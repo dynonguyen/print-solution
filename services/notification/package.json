@@ -1,5 +1,5 @@
 {
-  "name": "print-solution-account-service",
+  "name": "print-solution-notification-service",
   "private": true,
   "version": "0.0.1",
   "main": "index.ts",
