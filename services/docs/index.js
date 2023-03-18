@@ -14,6 +14,7 @@ const getEnv = require('~/utils/getEnv');
 const corsConfig = require('~/configs/cors');
 const { BASE_URL } = require('~/constants/common');
 const demoApi = require('~/controllers/demo');
+const logger = require('~/configs/logger');
 
 // Config port
 const app = express();
@@ -35,5 +36,5 @@ app.use(`${BASE_URL}/demo`, demoApi); // EX: remove it
 
 // Listening
 app.listen(SERVER_PORT, () => {
-  console.log(`🚀 DOCS SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
+  logger.info(`🚀 DOCS SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
 });

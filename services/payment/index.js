@@ -35,5 +35,5 @@ app.use(`${BASE_URL}/demo`, demoApi); // EX: remove it
 
 // Listening
 app.listen(SERVER_PORT, () => {
-  console.log(`🚀 PAYMENT SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
+  logger(`🚀 PAYMENT SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
 });

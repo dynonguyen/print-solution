@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 **/.env
+**/test.sh
 
 # Editor directories and files
 .idea

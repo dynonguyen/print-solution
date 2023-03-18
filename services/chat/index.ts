@@ -17,6 +17,7 @@ import { WebSocketServer } from 'ws';
 
 // Import local file
 import corsConfig from '~/config/cors';
+import logger from '~/config/logger';
 import { MAX } from '~/constants/validation';
 import resolvers from '~/resolvers';
 import getEnv from '~/utils/getEnv';
@@ -71,5 +72,5 @@ import getEnv from '~/utils/getEnv';
 
   // Modified server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));
-  console.log(`🚀 CHAT SERVICE IS LISTENING ON ${SERVER_PORT}`);
+  logger.info(`🚀 CHAT SERVICE IS LISTENING ON ${SERVER_PORT}`);
 })();

@@ -17,6 +17,7 @@ import { WebSocketServer } from 'ws';
 
 // Import local file
 import corsConfig from '~/config/cors';
+import logger from '~/config/logger';
 import { MAX } from '~/constants/validation';
 import resolvers from '~/resolvers';
 import getEnv from '~/utils/getEnv';
@@ -25,7 +26,7 @@ import getEnv from '~/utils/getEnv';
 /*
   Subscriptions are not supported by Apollo Server 4's startStandaloneServer function. To enable subscriptions, you must first swap to using the expressMiddleware function.
 */
-(async function runServer() {
+async function runServer() {
   const SERVER_PORT = Number(getEnv('PORT') || 3002);
   const app = express();
 
@@ -37,7 +38,7 @@ import getEnv from '~/utils/getEnv';
 
   // HTTP, Socket server for Subscription
   const httpServer = createServer(app);
-  const wsServer = new WebSocketServer({ server: httpServer });
+  const wsServer = new WebSocketServer({ server: httpServer, path: '/graphql' });
   const serverCleanup = useServer({ schema: graphqlSchema }, wsServer);
 
   // Apollo server
@@ -71,5 +72,7 @@ import getEnv from '~/utils/getEnv';
 
   // Modified server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));
-  console.log(`🚀 CATALOG SERVICE IS LISTENING ON ${SERVER_PORT}`);
-})();
+  logger.info(`🚀 CATALOG SERVICE IS LISTENING ON ${SERVER_PORT}`);
+}
+
+runServer();

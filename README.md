@@ -7,8 +7,6 @@
 
 > Print Solution System - Hệ thống quản lý đặt in ấn online hiệu quả, tiết kiệm.
 
-<br />
-
 ## ℹ️ Thông tin nhóm
 
 - 1612564 - Nguyễn Công Sơn
@@ -114,7 +112,7 @@
 **Run**
 
 ```sh
-  cd services/<service-name>
+  cd services/[service-name]
   cp .env.example .env # Thay đỗi value cần thiết (nếu có)
   yarn install
   yarn dev
@@ -135,7 +133,6 @@
   "module-alias": "^2.2.2",
   // Logger
   "morgan": "^1.10.0",
-  "winston": "^3.8.2",
   // Apollo server for GraphQL server
   "@apollo/server": "^4.5.0",
   "graphql": "^16.6.0",
