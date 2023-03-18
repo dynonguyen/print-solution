@@ -1,7 +1,6 @@
-import { CorsOptions } from 'apollo-server-express';
 import getEnv from '~/utils/getEnv';
 
-const corsConfig: CorsOptions = {
+const corsConfig = {
   // Configures the Access-Control-Allow-Origin
   origin: getEnv('CORS_ORIGIN') || '*',
 

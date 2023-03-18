@@ -20,14 +20,8 @@ const app = express();
 const SERVER_PORT = Number(getEnv('PORT') || 3001);
 
 // Setup logger
-const isDevMode = getEnv('NODE_ENV') !== 'production';
-
-if (!isDevMode) {
-  app.disable('x-powered-by');
-  app.use(morgan('common'));
-} else {
-  app.use(morgan('dev'));
-}
+if (getEnv('NODE_ENV') === 'production') app.use(morgan('common'));
+else app.use(morgan('dev'));
 
 // Config express server
 app.use(express.json({ limit: MAX.SIZE_JSON_REQUEST }));
@@ -41,5 +35,5 @@ app.use(`${BASE_URL}/demo`, demoApi); // EX: remove it
 
 // Listening
 app.listen(SERVER_PORT, () => {
-  console.log(`SHIPPING SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
+  console.log(`🚀 SHIPPING SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
 });
