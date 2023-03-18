@@ -30,6 +30,32 @@
 
 ...
 
+## 📃 Auto run via Shell Script
+
+> 🐧 Bắt buộc dùng qua terminal của **`Linux, Unix, WSL`**
+
+```sh
+  cd scripts
+  # Chạy lệnh bên dưới nếu chưa install (re-install) package
+  chmod +x ./auto-run.sh
+  ./auto-run.sh
+
+  # Hoặc nếu đã install
+  chmod +x ./pm2-start.sh
+  ./pm2-start.sh
+```
+
+- Sau khi đã start các server, sử dụng **[`pm2`](https://pm2.keymetrics.io/docs/usage/quick-start/)** để quản lý trạng thái.
+
+```sh
+  pm2 list # Hiển thị danh sách các services
+  pm2 kill # Xóa tất cả services
+  pm2 stop all # Dừng tất cả service đang chạy
+  pm2 reset all # Reset tất cả
+  pm2 restart all # Restart all service sau khi stop
+  pm2 [option] [service-name] # Áp dụng cho từng service
+```
+
 ## ⚙️ Manually Run
 
 ### 💫 Frontend
@@ -110,6 +136,20 @@
   // Logger
   "morgan": "^1.10.0",
   "winston": "^3.8.2",
+  // Apollo server for GraphQL server
+  "@apollo/server": "^4.5.0",
+  "graphql": "^16.6.0",
+  // Websocket for subscription graphql
+  "ws": "^8.8.0",
+  "graphql-ws": "^5.9.0",
+  // GraphQL with Typescript
+  "type-graphql": "^2.0.0-beta.1",
+  "@graphql-tools/schema": "^9.0.17",
+  "class-validator": "^0.14.0",
+  "reflect-metadata": "^0.1.13",
   // Auto reload dev server
-  "nodemon": "^2.0.21"
+  "nodemon": "^2.0.21",
+  "ts-node-dev": "^2.0.0",
+  "tsc-alias": "^1.8.3",
+  "tsconfig-paths": "^4.1.2"
 ```
