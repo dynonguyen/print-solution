@@ -3,5 +3,6 @@
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": { "source.organizeImports": true },
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
+  "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "files.exclude": { "**/yarn-error.log": true }
 }

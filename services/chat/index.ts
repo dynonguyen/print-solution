@@ -71,5 +71,5 @@ import getEnv from '~/utils/getEnv';
 
   // Modified server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));
-  console.log(`🚀 CATALOG SERVICE IS LISTENING ON ${SERVER_PORT}`);
+  console.log(`🚀 CHAT SERVICE IS LISTENING ON ${SERVER_PORT}`);
 })();
