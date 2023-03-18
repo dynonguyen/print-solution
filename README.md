@@ -34,9 +34,11 @@
 
 ### 💫 Frontend
 
+**Run**
+
 ```sh
   cd frontend
-  cp .env.example .env # Thay đỗi value cần thiết
+  cp .env.example .env # Thay đỗi value cần thiết (nếu có)
   yarn install
   yarn dev
 ```
@@ -45,7 +47,7 @@
 
 **Dependencies**
 
-```json
+```js
     // React core
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -79,4 +81,35 @@
 
     // Bundle tool
     "vite": "^4.1.0"
+```
+
+### 🔐 Backend Services
+
+**Run**
+
+```sh
+  cd services/<service-name>
+  cp .env.example .env # Thay đỗi value cần thiết (nếu có)
+  yarn install
+  yarn dev
+```
+
+**Dependencies**
+
+```js
+  // Core framework for REST API
+  "express": "^4.18.2",
+  // Read cookie from client
+  "cookie-parser": "^1.4.6",
+  // Setup CORS
+  "cors": "^2.8.5",
+  // Read .env
+  "dotenv": "^16.0.3",
+  // Alias import path from ../../.. to ~/
+  "module-alias": "^2.2.2",
+  // Logger
+  "morgan": "^1.10.0",
+  "winston": "^3.8.2",
+  // Auto reload dev server
+  "nodemon": "^2.0.21"
 ```
