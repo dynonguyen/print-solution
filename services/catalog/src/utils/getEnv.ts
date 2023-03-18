@@ -1,5 +1,3 @@
-export function getEnv(key: string = '') {
+export default function getEnv(key: string = '') {
   return process.env[key];
 }
-
-export default getEnv;

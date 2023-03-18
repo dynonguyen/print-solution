@@ -6,9 +6,11 @@ import 'reflect-metadata';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import to from 'await-to-js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import { GraphQLSchema } from 'graphql';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { createServer } from 'http';
 import morgan from 'morgan';
@@ -17,28 +19,42 @@ import { WebSocketServer } from 'ws';
 
 // Import local file
 import corsConfig from '~/config/cors';
+import mongooseConnect from '~/config/database';
 import logger from '~/config/logger';
 import { MAX } from '~/constants/validation';
 import resolvers from '~/resolvers';
 import getEnv from '~/utils/getEnv';
 
-// Run apollo server integrate with express server to use Subscription
 /*
   Subscriptions are not supported by Apollo Server 4's startStandaloneServer function. To enable subscriptions, you must first swap to using the expressMiddleware function.
 */
-(async function runServer() {
+async function runServer() {
+  // Connect mongodb
+  const [dbError] = await to<boolean>(mongooseConnect());
+  if (dbError) {
+    logger.error('Connect mongodb error failed !', dbError);
+    process.exit(-1);
+  }
+
   const SERVER_PORT = Number(getEnv('PORT') || 3002);
   const app = express();
 
   // GraphQL building
-  const graphqlSchema = await buildSchema({
-    resolvers: resolvers,
-    dateScalarMode: 'isoDate'
-  });
+  const [buildError, graphqlSchema] = await to<GraphQLSchema>(
+    buildSchema({
+      resolvers: resolvers,
+      dateScalarMode: 'isoDate'
+    })
+  );
+
+  if (buildError || !graphqlSchema) {
+    logger.error('Build graphql schema failed !', buildError);
+    process.exit(-1);
+  }
 
   // HTTP, Socket server for Subscription
   const httpServer = createServer(app);
-  const wsServer = new WebSocketServer({ server: httpServer });
+  const wsServer = new WebSocketServer({ server: httpServer, path: '/graphql' });
   const serverCleanup = useServer({ schema: graphqlSchema }, wsServer);
 
   // Apollo server
@@ -73,4 +89,6 @@ import getEnv from '~/utils/getEnv';
   // Modified server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));
   logger.info(`🚀 CHAT SERVICE IS LISTENING ON ${SERVER_PORT}`);
-})();
+}
+
+runServer();

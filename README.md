@@ -51,6 +51,7 @@
   pm2 stop all # Dừng tất cả service đang chạy
   pm2 reset all # Reset tất cả
   pm2 restart all # Restart all service sau khi stop
+  pm2 logs # Xem log tất cả services
   pm2 [option] [service-name] # Áp dụng cho từng service
 ```
 
@@ -103,6 +104,9 @@
     // SEO, tùy chỉnh head tag
     "react-helmet": "^6.1.0",
 
+    // Async await wrapper for easy error handling
+    "await-to-js": "^3.0.0",
+
     // Bundle tool
     "vite": "^4.1.0"
 ```
@@ -144,6 +148,10 @@
   "@graphql-tools/schema": "^9.0.17",
   "class-validator": "^0.14.0",
   "reflect-metadata": "^0.1.13",
+  // Async await wrapper for easy error handling
+  "await-to-js": "^3.0.0",
+  // Format thời gian
+  "moment": "^2.29.4",
   // Auto reload dev server
   "nodemon": "^2.0.21",
   "ts-node-dev": "^2.0.0",

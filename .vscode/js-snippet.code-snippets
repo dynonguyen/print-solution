@@ -1,0 +1,20 @@
+{
+  "logger.info": {
+    "prefix": "li",
+    "body": ["logger.info($1)"],
+    "description": "logger.info",
+    "scope": "javascript,typescript"
+  },
+  "logger.error": {
+    "prefix": "le",
+    "body": ["logger.error($1)"],
+    "description": "logger.error",
+    "scope": "javascript,typescript"
+  },
+  "logger.log": {
+    "prefix": "ll",
+    "body": ["logger.log($1)"],
+    "description": "logger.log",
+    "scope": "javascript,typescript"
+  }
+}
