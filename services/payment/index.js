@@ -32,7 +32,7 @@ app.use(cors(corsConfig));
 
 // APIs
 app.get(`${BASE_URL}/check-health`, (_, res) => res.status(200).json({ msg: 'OK' }));
-app.use(`${BASE_URL}/demo`, demoApi); // EX: remove it
+app.use(`${BASE_URL}/demo`, demoApi); // EXAMPLE: remove it
 
 // Listening
 app.listen(SERVER_PORT, () => {

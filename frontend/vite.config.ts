@@ -10,9 +10,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: Number(process.env.PORT) || 8000,
-    open: true,
+    open: false,
     host: process.env.HOST || '0.0.0.0'
   },
+  build: { outDir: 'build' },
   resolve: { alias: [{ find: '~', replacement: path.resolve(__dirname, 'src') }] },
   define: { 'process.env': {} }
 });

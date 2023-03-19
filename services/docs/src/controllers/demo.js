@@ -1,4 +1,4 @@
-// EX: Remove this file
+// EXAMPLE: Remove this file
 const demoApi = require('express').Router();
 
 demoApi.get('/list', (req, res) => {

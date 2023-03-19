@@ -1,4 +1,4 @@
-// EX: Remove this file
+// EXAMPLE: Remove this file
 import { Query, Resolver, Subscription } from 'type-graphql';
 
 @Resolver()

@@ -1,0 +1,17 @@
+version: '3.9'
+
+networks:
+  www-net:
+    driver: bridge
+
+services:
+  frontend:
+    container_name: frontend
+    hostname: frontend
+    build: ./../frontend
+    networks:
+      - www-net
+    volumes:
+      - ./../frontend:/home/app
+    ports:
+      - 8000:8000
