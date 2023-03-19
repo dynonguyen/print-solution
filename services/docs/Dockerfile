@@ -14,8 +14,11 @@ RUN if ["${NODE_ENV}" = "production"];\
 
 COPY . .
 
+# Sleep to wait postgres
 CMD if [[ "$NODE_ENV" = "production" ]]; then\
+      sleep 3;\
       yarn start;\
     else\
+      sleep 3;\
       yarn dev;\
   fi

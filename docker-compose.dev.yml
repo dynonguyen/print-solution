@@ -8,17 +8,43 @@ services:
   mongo:
     hostname: mongodb-dev
     container_name: mongodb-dev
-    image: mongo
+    image: mongo:latest
     restart: always
     networks:
       - www-net-dev
     volumes:
       - ./docker-volumes/mongodb:/data/db
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: admin
     ports:
       - 27017:27017
+  postgresql:
+    hostname: postgres-dev
+    container_name: postgres-dev
+    image: postgres:15.2
+    restart: always
+    networks:
+      - www-net-dev
+    volumes:
+      - ./docker-volumes/postgres:/var/lib/postgresql/data
+      - ./scripts/docker-postgresql-multiple-databases/db_init.sh:/docker-entrypoint-initdb.d/db_init.sh
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_MULTIPLE_DATABASES=order,docs,payment,shipping
+    ports:
+      - 5432:5432
+  pgadmin:
+    hostname: pgamdin-dev
+    container_name: pgadmin-dev
+    image: dpage/pgadmin4:latest
+    networks:
+      - www-net-dev
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@domain.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    ports:
+      - 5050:80
+    depends_on:
+      - postgresql
   frontend:
     hostname: frontend-dev
     container_name: frontend-dev
@@ -63,6 +89,8 @@ services:
       - ./services/docs:/home/app
     ports:
       - 3005:3005
+    depends_on:
+      - postgresql
   order-service:
     hostname: order-service-dev
     container_name: order-service-dev
@@ -79,6 +107,8 @@ services:
       - ./services/order:/home/app
     ports:
       - 3003:3003
+    depends_on:
+      - postgresql
   payment-service:
     hostname: payment-service-dev
     container_name: payment-service-dev
@@ -95,6 +125,8 @@ services:
       - ./services/payment:/home/app
     ports:
       - 3004:3004
+    depends_on:
+      - postgresql
   shipping-service:
     hostname: shipping-service-dev
     container_name: shipping-service-dev
@@ -111,6 +143,8 @@ services:
       - ./services/shipping:/home/app
     ports:
       - 3008:3008
+    depends_on:
+      - postgresql
   catalog-service:
     hostname: catalog-service-dev
     container_name: catalog-service-dev
