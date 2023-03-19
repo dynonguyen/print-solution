@@ -26,7 +26,21 @@
 
 ## 🚀 Run via Docker
 
-...
+```sh
+  # Chạy môi trường dev
+  docker compose -p print-solution-dev -f ./docker-compose.dev.yml up -d
+  # Chạy môi trường production
+  docker compose -p print-solution-prod up -d
+```
+
+```sh
+  # Xem log
+  docker logs [service-name] --follow
+  # Delete all containers
+  docker compose -p print-solution-[dev|prod] down
+  # Stop all containers
+  docker compose -p print-solution-[dev|prod] stop
+```
 
 ## 📃 Auto run via Shell Script
 

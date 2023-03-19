@@ -1,17 +1,17 @@
 version: '3.9'
 
 networks:
-  www-net:
+  www-net-dev:
     driver: bridge
 
 services:
   mongo:
-    hostname: mongodb
-    container_name: mongodb
+    hostname: mongodb-dev
+    container_name: mongodb-dev
     image: mongo
     restart: always
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./docker-volumes/mongodb:/data/db
     environment:
@@ -20,34 +20,36 @@ services:
     ports:
       - 27017:27017
   frontend:
-    container_name: frontend
-    hostname: frontend
-    build: ./frontend
+    hostname: frontend-dev
+    container_name: frontend-dev
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    networks:
+      - www-net-dev
     volumes:
       - ./frontend:/home/app
-    networks:
-      - www-net
     ports:
-      - 8000:80
+      - 8000:8000
   account-service:
-    hostname: account-service
-    container_name: account-service
+    hostname: account-service-dev
+    container_name: account-service-dev
     build:
       context: ./services/account
       dockerfile: Dockerfile
       args:
-        - NODE_ENV=production
+        - NODE_ENV=development
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/account:/home/app
     ports:
       - 3001:3001
   docs-service:
-    hostname: docs-service
-    container_name: docs-service
+    hostname: docs-service-dev
+    container_name: docs-service-dev
     build:
       context: ./services/docs
       dockerfile: Dockerfile
@@ -56,14 +58,14 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/docs:/home/app
     ports:
       - 3005:3005
   order-service:
-    hostname: order-service
-    container_name: order-service
+    hostname: order-service-dev
+    container_name: order-service-dev
     build:
       context: ./services/order
       dockerfile: Dockerfile
@@ -72,14 +74,14 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/order:/home/app
     ports:
       - 3003:3003
   payment-service:
-    hostname: payment-service
-    container_name: payment-service
+    hostname: payment-service-dev
+    container_name: payment-service-dev
     build:
       context: ./services/payment
       dockerfile: Dockerfile
@@ -88,14 +90,14 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/payment:/home/app
     ports:
       - 3004:3004
   shipping-service:
-    hostname: shipping-service
-    container_name: shipping-service
+    hostname: shipping-service-dev
+    container_name: shipping-service-dev
     build:
       context: ./services/shipping
       dockerfile: Dockerfile
@@ -104,14 +106,14 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/shipping:/home/app
     ports:
       - 3008:3008
   catalog-service:
-    hostname: catalog-service
-    container_name: catalog-service
+    hostname: catalog-service-dev
+    container_name: catalog-service-dev
     build:
       context: ./services/catalog
       dockerfile: Dockerfile
@@ -120,14 +122,16 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/catalog:/home/app
     ports:
       - 3002:3002
+    depends_on:
+      - mongo
   chat-service:
-    hostname: chat-service
-    container_name: chat-service
+    hostname: chat-service-dev
+    container_name: chat-service-dev
     build:
       context: ./services/chat
       dockerfile: Dockerfile
@@ -136,14 +140,16 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/chat:/home/app
     ports:
       - 3007:3007
+    depends_on:
+      - mongo
   notification-service:
-    hostname: notification-service
-    container_name: notification-service
+    hostname: notification-service-dev
+    container_name: notification-service-dev
     build:
       context: ./services/notification
       dockerfile: Dockerfile
@@ -152,8 +158,10 @@ services:
     environment:
       - NODE_ENV=development
     networks:
-      - www-net
+      - www-net-dev
     volumes:
       - ./services/notification:/home/app
     ports:
       - 3006:3006
+    depends_on:
+      - mongo

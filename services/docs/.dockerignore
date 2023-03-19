@@ -1,0 +1,15 @@
+dist
+build
+node_modules
+**/node_modules
+**/build
+**/dist
+dist
+yarn-error.log
+.git
+.env.local
+.results
+.vscode
+Dockerfile
+.dockerignore
+npm-debug.log
