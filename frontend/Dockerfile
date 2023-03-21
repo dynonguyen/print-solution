@@ -12,7 +12,7 @@ COPY . .
 RUN yarn build
 
 # Stage 2: Run web by Nginx
-FROM nginx:alpine
+FROM nginx:1.23.3
 
 RUN rm -rf /usr/share/nginx/html/*
 

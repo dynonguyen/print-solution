@@ -1,1 +1,1 @@
-exports.BASE_URL = '/api/v1';
+exports.BASE_URL = '';

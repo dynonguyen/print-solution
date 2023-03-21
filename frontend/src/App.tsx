@@ -1,8 +1,12 @@
+import Page from './components/Page';
+
 function App() {
   return (
-    <div className="PrintSolutionApp">
-      <h1>Hello Print Solution</h1>
-    </div>
+    <Page title="Trang chủ">
+      <div className="PrintSolutionApp">
+        <h1>Hello Print Solution 2</h1>
+      </div>
+    </Page>
   );
 }
 
