@@ -70,15 +70,6 @@ services:
     ports:
       - 3000:80
       - 80:80
-    depends_on:
-      - account-service
-      - docs-service
-      - order-service
-      - payment-service
-      - shipping-service
-      - catalog-service
-      - chat-service
-      - notification-service
   frontend:
     hostname: frontend
     container_name: frontend-dev
