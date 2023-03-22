@@ -4,7 +4,7 @@ function App() {
   return (
     <Page title="Trang chủ">
       <div className="PrintSolutionApp">
-        <h1>Hello Print Solution 2</h1>
+        <h1>Hello Print Solution</h1>
       </div>
     </Page>
   );

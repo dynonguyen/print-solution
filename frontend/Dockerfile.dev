@@ -1,4 +1,4 @@
-FROM node:18.15.0-alpine
+FROM node:18.15.0
 
 WORKDIR /home/app
 
@@ -8,4 +8,4 @@ RUN yarn install --production=false
 
 COPY . .
 
-CMD [ "yarn", "dev" ]
+CMD yarn install && yarn dev

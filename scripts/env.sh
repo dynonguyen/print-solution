@@ -4,10 +4,7 @@ APPS=("frontend" "services/account" "services/catalog" "services/chat" "services
 
 # Utils function
 function copy_env(){
-  if ! [ -e ".env" ]
-  then
-    cp .env.example .env
-  fi
+  cp .env.example .env
 }
 
 function start_process() {

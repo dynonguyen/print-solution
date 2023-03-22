@@ -1,9 +1,9 @@
 # Stage 1: Build react app by ViteJS
-FROM node:18.15.0-alpine as build
+FROM node:18.15.0 as build
 
 WORKDIR /home/app
 
-COPY package.json yarn.lock ./
+COPY package.json .
 
 RUN yarn install
 

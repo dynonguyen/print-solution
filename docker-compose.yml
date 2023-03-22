@@ -52,6 +52,7 @@ services:
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KEYCLOAK_HOSTNAME=localhost
     ports:
       - 8080:8080
       - 8443:8443
@@ -65,9 +66,19 @@ services:
       - ./static:/data/static
     networks:
       - www-net
+    restart: always
     ports:
       - 3000:80
       - 80:80
+    depends_on:
+      - account-service
+      - docs-service
+      - order-service
+      - payment-service
+      - shipping-service
+      - catalog-service
+      - chat-service
+      - notification-service
   frontend:
     container_name: frontend
     hostname: frontend

@@ -1,10 +1,11 @@
 #!/bin/bash
-source env.sh
+source ./env.sh
 
 # Add pm2 package
 if ! npm list -g | grep -q "pm2"
 then
   start_process "INSTALL pm2 package"
+  npm install -g yarn
   yarn global add pm2
   end_process
 fi
