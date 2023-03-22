@@ -28,6 +28,7 @@
 
 ```sh
   # Chạy môi trường dev
+  docker compose -p print-solution-dev -f ./docker-compose.dev.yml build --no-cache
   docker compose -p print-solution-dev -f ./docker-compose.dev.yml up -d
   # Chạy môi trường production
   docker compose -p print-solution-prod up -d
