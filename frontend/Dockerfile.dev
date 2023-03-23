@@ -2,9 +2,7 @@ FROM node:18.15.0
 
 WORKDIR /home/app
 
-COPY package.json yarn.lock ./
-
-RUN yarn install --production=false
+COPY package.json ./
 
 COPY . .
 

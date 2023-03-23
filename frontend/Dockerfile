@@ -3,7 +3,7 @@ FROM node:18.15.0 as build
 
 WORKDIR /home/app
 
-COPY package.json .
+COPY package.json ./
 
 RUN yarn install
 
