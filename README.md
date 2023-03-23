@@ -30,6 +30,12 @@
   # Copy .env
   cd scripts
   sh ./copy-env.sh
+  # Nếu lệnh trên chạy lỗi thì chạy lệnh dưới
+  chmod +x ./copy-env.sh
+  ./copy-env.sh
+```
+
+```sh
 
   # Chạy môi trường dev
   docker compose -p print-solution-dev -f ./docker-compose.dev.yml build --no-cache
