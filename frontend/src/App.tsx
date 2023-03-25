@@ -14,7 +14,7 @@ function App() {
     <Page>
       <ThemeConfig>
         <ErrorBoundary FallbackComponent={ServerErrorPage}>
-          <GlobalLoading />
+          <GlobalLoading colors={['#0066cf', '#019bfd', '#44befc']} />
           <Provider store={store}>
             <RouterProvider router={router} fallbackElement={<LoadingScreen />} />
           </Provider>

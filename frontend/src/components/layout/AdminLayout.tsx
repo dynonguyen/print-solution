@@ -3,6 +3,8 @@ import Notification from '@cads-ui/x/Notification';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/path';
+import useAuth from '~/hooks/useAuth';
+import keycloak from '~/libs/keycloak';
 import { withPublic } from '~/utils/withStatic';
 import Icon from '../Icon';
 
@@ -10,12 +12,12 @@ import Icon from '../Icon';
 const sidebarItems: SidebarItems[] = [
   {
     menu: [
-      { label: 'Quản lý sản phẩm', link: PATH.ADMIN.PRODUCT, icon: <Icon icon="carbon:carbon-for-ibm-product" /> },
+      { label: 'Quản lý sản phẩm', link: PATH.ADMIN.PRODUCT.ROOT, icon: <Icon icon="carbon:carbon-for-ibm-product" /> },
       { label: 'Quản lý đơn hàng', link: PATH.ADMIN.ORDER, icon: <Icon icon="icon-park-solid:transaction-order" /> },
       { label: 'Doanh thu', link: PATH.ADMIN.REVENUE, icon: <Icon icon="ph:currency-circle-dollar-fill" /> },
       { label: 'Tài khoản', link: PATH.ADMIN.PROFILE, icon: <Icon icon="ic:baseline-account-circle" /> },
       { label: 'Cài đặt', link: PATH.ADMIN.SETTINGS, icon: <Icon icon="ant-design:setting-filled" /> },
-      { label: 'Đăng xuất', icon: <Icon icon="ri:logout-box-r-fill" /> }
+      { label: 'Đăng xuất', icon: <Icon icon="ri:logout-box-r-fill" />, itemProps: { id: 'logout' } }
     ]
   }
 ];
@@ -28,16 +30,11 @@ const Account = () => {
   const [openMenu, setOpenMenu] = React.useState(false);
   const anchorEl = React.useRef<HTMLElement>(null);
   const navigate = useNavigate();
+  const { profile = {}, logout } = useAuth();
 
-  // TEST: fake data
   const avt = withPublic('img/default-user.png');
-  const name = 'Nguyen Van A';
+  const name = `${profile.firstName} ${profile.lastName}`;
   const role = 'Admin';
-
-  // TODO: Implement logic
-  const handleLogout = () => {
-    alert('Handle logout');
-  };
 
   return (
     <React.Fragment>
@@ -73,7 +70,7 @@ const Account = () => {
             {
               primary: 'Đăng xuất',
               icon: <Icon icon="ri:logout-box-r-fill" />,
-              onItemClick: handleLogout,
+              onItemClick: () => logout(),
               itemProps: { sx: { color: 'error.main' } }
             }
           ]}
@@ -116,6 +113,7 @@ const AdminLayout = () => {
           '& .cads-sidebar-top': { borderBottom: `solid 1px ${theme.palette.grey[300]}`, pb: 4 },
           '& .cads-sidebar-body': { mt: 4 }
         })}
+        howActiveLink={(link) => window.location.pathname.includes(link)}
         items={sidebarItems}
         homeLogo={withPublic('img/logo.png')}
         homeTitle="Administrator"
@@ -127,6 +125,9 @@ const AdminLayout = () => {
         autoScale
         onToggleIconClick={() => setIsSmall(!isSmall)}
         onNavigate={navigate}
+        onItemClick={(item) => {
+          if (item.itemProps?.id === 'logout') keycloak?.logout?.();
+        }}
       />
       <Box
         sx={{ flexGrow: 1, ml: isSmall ? `${SIDEBAR_SMALL_WIDTH}px` : `${SIDEBAR_WIDTH}px`, transition: 'margin 0.3s' }}

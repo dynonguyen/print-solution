@@ -5,7 +5,6 @@ function LoadingScreen() {
   const { loading, toggleLoading } = useToggleGlobalLoading();
 
   React.useEffect(() => {
-    console.log('RUBN');
     if (!loading) toggleLoading(true);
     return () => toggleLoading(false);
   }, []);

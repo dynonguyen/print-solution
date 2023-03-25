@@ -11,7 +11,7 @@ const NotFoundPage: React.FC = (props) => {
       title="Không tìm thấy trang"
       subTitle="Rất tiếc, chúng tôi không thể tìm thấy trang bạn đang tìm kiếm. Có lẽ bạn đã nhập sai URL? Hãy chắc chắn kiểm tra chính tả của bạn."
       action={
-        <Link to={PATH.HOME}>
+        <Link to={PATH.ADMIN.ROOT}>
           <Button>Về trang chủ</Button>
         </Link>
       }

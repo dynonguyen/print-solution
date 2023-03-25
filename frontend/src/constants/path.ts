@@ -4,7 +4,11 @@ export const PATH = {
 
   ADMIN: {
     ROOT: '/admin',
-    PRODUCT: '/admin/product',
+    PRODUCT: {
+      ROOT: '/admin/product',
+      LIST: '/admin/product',
+      DETAILS: '/admin/product/:productId'
+    },
     ORDER: '/admin/order',
     REVENUE: '/admin/revenue',
     PROFILE: '/admin/profile',
