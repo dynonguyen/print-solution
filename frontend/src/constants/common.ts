@@ -1,4 +1,4 @@
-export const COMMON = {
+export const COMMONS = {
   APP_NAME: 'Print Solution',
   SLOGAN: 'Giải pháp quản lý đặt in ấn hiệu quả, tiết kiệm'
 };

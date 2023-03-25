@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Script này để copy file .env.example thành .env
+# Việc này sẽ override lại file .env hiện có
+
 source ./env.sh
 
 for app_name in "${APPS[@]}"

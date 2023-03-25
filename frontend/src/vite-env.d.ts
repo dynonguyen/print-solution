@@ -1,7 +1,12 @@
 /// <reference types="vite/client" />
 
 export interface ImportMetaEnv {
-  readonly VITE_APP_GATEWAY_PATH: string;
+  BASE_URL: string;
+  MODE: string;
+  DEV: boolean;
+  PROD: boolean;
+  SSR: boolean;
+  VITE_APP_GATEWAY_PATH: string;
 }
 
 interface ImportMeta {

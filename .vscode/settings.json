@@ -5,7 +5,21 @@
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "files.exclude": { "**/yarn-error.log": true },
-  "search.exclude": {
-    "**/.env": false
+  "search.exclude": { "**/.env": false },
+  "dynoFileUtils.folderExclude": ["node_modules", ".git", "build", "dist", "docker-volumes"],
+  "todo-tree.general.tags": ["BUG", "FIX", "TODO", "TEST", "REFACTOR", "IMPROVE", "EXAMPLE"],
+  "todo-tree.filtering.excludeGlobs": ["**/node_modules/*/**"],
+  "todo-tree.tree.flat": true,
+  "todo-tree.general.statusBar": "tags",
+  "todo-tree.tree.groupedByTag": true,
+  "todo-tree.highlights.customHighlight": {
+    // Icon from: https://primer.style/design/foundations/icons
+    "TODO": { "icon": "check-circle", "iconColour": "#007460", "background": "#007460", "foreground": "#FFF" },
+    "BUG": { "icon": "bug", "iconColour": "#B72136", "background": "#B72136", "foreground": "#FFF" },
+    "FIX": { "icon": "flame", "iconColour": "#E25822", "background": "#E25822", "foreground": "#FFF" },
+    "TEST": { "icon": "beaker", "iconColour": "#B78103", "background": "#B78103", "foreground": "#FFF" },
+    "EXAMPLE": { "icon": "beaker", "iconColour": "#B78103", "background": "#B78103", "foreground": "#FFF" },
+    "REFACTOR": { "icon": "tools", "iconColour": "#0FBDCC", "background": "#0FBDCC", "foreground": "#000" },
+    "IMPROVE": { "icon": "zap", "iconColour": "#DF2A98", "background": "#DF2A98", "foreground": "#FFF" }
   }
 }

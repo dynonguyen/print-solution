@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# Script này để tự động hóa quá trình chạy các service thủ công, quản lý qua pm2
+# Tuy nhiên nếu chạy qua cách này cần cài thủ công Mongodb, postgres, keycloak, nginx, ...
+# Thích hợp chạy solution-sketch
+
 source ./env.sh
 
 # Add pm2 package

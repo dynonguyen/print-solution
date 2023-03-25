@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# Tương tự auto run, nhưng file này chạy những lần sau khi đã chạy auto run để cài packages.
+
 source ./env.sh
 
 # Kill all apps

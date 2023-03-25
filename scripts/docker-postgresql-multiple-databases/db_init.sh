@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Tự động tạo DB trước khi khởi chạy postgresql
+
 set -e
 set -u
 
