@@ -1,11 +1,17 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
+import { USER_ROLES } from '~/constants/common';
+import { PATH } from '~/constants/path';
+import useAuth from '~/hooks/useAuth';
 
 // -----------------------------
-interface GuestGuardProps {}
+const GuestGuard = () => {
+  const { hasRealmRole, authenticated } = useAuth();
 
-// -----------------------------
-const GuestGuard: React.FC<GuestGuardProps> = () => {
+  // Redirect admin back to admin route
+  if (authenticated && hasRealmRole(USER_ROLES.ADMIN)) {
+    return <Navigate to={PATH.ADMIN.ROOT} />;
+  }
+
   return <Outlet />;
 };
 
