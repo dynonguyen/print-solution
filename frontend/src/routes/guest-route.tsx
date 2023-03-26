@@ -14,6 +14,7 @@ const guestRoute: RouteObject[] = [
   },
 
   // Not found
+  { path: PATH.SERVER_ERROR, element: <ServerErrorPage /> },
   { path: PATH.NOT_FOUND, element: <NotFoundPage /> },
   { path: '*', element: <NotFoundPage /> }
 ];

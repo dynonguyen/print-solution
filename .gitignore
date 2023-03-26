@@ -24,6 +24,7 @@ dist-ssr
 *.sln
 *.sw?
 docker-volumes/*
+!docker-volumes/keycloak
 !docker-volumes/note.txt
 static/tmp/*
 !static/tmp/note.txt

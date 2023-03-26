@@ -1,6 +1,7 @@
 export const PATH = {
   HOME: '/',
   NOT_FOUND: '/404',
+  SERVER_ERROR: '/oop',
 
   ADMIN: {
     ROOT: '/admin',

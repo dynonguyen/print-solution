@@ -1,4 +1,5 @@
 import { GlobalLoading } from '@cads-ui/core';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
@@ -16,7 +17,9 @@ function App() {
         <ErrorBoundary FallbackComponent={ServerErrorPage}>
           <GlobalLoading colors={['#0066cf', '#019bfd', '#44befc']} />
           <Provider store={store}>
-            <RouterProvider router={router} fallbackElement={<LoadingScreen />} />
+            <Suspense fallback={<LoadingScreen />}>
+              <RouterProvider router={router} fallbackElement={<LoadingScreen />} />
+            </Suspense>
           </Provider>
         </ErrorBoundary>
       </ThemeConfig>

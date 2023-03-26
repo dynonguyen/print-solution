@@ -29,7 +29,7 @@ services:
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_MULTIPLE_DATABASES=order,docs,payment,shipping
+      - POSTGRES_MULTIPLE_DATABASES=order,docs,payment,shipping,keycloak
     ports:
       - 5432:5432
   pgadmin:
@@ -49,15 +49,23 @@ services:
     hostname: keycloak
     container_name: keycloak-dev
     image: quay.io/keycloak/keycloak:21.0.1
-    environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
-    volumes:
-      - ./docker-volumes/keycloak/realm/data:/opt/keycloak/data/import
     ports:
       - 8080:8080
       - 8443:8443
-    command: start-dev
+    networks:
+      - www-net-dev
+    volumes:
+      - ./docker-volumes/keycloak/data/import:/opt/keycloak/data/import
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://postgresql:5432/keycloak
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=admin
+    depends_on:
+      - postgresql
+    command: start-dev --import-realm
   nginx:
     hostname: nginx
     container_name: nginx-dev
