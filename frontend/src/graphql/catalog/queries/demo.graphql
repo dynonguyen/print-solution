@@ -1,0 +1,9 @@
+# EXAMPLE: Remove this file
+query GetDemo {
+  demo {
+    _id
+    name
+    createdAt
+    updatedAt
+  }
+}

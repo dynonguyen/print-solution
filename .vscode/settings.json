@@ -22,5 +22,5 @@
     "REFACTOR": { "icon": "tools", "iconColour": "#0FBDCC", "background": "#0FBDCC", "foreground": "#000" },
     "IMPROVE": { "icon": "zap", "iconColour": "#DF2A98", "background": "#DF2A98", "foreground": "#FFF" }
   },
-  "cSpell.words": ["keycloak"]
+  "cSpell.words": ["Codegen", "keycloak"]
 }

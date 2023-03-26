@@ -41,10 +41,7 @@ async function runServer() {
 
   // GraphQL building
   const [buildError, graphqlSchema] = await to<GraphQLSchema>(
-    buildSchema({
-      resolvers: resolvers,
-      dateScalarMode: 'isoDate'
-    })
+    buildSchema({ resolvers: resolvers, dateScalarMode: 'isoDate' })
   );
 
   if (buildError || !graphqlSchema) {

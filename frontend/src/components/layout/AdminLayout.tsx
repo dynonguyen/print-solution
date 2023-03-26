@@ -1,12 +1,13 @@
-import { alpha, AppBar, Avatar, Box, Flex, List, Popover, Sidebar, SidebarItems, Typography } from '@cads-ui/core';
+import { alpha, AppBar, Box, Flex, Sidebar, SidebarItems, useEffectNotFirst } from '@cads-ui/core';
 import Notification from '@cads-ui/x/Notification';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import HeaderAccount from '~/components/HeaderAccount';
+import Icon from '~/components/Icon';
+import { LS_KEY } from '~/constants/key';
 import { PATH } from '~/constants/path';
-import useAuth from '~/hooks/useAuth';
 import keycloak from '~/libs/keycloak';
 import { withPublic } from '~/utils/withStatic';
-import Icon from '../Icon';
 
 // -----------------------------
 const sidebarItems: SidebarItems[] = [
@@ -26,60 +27,6 @@ const SIDEBAR_SMALL_WIDTH = 74;
 const TOP_BAR_HEIGHT = 77;
 
 // -----------------------------
-const Account = () => {
-  const [openMenu, setOpenMenu] = React.useState(false);
-  const anchorEl = React.useRef<HTMLElement>(null);
-  const navigate = useNavigate();
-  const { profile = {}, logout } = useAuth();
-
-  const avt = withPublic('img/default-user.png');
-  const name = `${profile.firstName} ${profile.lastName}`;
-  const role = 'Admin';
-
-  return (
-    <React.Fragment>
-      <Flex spacing={2} sx={{ cursor: 'pointer' }} onClick={() => setOpenMenu(!openMenu)}>
-        <Avatar ref={anchorEl} src={avt} alt={name} />
-        <Flex sx={(theme) => ({ [theme.breakpoints.down('md')]: { display: 'none' } })} spacing={1} direction="column">
-          <Typography fs={16} fw={500}>
-            {name}
-          </Typography>
-          <Typography fs={15} color="text.secondary">
-            {role}
-          </Typography>
-        </Flex>
-      </Flex>
-
-      {/* Account menu */}
-      <Popover
-        anchorEl={anchorEl}
-        open={openMenu}
-        offset={[0, 10]}
-        placement="bottom-end"
-        sx={{ minW: 180 }}
-        showBackdrop
-        onClose={() => setOpenMenu(false)}
-      >
-        <List
-          items={[
-            {
-              primary: 'Cài đặt',
-              icon: <Icon icon="ant-design:setting-filled" />,
-              onItemClick: () => navigate(PATH.ADMIN.PROFILE)
-            },
-            {
-              primary: 'Đăng xuất',
-              icon: <Icon icon="ri:logout-box-r-fill" />,
-              onItemClick: () => logout(),
-              itemProps: { sx: { color: 'error.main' } }
-            }
-          ]}
-        />
-      </Popover>
-    </React.Fragment>
-  );
-};
-
 const TopBar = () => {
   return (
     <AppBar
@@ -93,7 +40,7 @@ const TopBar = () => {
       <Flex spacing={4} justifyContent="flex-end" sx={{ h: 1, p: 2 }}>
         {/* TODO: Implement logic */}
         <Notification PopoverProps={{ showBackdrop: true }} />
-        <Account />
+        <HeaderAccount role="Admin" />
       </Flex>
     </AppBar>
   );
@@ -101,8 +48,10 @@ const TopBar = () => {
 
 // -----------------------------
 const AdminLayout = () => {
-  const [isSmall, setIsSmall] = React.useState(false);
+  const [isSmall, setIsSmall] = React.useState(localStorage.getItem(LS_KEY.SIDEBAR_SMALL_MODE) == 'true');
   const navigate = useNavigate();
+
+  useEffectNotFirst(() => localStorage.setItem(LS_KEY.SIDEBAR_SMALL_MODE, isSmall.toString()), [isSmall]);
 
   return (
     <Flex alignItems="flex-start">
@@ -123,6 +72,7 @@ const AdminLayout = () => {
         hoverToggle={false}
         showToggleIcon
         autoScale
+        onAutoScale={() => setIsSmall(true)}
         onToggleIconClick={() => setIsSmall(!isSmall)}
         onNavigate={navigate}
         onItemClick={(item) => {

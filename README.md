@@ -111,6 +111,7 @@
     // Kết nối graphQL, Apollo server
     "@apollo/client": "^3.7.10",
     "graphql": "^16.6.0",
+    "@graphql-codegen/cli": "^3.2.2",
 
     // Kết nối REST API
     "axios": "^1.3.4",

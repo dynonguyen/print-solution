@@ -3,6 +3,11 @@ export const PATH = {
   NOT_FOUND: '/404',
   SERVER_ERROR: '/oop',
 
+  ACCOUNT: {
+    ROOT: '/account',
+    PROFILE: '/account/profile'
+  },
+
   ADMIN: {
     ROOT: '/admin',
     PRODUCT: {

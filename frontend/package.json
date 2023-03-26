@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "graphql-codegen": "graphql-codegen-catalog && graphql-codegen-notification && graphql-codegen-chat",
+    "graphql-codegen-catalog": "graphql-codegen --config ./src/graphql/catalog/codegen.ts",
+    "graphql-codegen-chat": "graphql-codegen --config ./src/graphql/chat/codegen.ts",
+    "graphql-codegen-notification": "graphql-codegen --config ./src/graphql/chat/codegen.ts"
   },
   "dependencies": {
     "@apollo/client": "^3.7.10",
@@ -31,6 +35,11 @@
     "react-toastify": "^9.1.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "3.2.2",
+    "@graphql-codegen/client-preset": "2.1.1",
+    "@graphql-codegen/typescript": "^3.0.2",
+    "@graphql-codegen/typescript-operations": "^3.0.2",
+    "@graphql-codegen/typescript-react-apollo": "^3.3.7",
     "@iconify/react": "^4.1.0",
     "@types/node": "^18.15.3",
     "@types/react": "^18.0.27",
