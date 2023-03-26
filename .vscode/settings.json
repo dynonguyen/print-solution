@@ -4,7 +4,7 @@
   "editor.codeActionsOnSave": { "source.organizeImports": true },
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "files.exclude": { "**/yarn-error.log": true },
+  "files.exclude": { "**/yarn-error.log": true, "**/.env": false },
   "search.exclude": { "**/.env": false },
   "dynoFileUtils.folderExclude": ["node_modules", ".git", "build", "dist", "docker-volumes"],
   "todo-tree.general.tags": ["BUG", "FIX", "TODO", "TEST", "REFACTOR", "IMPROVE", "EXAMPLE"],

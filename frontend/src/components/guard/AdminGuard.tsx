@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { ROLES } from '~/constants/common';
+import { USER_ROLES } from '~/constants/common';
 import { PATH } from '~/constants/path';
 import useAuth from '~/hooks/useAuth';
 import LoadingScreen from '../LoadingScreen';
@@ -26,7 +26,7 @@ const AdminGuard = () => {
   }, []);
 
   if (!loading && !token) login();
-  if (!loading && !hasRealmRole(ROLES.ADMIN)) return <Navigate to={PATH.NOT_FOUND} />;
+  if (!loading && !hasRealmRole(USER_ROLES.ADMIN)) return <Navigate to={PATH.NOT_FOUND} />;
 
   return loading ? <LoadingScreen /> : <Outlet />;
 };

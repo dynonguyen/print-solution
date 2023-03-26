@@ -13,10 +13,8 @@ const { MAX } = require('~/constants/validation');
 const getEnv = require('~/utils/getEnv');
 const corsConfig = require('~/configs/cors');
 const { BASE_URL } = require('~/constants/common');
-const demoApi = require('~/controllers/demo');
 const logger = require('~/configs/logger');
-const { db, postgresConnect } = require('~/configs/database');
-const DemoModel = require('~/models/demo');
+const { postgresConnect } = require('~/configs/database');
 
 // Config port
 const app = express();
@@ -34,7 +32,6 @@ app.use(cors(corsConfig));
 
 // APIs
 app.get(`${BASE_URL}/check-health`, (_, res) => res.status(200).json({ msg: 'OK' }));
-app.use(`${BASE_URL}/demo`, demoApi); // EXAMPLE: remove it
 
 // Listening
 postgresConnect()

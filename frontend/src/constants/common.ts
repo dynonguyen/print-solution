@@ -3,6 +3,6 @@ export const COMMONS = {
   SLOGAN: 'Giải pháp quản lý đặt in ấn hiệu quả, tiết kiệm'
 };
 
-export const ROLES = {
+export const USER_ROLES = {
   ADMIN: 'admin'
 };

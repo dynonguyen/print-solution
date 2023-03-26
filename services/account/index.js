@@ -15,6 +15,7 @@ const corsConfig = require('~/configs/cors');
 const { BASE_URL } = require('~/constants/common');
 const demoApi = require('~/controllers/demo');
 const logger = require('~/configs/logger');
+const authenticate = require('~/middleware/authenticate');
 
 // Config port
 const app = express();
@@ -32,7 +33,18 @@ app.use(cors(corsConfig));
 
 // APIs
 app.get(`${BASE_URL}/check-health`, (_, res) => res.status(200).json({ msg: 'OK' }));
-app.use(`${BASE_URL}/demo`, demoApi); // EXAMPLE: remove it
+app.use(`${BASE_URL}/demo`, demoApi); // EXAMPLE: remove it, public api
+// EXAMPLE: remove it, protected api sử dụng authenticate middleware
+app.use(
+  `${BASE_URL}/admin`,
+  authenticate,
+  (req, res, next) => {
+    logger.info(req.user);
+    if (req.user.isAdmin) next();
+    else return res.status(401).json({ msg: 'Token invalid' });
+  },
+  demoApi
+);
 
 // Listening
 app.listen(SERVER_PORT, () => {
