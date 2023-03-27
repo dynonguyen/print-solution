@@ -22,6 +22,7 @@ import corsConfig from '~/config/cors';
 import mongooseConnect from '~/config/database';
 import logger from '~/config/logger';
 import { MAX } from '~/constants/validation';
+import authChecker from '~/middleware/authenticate';
 import resolvers from '~/resolvers';
 import getEnv from '~/utils/getEnv';
 
@@ -41,10 +42,7 @@ async function runServer() {
 
   // GraphQL building
   const [buildError, graphqlSchema] = await to<GraphQLSchema>(
-    buildSchema({
-      resolvers: resolvers,
-      dateScalarMode: 'isoDate'
-    })
+    buildSchema({ resolvers: resolvers, dateScalarMode: 'isoDate', authChecker })
   );
 
   if (buildError || !graphqlSchema) {
@@ -84,7 +82,7 @@ async function runServer() {
   app.use(express.urlencoded({ limit: MAX.SIZE_JSON_REQUEST, extended: true }));
   app.use(cors(corsConfig));
   app.use(cookieParser());
-  app.use(expressMiddleware(apolloServer));
+  app.use(expressMiddleware(apolloServer, { context: async ({ req, res }) => ({ req, res }) }));
 
   // Modified server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));

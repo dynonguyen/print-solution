@@ -19,7 +19,10 @@ const adminRoute: RouteObject[] = [
         element: <AdminLayout />,
         children: [
           { path: '', element: <Navigate to={PATH.ADMIN.PRODUCT.LIST} /> },
-          { path: PATH.ADMIN.PRODUCT.LIST, element: <AdminProductList /> }
+          {
+            path: PATH.ADMIN.PRODUCT.LIST,
+            element: <AdminProductList />
+          }
         ]
       }
     ]

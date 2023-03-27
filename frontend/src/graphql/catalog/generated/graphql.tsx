@@ -27,6 +27,7 @@ export type Demo = {
 export type Query = {
   __typename?: 'Query';
   demo: Demo;
+  protectedDemo: Demo;
 };
 
 export type Subscription = {
@@ -38,6 +39,11 @@ export type GetDemoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetDemoQuery = { __typename?: 'Query', demo: { __typename?: 'Demo', _id: string, name: string, createdAt: any, updatedAt: any } };
+
+export type GetProtectedDemoQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetProtectedDemoQuery = { __typename?: 'Query', protectedDemo: { __typename?: 'Demo', _id: string, name: string, createdAt: any, updatedAt: any } };
 
 
 export const GetDemoDocument = gql`
@@ -77,3 +83,40 @@ export function useGetDemoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetDemoQueryHookResult = ReturnType<typeof useGetDemoQuery>;
 export type GetDemoLazyQueryHookResult = ReturnType<typeof useGetDemoLazyQuery>;
 export type GetDemoQueryResult = Apollo.QueryResult<GetDemoQuery, GetDemoQueryVariables>;
+export const GetProtectedDemoDocument = gql`
+    query GetProtectedDemo {
+  protectedDemo {
+    _id
+    name
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useGetProtectedDemoQuery__
+ *
+ * To run a query within a React component, call `useGetProtectedDemoQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProtectedDemoQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProtectedDemoQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProtectedDemoQuery(baseOptions?: Apollo.QueryHookOptions<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>(GetProtectedDemoDocument, options);
+      }
+export function useGetProtectedDemoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>(GetProtectedDemoDocument, options);
+        }
+export type GetProtectedDemoQueryHookResult = ReturnType<typeof useGetProtectedDemoQuery>;
+export type GetProtectedDemoLazyQueryHookResult = ReturnType<typeof useGetProtectedDemoLazyQuery>;
+export type GetProtectedDemoQueryResult = Apollo.QueryResult<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>;

@@ -7,3 +7,12 @@ query GetDemo {
     updatedAt
   }
 }
+
+query GetProtectedDemo {
+  protectedDemo {
+    _id
+    name
+    createdAt
+    updatedAt
+  }
+}
