@@ -1,14 +1,16 @@
-// EXAMPLE: remove this file
 import { Field, ID, ObjectType } from 'type-graphql';
 import { MongoID } from '../common';
 
 @ObjectType()
-class Demo {
+class Category {
   @Field((_type) => ID)
   _id: MongoID;
 
   @Field((_type) => String)
   name: string;
+
+  @Field((_type) => String)
+  photo: string;
 
   @Field((_type) => Date)
   createdAt: Date;
@@ -17,4 +19,4 @@ class Demo {
   updatedAt: Date;
 }
 
-export default Demo;
+export default Category;

@@ -1,0 +1,7 @@
+{
+  "name": "print-solution",
+  "scripts": {
+    "cm": "yarn commit",
+    "commit": "sh ./scripts/cz-customize.sh"
+  }
+}
