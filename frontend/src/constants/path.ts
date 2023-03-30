@@ -10,6 +10,7 @@ export const PATH = {
 
   ADMIN: {
     ROOT: '/admin',
+    CATEGORY: '/admin/category',
     PRODUCT: {
       ROOT: '/admin/product',
       LIST: '/admin/product',

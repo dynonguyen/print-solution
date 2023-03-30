@@ -2,7 +2,7 @@ import { withSx } from '@cads-ui/core';
 import { Icon as Iconify, IconifyIcon } from '@iconify/react';
 
 // -----------------------------
-interface IconProps {
+interface IconProps extends React.ComponentProps<typeof Iconify> {
   icon: string | IconifyIcon;
 }
 

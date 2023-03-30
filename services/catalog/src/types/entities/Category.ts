@@ -10,6 +10,16 @@ class Category {
   name: string;
 
   @Field((_type) => String)
+  desc: string;
+
+  // A category cannot be deleted, can only be hidden
+  @Field((_type) => Boolean)
+  isHidden: boolean;
+
+  @Field((_type) => Number)
+  numOfProducts: number;
+
+  @Field((_type) => String)
   photo: string;
 
   @Field((_type) => Date)

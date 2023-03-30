@@ -12,16 +12,8 @@ const schema: Schema = new Schema<Product>({
   numOfFavorites: { type: Number, required: true, default: 0 },
   numOfViews: { type: Number, required: true, default: 0 },
   infos: { type: [{ label: String, value: String }], default: [] },
-  createdAt: {
-    type: Date,
-    required: true,
-    default: new Date()
-  },
-  updatedAt: {
-    type: Date,
-    required: true,
-    default: new Date()
-  }
+  createdAt: { type: Date, required: true, default: new Date() },
+  updatedAt: { type: Date, required: true, default: new Date() }
 });
 
 const ProductModel: Model<Product> = model<Product>(MODEL_NAMES.PRODUCT, schema, 'products');

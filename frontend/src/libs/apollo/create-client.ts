@@ -4,7 +4,6 @@ import keycloak from '../keycloak';
 
 const createApolloClient = (uri: string, options?: Omit<ApolloClientOptions<any>, 'cache'>) => {
   const httpLink = createHttpLink({ uri });
-  console.log(httpLink);
 
   const authLink = setContext((_, { headers }) => {
     const token = keycloak.token;

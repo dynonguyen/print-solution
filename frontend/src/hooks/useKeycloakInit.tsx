@@ -1,6 +1,5 @@
 import { KeycloakInitOptions } from 'keycloak-js';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/path';
 import useAuth from './useAuth';
 
@@ -8,7 +7,6 @@ import useAuth from './useAuth';
 const useKeycloakInit = (initOptions?: KeycloakInitOptions): boolean => {
   const { init, authenticated, loadUserInfo, loadUserProfile } = useAuth();
   const [loading, setLoading] = React.useState(!Boolean(authenticated));
-  const navigate = useNavigate();
 
   React.useEffect(() => {
     if (loading) {
@@ -19,7 +17,7 @@ const useKeycloakInit = (initOptions?: KeycloakInitOptions): boolean => {
         })
         .catch((err) => {
           console.error('Authentication init error: ', err);
-          navigate(PATH.SERVER_ERROR);
+          window.location.href = PATH.SERVER_ERROR;
         });
     }
   }, []);

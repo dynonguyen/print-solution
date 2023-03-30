@@ -13,6 +13,7 @@ import { withPublic } from '~/utils/withStatic';
 const sidebarItems: SidebarItems[] = [
   {
     menu: [
+      { label: 'Quản lý danh mục', link: PATH.ADMIN.CATEGORY, icon: <Icon icon="ic:round-category" /> },
       { label: 'Quản lý sản phẩm', link: PATH.ADMIN.PRODUCT.ROOT, icon: <Icon icon="carbon:carbon-for-ibm-product" /> },
       { label: 'Quản lý đơn hàng', link: PATH.ADMIN.ORDER, icon: <Icon icon="icon-park-solid:transaction-order" /> },
       { label: 'Doanh thu', link: PATH.ADMIN.REVENUE, icon: <Icon icon="ph:currency-circle-dollar-fill" /> },
@@ -91,4 +92,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default React.memo(AdminLayout, () => true);

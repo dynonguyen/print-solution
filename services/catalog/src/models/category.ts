@@ -5,7 +5,10 @@ import Category from '~/types/entities/Category';
 
 const schema: Schema = new Schema<Category>({
   name: { type: String, required: true, maxlength: MAX.CATEGORY_NAME },
+  desc: { type: String, required: true, default: '' },
   photo: { type: String, required: true },
+  numOfProducts: { type: Number, default: 0 },
+  isHidden: { type: Boolean, default: false },
   createdAt: { type: Date, required: true, default: new Date() },
   updatedAt: { type: Date, required: true, default: new Date() }
 });

@@ -3,7 +3,10 @@
 const TYPES = {
   feat: '✨ feat',
   fix: '🐞 fix',
+  debug: '🔴 debug',
   hotfix: '🔥 hotfix',
+  style: '🌈 style',
+  wip: '🚧 wip',
   docs: '📝 docs',
   build: '🔨 build',
   test: '🧪 test',
@@ -14,13 +17,16 @@ const TYPES = {
   init: '🎉 init'
 };
 
-const DIVIDER = '|';
+const DIVIDER = '';
 
 module.exports = {
   types: [
     { value: TYPES.feat, name: `${TYPES.feat}: Add a new feature` },
     { value: TYPES.fix, name: `${TYPES.fix}: Fix a bug` },
+    { value: TYPES.debug, name: `${TYPES.debug}: Debugging` },
     { value: TYPES.hotfix, name: `${TYPES.hotfix}: Hotfix a bug` },
+    { value: TYPES.style, name: `${TYPES.style}: Custom CSS, UI Style` },
+    { value: TYPES.wip, name: `${TYPES.wip}: Work in progress` },
     { value: TYPES.setup, name: `${TYPES.setup}: Add project configuration` },
     { value: TYPES.docs, name: `${TYPES.docs}: Add or update documentation, README.md` },
     { value: TYPES.build, name: `${TYPES.build}: Add or update regards to build process` },
