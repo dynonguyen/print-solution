@@ -25,9 +25,13 @@ dist-ssr
 *.sw?
 docker-volumes/*
 !docker-volumes/minio
-!docker-volumes/mongo-export
+docker-volumes/minio/.minio.sys/buckets/.bloomcycle.bin
+docker-volumes/minio/.minio.sys/buckets/.usage-cache.bin
+docker-volumes/minio/.minio.sys/buckets/.usage.json
+docker-volumes/minio/.minio.sys/buckets/print-solution/.usage-cache.bin
 docker-volumes/minio/print-solution/private/*
 !docker-volumes/minio/print-solution/private/note.txt
+!docker-volumes/mongo-export
 !docker-volumes/keycloak
 !docker-volumes/note.txt
 services/docs/src/upload/*

@@ -3,4 +3,4 @@ export const COMMONS = {
   SLOGAN: 'Giải pháp quản lý đặt in ấn hiệu quả, tiết kiệm'
 };
 
-export const USER_ROLES = { ADMIN: 'admin' };
+export const USER_ROLES = { ADMIN: 'admin', CUSTOMER: 'customer', GUEST: 'guest' };
