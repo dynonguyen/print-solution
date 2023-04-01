@@ -1,0 +1,10 @@
+mutation AddCategory($addCategoryInput: AddCategoryInput!) {
+  addCategory(addCategoryInput: $addCategoryInput) {
+    code
+    msg
+    success
+    doc {
+      ...fullCategory
+    }
+  }
+}

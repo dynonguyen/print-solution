@@ -9,9 +9,6 @@ class Category {
   @Field((_type) => String)
   name: string;
 
-  @Field((_type) => String)
-  desc: string;
-
   // A category cannot be deleted, can only be hidden
   @Field((_type) => Boolean)
   isHidden: boolean;

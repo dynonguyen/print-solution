@@ -1,6 +1,6 @@
-import { getEnv } from '~/utils/getEnv';
+import { ENDPOINTS } from '~/constants/endpoints';
 import createAxiosInstance from './create-instance';
 
-const shippingAxios = createAxiosInstance(`${getEnv('VITE_APP_GATEWAY_PATH')}/api/shipping`);
+const shippingAxios = createAxiosInstance(ENDPOINTS.SHIPPING_API.ROOT);
 
 export default shippingAxios;

@@ -1,1 +1,0 @@
-Folder này dùng để test các tính năng upload nhầm không đẩy lên git

@@ -16,107 +16,131 @@ export type Scalars = {
   DateTime: any;
 };
 
-export type Demo = {
-  __typename?: 'Demo';
+export type AddCategoryInput = {
+  name: Scalars['String'];
+  photoUrl: Scalars['String'];
+};
+
+export type AddCategoryResponse = IMutationResponse & {
+  __typename?: 'AddCategoryResponse';
+  code: Scalars['Int'];
+  doc?: Maybe<Category>;
+  msg?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
+export type Category = {
+  __typename?: 'Category';
   _id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
+  isHidden: Scalars['Boolean'];
   name: Scalars['String'];
+  numOfProducts: Scalars['Float'];
+  photo: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type CategoryPaginatedResponse = IQueryResponse & {
+  __typename?: 'CategoryPaginatedResponse';
+  code: Scalars['Int'];
+  docs: Array<Category>;
+  message?: Maybe<Scalars['String']>;
+  page: Scalars['Int'];
+  pageSize: Scalars['Int'];
+  search?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['String']>;
+  total: Scalars['Int'];
+};
+
+export type IMutationResponse = {
+  code: Scalars['Int'];
+  msg?: Maybe<Scalars['String']>;
+  success: Scalars['Boolean'];
+};
+
+export type IQueryResponse = {
+  code: Scalars['Int'];
+  message?: Maybe<Scalars['String']>;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  addCategory: AddCategoryResponse;
+};
+
+
+export type MutationAddCategoryArgs = {
+  addCategoryInput: AddCategoryInput;
 };
 
 export type Query = {
   __typename?: 'Query';
-  demo: Demo;
-  protectedDemo: Demo;
+  catagories: CategoryPaginatedResponse;
 };
 
-export type Subscription = {
-  __typename?: 'Subscription';
-  newNotification: Scalars['String'];
+
+export type QueryCatagoriesArgs = {
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['String']>;
 };
 
-export type GetDemoQueryVariables = Exact<{ [key: string]: never; }>;
+export type FullCategoryFragment = { __typename?: 'Category', _id: string, name: string, photo: string, numOfProducts: number, createdAt: any, updatedAt: any, isHidden: boolean };
+
+export type AddCategoryMutationVariables = Exact<{
+  addCategoryInput: AddCategoryInput;
+}>;
 
 
-export type GetDemoQuery = { __typename?: 'Query', demo: { __typename?: 'Demo', _id: string, name: string, createdAt: any, updatedAt: any } };
+export type AddCategoryMutation = { __typename?: 'Mutation', addCategory: { __typename?: 'AddCategoryResponse', code: number, msg?: string | null, success: boolean, doc?: { __typename?: 'Category', _id: string, name: string, photo: string, numOfProducts: number, createdAt: any, updatedAt: any, isHidden: boolean } | null } };
 
-export type GetProtectedDemoQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetProtectedDemoQuery = { __typename?: 'Query', protectedDemo: { __typename?: 'Demo', _id: string, name: string, createdAt: any, updatedAt: any } };
-
-
-export const GetDemoDocument = gql`
-    query GetDemo {
-  demo {
-    _id
-    name
-    createdAt
-    updatedAt
-  }
+export const FullCategoryFragmentDoc = gql`
+    fragment fullCategory on Category {
+  _id
+  name
+  photo
+  numOfProducts
+  createdAt
+  updatedAt
+  isHidden
 }
     `;
+export const AddCategoryDocument = gql`
+    mutation AddCategory($addCategoryInput: AddCategoryInput!) {
+  addCategory(addCategoryInput: $addCategoryInput) {
+    code
+    msg
+    success
+    doc {
+      ...fullCategory
+    }
+  }
+}
+    ${FullCategoryFragmentDoc}`;
+export type AddCategoryMutationFn = Apollo.MutationFunction<AddCategoryMutation, AddCategoryMutationVariables>;
 
 /**
- * __useGetDemoQuery__
+ * __useAddCategoryMutation__
  *
- * To run a query within a React component, call `useGetDemoQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDemoQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
+ * To run a mutation, you first call `useAddCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
  *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const { data, loading, error } = useGetDemoQuery({
+ * const [addCategoryMutation, { data, loading, error }] = useAddCategoryMutation({
  *   variables: {
+ *      addCategoryInput: // value for 'addCategoryInput'
  *   },
  * });
  */
-export function useGetDemoQuery(baseOptions?: Apollo.QueryHookOptions<GetDemoQuery, GetDemoQueryVariables>) {
+export function useAddCategoryMutation(baseOptions?: Apollo.MutationHookOptions<AddCategoryMutation, AddCategoryMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetDemoQuery, GetDemoQueryVariables>(GetDemoDocument, options);
+        return Apollo.useMutation<AddCategoryMutation, AddCategoryMutationVariables>(AddCategoryDocument, options);
       }
-export function useGetDemoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDemoQuery, GetDemoQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetDemoQuery, GetDemoQueryVariables>(GetDemoDocument, options);
-        }
-export type GetDemoQueryHookResult = ReturnType<typeof useGetDemoQuery>;
-export type GetDemoLazyQueryHookResult = ReturnType<typeof useGetDemoLazyQuery>;
-export type GetDemoQueryResult = Apollo.QueryResult<GetDemoQuery, GetDemoQueryVariables>;
-export const GetProtectedDemoDocument = gql`
-    query GetProtectedDemo {
-  protectedDemo {
-    _id
-    name
-    createdAt
-    updatedAt
-  }
-}
-    `;
-
-/**
- * __useGetProtectedDemoQuery__
- *
- * To run a query within a React component, call `useGetProtectedDemoQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProtectedDemoQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProtectedDemoQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetProtectedDemoQuery(baseOptions?: Apollo.QueryHookOptions<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>(GetProtectedDemoDocument, options);
-      }
-export function useGetProtectedDemoLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>(GetProtectedDemoDocument, options);
-        }
-export type GetProtectedDemoQueryHookResult = ReturnType<typeof useGetProtectedDemoQuery>;
-export type GetProtectedDemoLazyQueryHookResult = ReturnType<typeof useGetProtectedDemoLazyQuery>;
-export type GetProtectedDemoQueryResult = Apollo.QueryResult<GetProtectedDemoQuery, GetProtectedDemoQueryVariables>;
+export type AddCategoryMutationHookResult = ReturnType<typeof useAddCategoryMutation>;
+export type AddCategoryMutationResult = Apollo.MutationResult<AddCategoryMutation>;
+export type AddCategoryMutationOptions = Apollo.BaseMutationOptions<AddCategoryMutation, AddCategoryMutationVariables>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { COMMONS } from '~/constants/common';
-import { withPublic } from '~/utils/withStatic';
+import { withStatic } from '~/utils/withStatic';
 
 // -----------------------------
 interface PageProps {
@@ -16,7 +16,7 @@ function Page({ title, showAppName = true, children }: PageProps) {
     <React.Fragment>
       <Helmet>
         {title && <title>{title + (showAppName ? ` | ${COMMONS.APP_NAME}` : '')}</title>}
-        <link rel="icon" type="image/png" href={withPublic('img/favicon.png')} />
+        <link rel="icon" type="image/png" href={withStatic('img/favicon.png')} />
       </Helmet>
       {children}
     </React.Fragment>

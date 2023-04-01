@@ -7,7 +7,7 @@ import Icon from '~/components/Icon';
 import { LS_KEY } from '~/constants/key';
 import { PATH } from '~/constants/path';
 import keycloak from '~/libs/keycloak';
-import { withPublic } from '~/utils/withStatic';
+import { withStatic } from '~/utils/withStatic';
 
 // -----------------------------
 const sidebarItems: SidebarItems[] = [
@@ -65,7 +65,7 @@ const AdminLayout = () => {
         })}
         howActiveLink={(link) => window.location.pathname.includes(link)}
         items={sidebarItems}
-        homeLogo={withPublic('img/logo.png')}
+        homeLogo={withStatic('img/logo.png')}
         homeTitle="Administrator"
         homeLink={PATH.ADMIN.ROOT}
         isSmall={isSmall}

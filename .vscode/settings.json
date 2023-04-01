@@ -5,7 +5,7 @@
   "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[javascriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "files.exclude": { "**/yarn-error.log": true, "**/.env": false },
-  "search.exclude": { "**/.env": false },
+  "search.exclude": { "**/.env": false, "**/docker-volumes": true },
   "dynoFileUtils.folderExclude": ["node_modules", ".git", "build", "dist", "docker-volumes"],
   "todo-tree.general.tags": ["BUG", "FIX", "TODO", "TEST", "REFACTOR", "IMPROVE", "EXAMPLE"],
   "todo-tree.filtering.excludeGlobs": ["**/node_modules/*/**"],
@@ -22,6 +22,6 @@
     "REFACTOR": { "icon": "tools", "iconColour": "#0FBDCC", "background": "#0FBDCC", "foreground": "#000" },
     "IMPROVE": { "icon": "zap", "iconColour": "#DF2A98", "background": "#DF2A98", "foreground": "#FFF" }
   },
-  "cSpell.words": ["Codegen", "keycloak"],
+  "cSpell.words": ["Codegen", "keycloak", "MINIO"],
   "todo-tree.tree.scanMode": "workspace"
 }

@@ -1,6 +1,6 @@
-import { getEnv } from '~/utils/getEnv';
+import { ENDPOINTS } from '~/constants/endpoints';
 import createAxiosInstance from './create-instance';
 
-const paymentAxios = createAxiosInstance(`${getEnv('VITE_APP_GATEWAY_PATH')}/api/payment`);
+const paymentAxios = createAxiosInstance(ENDPOINTS.PAYMENT_API.ROOT);
 
 export default paymentAxios;

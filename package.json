@@ -1,5 +1,6 @@
 {
   "name": "print-solution",
+  "license": "MIT",
   "scripts": {
     "cm": "yarn commit",
     "commit": "sh ./scripts/cz-customize.sh"

@@ -2,7 +2,7 @@ import { Button, PageResult } from '@cads-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { PATH } from '~/constants/path';
-import { withPublic } from '~/utils/withStatic';
+import { withStatic } from '~/utils/withStatic';
 
 const NotFoundPage: React.FC = (props) => {
   return (
@@ -15,7 +15,7 @@ const NotFoundPage: React.FC = (props) => {
           <Button>Về trang chủ</Button>
         </Link>
       }
-      illustration={<img src={withPublic('img/not-found.svg')} />}
+      illustration={<img src={withStatic('img/not-found.svg')} />}
     />
   );
 };

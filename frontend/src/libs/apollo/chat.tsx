@@ -1,8 +1,8 @@
 import { ApolloProvider } from '@apollo/client';
-import { getEnv } from '~/utils/getEnv';
+import { ENDPOINTS } from '~/constants/endpoints';
 import createApolloClient from './create-client';
 
-export const chatApolloClient = createApolloClient(`${getEnv('VITE_APP_GATEWAY_PATH')}/api/chat`);
+export const chatApolloClient = createApolloClient(ENDPOINTS.CHAT_API.ROOT);
 
 const ChatApolloProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <ApolloProvider client={chatApolloClient}>{children}</ApolloProvider>;

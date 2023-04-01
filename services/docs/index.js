@@ -1,6 +1,7 @@
 // Set environment variables
 require('dotenv').config();
 require('module-alias/register');
+global.__root_dir = __dirname;
 
 // Import third-party
 const express = require('express');
@@ -15,6 +16,8 @@ const corsConfig = require('~/configs/cors');
 const { BASE_URL } = require('~/constants/common');
 const logger = require('~/configs/logger');
 const { postgresConnect } = require('~/configs/database');
+const uploadApi = require('~/controllers/upload');
+const { SUCCESS_CODE } = require('~/constants/status-code');
 
 // Config port
 const app = express();
@@ -31,7 +34,8 @@ app.use(cookieParser());
 app.use(cors(corsConfig));
 
 // APIs
-app.get(`${BASE_URL}/check-health`, (_, res) => res.status(200).json({ msg: 'OK' }));
+app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json({ msg: 'OK' }));
+app.use(`${BASE_URL}/upload`, uploadApi);
 
 // Listening
 postgresConnect()

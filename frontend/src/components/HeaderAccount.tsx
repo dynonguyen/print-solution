@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Icon from '~/components/Icon';
 import { PATH } from '~/constants/path';
 import useAuth from '~/hooks/useAuth';
-import { withPublic } from '~/utils/withStatic';
+import { withStatic } from '~/utils/withStatic';
 
 // -----------------------------
 interface HeaderAccountProps {
@@ -19,7 +19,7 @@ const HeaderAccount: React.FC<HeaderAccountProps> = (props) => {
   const navigate = useNavigate();
   const { profile = {}, logout } = useAuth();
 
-  const avt = withPublic('img/default-user.png');
+  const avt = withStatic('img/default-user.png');
   const name = `${profile.firstName} ${profile.lastName}`;
 
   return (

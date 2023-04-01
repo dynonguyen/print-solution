@@ -91,8 +91,8 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
             icon: <Icon icon={FILE_EXT_ICON_MAPPING[getFileExt(file.name)]} />,
             action: (
               <Icon
-                sx={{ fs: 24 }}
-                icon="material-symbols:close-rounded"
+                sx={{ fs: 24, color: 'text.secondary', _hover: { color: 'error.main' } }}
+                icon="mdi:bin"
                 onClick={(e) => {
                   handleDeleteFile(file);
                   e.preventDefault();

@@ -1,0 +1,9 @@
+fragment fullCategory on Category {
+  _id
+  name
+  photo
+  numOfProducts
+  createdAt
+  updatedAt
+  isHidden
+}

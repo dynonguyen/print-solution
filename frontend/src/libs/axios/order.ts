@@ -1,6 +1,6 @@
-import { getEnv } from '~/utils/getEnv';
+import { ENDPOINTS } from '~/constants/endpoints';
 import createAxiosInstance from './create-instance';
 
-const orderAxios = createAxiosInstance(`${getEnv('VITE_APP_GATEWAY_PATH')}/api/order`);
+const orderAxios = createAxiosInstance(ENDPOINTS.ORDER_API.ROOT);
 
 export default orderAxios;

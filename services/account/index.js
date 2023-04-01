@@ -16,6 +16,7 @@ const { BASE_URL } = require('~/constants/common');
 const demoApi = require('~/controllers/demo');
 const logger = require('~/configs/logger');
 const authenticate = require('~/middleware/authenticate');
+const { SUCCESS_CODE, ERROR_CODE } = require('~/constants/status-code');
 
 // Config port
 const app = express();
@@ -32,7 +33,7 @@ app.use(cookieParser());
 app.use(cors(corsConfig));
 
 // APIs
-app.get(`${BASE_URL}/check-health`, (_, res) => res.status(200).json({ msg: 'OK' }));
+app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json({ msg: 'OK' }));
 app.use(`${BASE_URL}/demo`, demoApi); // EXAMPLE: remove it, public api
 // EXAMPLE: remove it, protected api sử dụng authenticate middleware
 app.use(
@@ -41,7 +42,7 @@ app.use(
   (req, res, next) => {
     logger.info(req.user);
     if (req.user.isAdmin) next();
-    else return res.status(401).json({ msg: 'Token invalid' });
+    else return res.status(ERROR_CODE.UNAUTHORIZED).json({ msg: 'Token invalid' });
   },
   demoApi
 );

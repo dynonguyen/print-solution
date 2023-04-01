@@ -1,9 +1,9 @@
 import { ApolloProvider } from '@apollo/client';
 import React from 'react';
-import { getEnv } from '~/utils/getEnv';
+import { ENDPOINTS } from '~/constants/endpoints';
 import createApolloClient from './create-client';
 
-export const catalogApolloClient = createApolloClient(`${getEnv('VITE_APP_GATEWAY_PATH')}/api/catalog`);
+export const catalogApolloClient = createApolloClient(ENDPOINTS.CATALOG_API.ROOT);
 
 const CatalogApolloProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return <ApolloProvider client={catalogApolloClient}>{children}</ApolloProvider>;
