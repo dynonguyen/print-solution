@@ -1,5 +1,6 @@
 import { withSx } from '@cads-ui/core';
 import { Icon as Iconify, IconifyIcon } from '@iconify/react';
+import clsx from 'clsx';
 
 // -----------------------------
 interface IconProps extends React.ComponentProps<typeof Iconify> {
@@ -8,9 +9,9 @@ interface IconProps extends React.ComponentProps<typeof Iconify> {
 
 // -----------------------------
 const Icon = withSx<IconProps>((props) => {
-  const { icon, ...other } = props;
+  const { icon, className, ...other } = props;
 
-  return <Iconify icon={icon} {...other} />;
+  return <Iconify className={clsx('icon', className)} icon={icon} {...other} />;
 });
 
 export default Icon;

@@ -8,3 +8,15 @@ mutation AddCategory($addCategoryInput: AddCategoryInput!) {
     }
   }
 }
+
+mutation DeleteCategory($deleteCategoryInput: DeleteCategoryInput!) {
+  deleteCategory(deleteCategoryInput: $deleteCategoryInput) {
+    ...mutationResponse
+  }
+}
+
+mutation UpdateCategory($updateCategoryInput: UpdateCategoryInput!) {
+  updateCategory(updateCategoryInput: $updateCategoryInput) {
+    ...mutationResponse
+  }
+}

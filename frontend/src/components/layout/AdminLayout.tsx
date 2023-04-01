@@ -39,7 +39,7 @@ const TopBar = () => {
       elevateOnScroll={false}
     >
       <Flex spacing={4} justifyContent="flex-end" sx={{ h: 1, p: 2 }}>
-        {/* TODO: Implement logic */}
+        {/* TODO: Implement notify logic */}
         <Notification PopoverProps={{ showBackdrop: true }} />
         <HeaderAccount role="Admin" />
       </Flex>
@@ -84,7 +84,7 @@ const AdminLayout = () => {
         sx={{ flexGrow: 1, ml: isSmall ? `${SIDEBAR_SMALL_WIDTH}px` : `${SIDEBAR_WIDTH}px`, transition: 'margin 0.3s' }}
       >
         <TopBar />
-        <Box sx={{ p: 4 }}>
+        <Box sx={{ p: 8 }}>
           <Outlet />
         </Box>
       </Box>

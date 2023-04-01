@@ -2,8 +2,8 @@ import { Model } from 'mongoose';
 import DEFAULTS from '~/constants/default';
 
 interface PaginateOptions {
-  select?: string;
-  sort?: string;
+  select?: any;
+  sort?: any;
 }
 
 interface MongoosePaginateResult<T> {

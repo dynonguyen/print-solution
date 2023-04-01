@@ -1,6 +1,7 @@
-import { Typography } from '@cads-ui/core';
+import { Box } from '@cads-ui/core';
 import React from 'react';
 import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
+import CategoryList from '../components/CategoryList';
 import NewCategory from '../components/NewCategory';
 
 // -----------------------------
@@ -10,8 +11,10 @@ interface AdminCategoryListProps {}
 const AdminCategoryList = withCatalogApolloProvider<AdminCategoryListProps>((props) => {
   return (
     <React.Fragment>
-      <NewCategory />
-      <Typography variant="h3">Danh mục sản phẩm</Typography>
+      <Box sx={{ my: 5, mb: 8 }}>
+        <NewCategory />
+      </Box>
+      <CategoryList />
     </React.Fragment>
   );
 });

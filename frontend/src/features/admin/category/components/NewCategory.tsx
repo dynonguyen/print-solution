@@ -1,13 +1,15 @@
 import { Alert, Button, Dialog, FieldLabel, Flex, Input } from '@cads-ui/core';
 import to from 'await-to-js';
+import { getOperationAST } from 'graphql';
 import React from 'react';
 import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
+import SearchBar from '~/components/SearchBar';
 import UploadFile from '~/components/UploadFile';
 import { ENDPOINTS } from '~/constants/endpoints';
 import { SUCCESS_CODE } from '~/constants/status-code';
 import { MAX } from '~/constants/validation';
-import { useAddCategoryMutation } from '~/graphql/catalog/generated/graphql';
+import { AdminCategoryListDocument, useAddCategoryMutation } from '~/graphql/catalog/generated/graphql';
 import docsAxios from '~/libs/axios/docs';
 import { fileReader } from '~/utils/file-reader';
 import { getFileExt } from '~/utils/helper';
@@ -18,17 +20,33 @@ interface CategoryForm {
   photoFile: File | null;
 }
 
+const defaultForm: CategoryForm = { name: '', photoFile: null };
+
 // -----------------------------
 const NewCategory = () => {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState({ field: '', msg: '' });
-  const form = React.useRef<CategoryForm>({ name: '', photoFile: null });
+  const form = React.useRef<CategoryForm>({ ...defaultForm });
   const [loading, setLoading] = React.useState(false);
-  const [addCategoryMutation] = useAddCategoryMutation();
+  const [addCategoryMutation] = useAddCategoryMutation({
+    refetchQueries: [getOperationAST(AdminCategoryListDocument)?.name?.value || 'AdminCategoryList'],
+    awaitRefetchQueries: true
+  });
+
+  const handleCloseForm = () => {
+    form.current = { ...defaultForm };
+    setError({ field: '', msg: '' });
+    setOpen(false);
+  };
 
   const handleAddCategorySuccess = () => {
     toast.success('Thêm danh mục thành công');
-    setOpen(false);
+    handleCloseForm();
+  };
+
+  const handleAddCategoryError = (photoUrl: string, msg?: string) => {
+    docsAxios.delete(ENDPOINTS.DOCS_API.UPLOAD_CATEGORY_PHOTO, { params: { photoUrl } });
+    toast.error(msg || 'Thêm danh mục thất bại, thử lại');
   };
 
   const handleAddCategory = async () => {
@@ -54,13 +72,17 @@ const NewCategory = () => {
     }
 
     const { photoUrl } = uploadResult.data;
-    const { errors, data } = await addCategoryMutation({ variables: { addCategoryInput: { name, photoUrl } } });
 
-    if (errors?.length || data?.addCategory.code !== SUCCESS_CODE.CREATED) {
-      docsAxios.delete(ENDPOINTS.DOCS_API.UPLOAD_CATEGORY_PHOTO, { params: { photoUrl } });
-      toast.error(data?.addCategory.msg || 'Thêm danh mục thất bại, thử lại');
-    } else {
-      handleAddCategorySuccess();
+    try {
+      const { errors, data } = await addCategoryMutation({ variables: { addCategoryInput: { name, photoUrl } } });
+
+      if (errors?.length || data?.addCategory.code !== SUCCESS_CODE.CREATED) {
+        handleAddCategoryError(photoUrl, data?.addCategory.msg || '');
+      } else {
+        handleAddCategorySuccess();
+      }
+    } catch (error) {
+      handleAddCategoryError(photoUrl);
     }
 
     setError({ field: '', msg: '' });
@@ -69,23 +91,24 @@ const NewCategory = () => {
 
   return (
     <React.Fragment>
-      <Flex justifyContent="flex-end" sx={{ mb: 8 }}>
-        <Button variant="text" endIcon={<Icon icon="material-symbols:add" />} onClick={() => setOpen(true)}>
+      <Flex justifyContent="space-between" spacing={2} wrap wrapSpace="both">
+        <SearchBar />
+        <Button endIcon={<Icon icon="material-symbols:add" />} onClick={() => setOpen(true)}>
           Thêm danh mục mới
         </Button>
       </Flex>
 
       <Dialog
         open={open}
-        PopoverProps={{ disabledBackdropClick: true }}
-        onClose={() => setOpen(false)}
+        PopoverProps={{ disabledBackdropClick: true, unmountOnExit: true }}
+        onClose={handleCloseForm}
         header="Thêm danh mục sản phẩm"
         body={
           <Flex direction="column" spacing={3}>
             {error.msg && <Alert type="error">{error.msg}</Alert>}
 
             <FieldLabel label="Tên danh mục *" error={error.field === 'name'}>
-              <Input fullWidth onChange={(e) => (form.current.name = e.target.value.trim())} />
+              <Input autoFocus fullWidth onChange={(e) => (form.current.name = e.target.value.trim())} />
             </FieldLabel>
 
             <FieldLabel label="Hình ảnh danh mục *" error={error.field === 'photoFile'}>
@@ -98,7 +121,7 @@ const NewCategory = () => {
         maxWidth="md"
         action={
           <Flex spacing={2}>
-            <Button variant="soft" color="grey" onClick={() => setOpen(false)}>
+            <Button variant="soft" color="grey" onClick={handleCloseForm}>
               Hủy
             </Button>
             <Button onClick={handleAddCategory} loading={loading}>

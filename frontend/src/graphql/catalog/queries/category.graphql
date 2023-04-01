@@ -1,0 +1,12 @@
+query AdminCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
+  catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {
+    code
+    message
+    page
+    total
+    pageSize
+    docs {
+      ...fullCategory
+    }
+  }
+}

@@ -20,16 +20,6 @@ const createAxiosInstance = (baseURL: string, configs?: CreateAxiosDefaults) => 
     }
   );
 
-  axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      if (Number(error.response?.status) === 401) {
-        // TODO: handle here
-      }
-      throw error;
-    }
-  );
-
   return axiosInstance;
 };
 
