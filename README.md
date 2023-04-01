@@ -18,6 +18,8 @@
 - 18120634 - Nguyễn Lê Anh Tuấn
 - 18120644 - Nguyễn Cát Tường
 
+## 📑 [Documentation](./docs/README.md)
+
 ## 🔥 Prerequisites
 
 - `Nodejs >= 16.8.0`

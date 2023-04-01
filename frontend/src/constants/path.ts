@@ -11,6 +11,7 @@ export const PATH = {
   ADMIN: {
     ROOT: '/admin',
     CATEGORY: '/admin/category',
+    CHAT: '/admin/chat',
     PRODUCT: {
       ROOT: '/admin/product',
       LIST: '/admin/product',

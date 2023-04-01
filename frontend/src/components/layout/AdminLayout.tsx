@@ -16,6 +16,7 @@ const sidebarItems: SidebarItems[] = [
       { label: 'Quản lý danh mục', link: PATH.ADMIN.CATEGORY, icon: <Icon icon="ic:round-category" /> },
       { label: 'Quản lý sản phẩm', link: PATH.ADMIN.PRODUCT.ROOT, icon: <Icon icon="carbon:carbon-for-ibm-product" /> },
       { label: 'Quản lý đơn hàng', link: PATH.ADMIN.ORDER, icon: <Icon icon="icon-park-solid:transaction-order" /> },
+      { label: 'Hỗ trợ khách hàng', link: PATH.ADMIN.CHAT, icon: <Icon icon="material-symbols:support-agent" /> },
       { label: 'Doanh thu', link: PATH.ADMIN.REVENUE, icon: <Icon icon="ph:currency-circle-dollar-fill" /> },
       { label: 'Tài khoản', link: PATH.ADMIN.PROFILE, icon: <Icon icon="ic:baseline-account-circle" /> },
       { label: 'Cài đặt', link: PATH.ADMIN.SETTINGS, icon: <Icon icon="ant-design:setting-filled" /> },
