@@ -25,11 +25,10 @@ dist-ssr
 *.sw?
 docker-volumes/*
 !docker-volumes/minio
+!docker-volumes/mongo-export
 docker-volumes/minio/print-solution/private/*
 !docker-volumes/minio/print-solution/private/note.txt
 !docker-volumes/keycloak
 !docker-volumes/note.txt
-static/tmp/*
-!static/tmp/note.txt
 services/docs/src/upload/*
 !services/docs/src/upload/note.txt

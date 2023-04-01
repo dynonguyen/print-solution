@@ -57,6 +57,8 @@
   docker compose -p print-solution-[dev|prod] stop
   # Export all keycloak realms
   docker exec -u root -it keycloak-dev bash -c "/opt/keycloak/bin/kc.sh export --file /opt/keycloak/data/import/realms.json --users same_file"
+  # Export a mongodb collection
+  docker exec -it mongodb-dev mongoexport --db <database_name> --collection <collection_name> --out /mongo-export/<filename.json>
 ```
 
 ## 📃 Auto run via Shell Script

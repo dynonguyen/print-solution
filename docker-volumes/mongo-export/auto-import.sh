@@ -1,0 +1,3 @@
+#!/bin/sh
+
+mongoimport --host mongo:27017 --db catalog --collection categories --file /mongo-export/categories.json

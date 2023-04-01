@@ -14,8 +14,19 @@ services:
       - www-net-dev
     volumes:
       - ./docker-volumes/mongodb:/data/db
+      - ./docker-volumes/mongo-export:/mongo-export
     ports:
       - 27017:27017
+  mongo-import:
+    container_name: mongo-import
+    image: mongo:latest
+    networks:
+      - www-net-dev
+    volumes:
+      - ./docker-volumes/mongo-export:/mongo-export
+    depends_on:
+      - mongo
+    command: sh /mongo-export/auto-import.sh
   postgresql:
     hostname: postgresql
     container_name: postgres-dev
