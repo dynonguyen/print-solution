@@ -92,8 +92,13 @@ const NewCategory = () => {
   return (
     <React.Fragment>
       <Flex justifyContent="space-between" spacing={2} wrap wrapSpace="both">
-        <SearchBar />
-        <Button endIcon={<Icon icon="material-symbols:add" />} onClick={() => setOpen(true)}>
+        <SearchBar fullWidth sm={{ fullWidth: false }} />
+        <Button
+          fullWidth
+          sm={{ fullWidth: false }}
+          endIcon={<Icon icon="material-symbols:add" />}
+          onClick={() => setOpen(true)}
+        >
           Thêm danh mục mới
         </Button>
       </Flex>

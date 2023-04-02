@@ -10,7 +10,7 @@ const useKeycloakInit = (initOptions?: KeycloakInitOptions): boolean => {
 
   React.useEffect(() => {
     if (loading) {
-      init({ onLoad: 'login-required', checkLoginIframe: false, responseMode: 'query', ...initOptions })
+      init({ onLoad: 'check-sso', checkLoginIframe: false, responseMode: 'query', ...initOptions })
         .then(async (isAuth) => {
           if (isAuth) await Promise.all([loadUserInfo(), loadUserProfile()]);
           setLoading(false);

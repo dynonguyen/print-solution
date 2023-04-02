@@ -1,10 +1,10 @@
-import { Input, InputProps } from '@cads-ui/core';
+import { Input } from '@cads-ui/core';
 import React from 'react';
 import useQueryPagination from '~/hooks/useQueryPagination';
 import Icon from './Icon';
 
 // -----------------------------
-const SearchBar: React.FC<InputProps> = (props) => {
+const SearchBar: React.FC<React.ComponentProps<typeof Input>> = (props) => {
   const { setParams, deleteParams, search } = useQueryPagination();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {

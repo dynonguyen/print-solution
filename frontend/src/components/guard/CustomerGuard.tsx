@@ -4,7 +4,7 @@ import { PATH } from '~/constants/path';
 import useAuth from '~/hooks/useAuth';
 
 // -----------------------------
-const AdminGuard = () => {
+const CustomerGuard = () => {
   const { hasRealmRole, authenticated, login } = useAuth();
 
   if (!authenticated) {
@@ -12,9 +12,12 @@ const AdminGuard = () => {
     return null;
   }
 
-  if (!hasRealmRole(USER_ROLES.ADMIN)) return <Navigate to={PATH.NOT_FOUND} />;
+  // Redirect admin back to admin route
+  if (authenticated && hasRealmRole(USER_ROLES.ADMIN)) {
+    return <Navigate to={PATH.ADMIN.ROOT} />;
+  }
 
   return <Outlet />;
 };
 
-export default AdminGuard;
+export default CustomerGuard;

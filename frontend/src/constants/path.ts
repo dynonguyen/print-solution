@@ -3,9 +3,9 @@ export const PATH = {
   NOT_FOUND: '/404',
   SERVER_ERROR: '/oop',
 
-  ACCOUNT: {
-    ROOT: '/account',
-    PROFILE: '/account/profile'
+  CUSTOMER: {
+    ROOT: '/customer',
+    ACCOUNT: '/customer/account'
   },
 
   ADMIN: {

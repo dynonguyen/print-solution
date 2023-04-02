@@ -1,7 +1,12 @@
+import Page from '~/components/Page';
 import AdminCategoryList from './pages/List';
 
 const AdminCategory = () => {
-  return <AdminCategoryList />;
+  return (
+    <Page title="Quản lý danh mục">
+      <AdminCategoryList />
+    </Page>
+  );
 };
 
 export default AdminCategory;

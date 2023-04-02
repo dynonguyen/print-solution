@@ -62,8 +62,6 @@ const CategoryItem: React.FC<CategoryItemProps> = (props) => {
   };
 
   const moreListItems: ListItemProps[] = [
-    // TODO: handle edit category
-    { primary: 'Chỉnh sửa', icon: <Icon icon="material-symbols:edit" /> },
     {
       primary: isHidden ? 'Hiển thị' : 'Ẩn',
       icon: <Icon icon={isHidden ? 'ph:eye-fill' : 'ph:eye-slash-fill'} />,

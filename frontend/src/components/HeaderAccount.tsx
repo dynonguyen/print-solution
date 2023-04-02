@@ -58,12 +58,12 @@ const HeaderAccount: React.FC<HeaderAccountProps> = (props) => {
             {
               primary: 'Quản lý tài khoản',
               icon: <Icon icon="ant-design:setting-filled" />,
-              onItemClick: () => navigate(PATH.ACCOUNT.PROFILE)
+              onItemClick: () => navigate(PATH.ADMIN.PROFILE)
             },
             {
               primary: 'Đăng xuất',
               icon: <Icon icon="ri:logout-box-r-fill" />,
-              onItemClick: () => logout()
+              onItemClick: () => logout({ redirectUri: window.location.origin })
             }
           ]}
         />

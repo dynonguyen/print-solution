@@ -78,7 +78,7 @@ const AdminLayout = () => {
         onToggleIconClick={() => setIsSmall(!isSmall)}
         onNavigate={navigate}
         onItemClick={(item) => {
-          if (item.itemProps?.id === 'logout') keycloak?.logout?.();
+          if (item.itemProps?.id === 'logout') keycloak?.logout({ redirectUri: window.location.origin });
         }}
       />
       <Box
