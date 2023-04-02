@@ -7,6 +7,11 @@ const { ERROR_CODE } = require('~/constants/status-code');
 const publicKey = `-----BEGIN PUBLIC KEY-----\n${getEnv('KEYCLOAK_PUBLIC_KEY')}\n-----END PUBLIC KEY-----`;
 
 const authenticate = (req, res, next) => {
+  // Check if the connection is from other services
+  if (req.headers.authorization === getEnv('API_KEY')) {
+    return next();
+  }
+
   const bearerHeader = req.headers.authorization;
   const token = bearerHeader && bearerHeader.startsWith('Bearer ') && bearerHeader.replace('Bearer ', '');
 

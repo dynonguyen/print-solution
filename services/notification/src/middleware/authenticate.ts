@@ -10,6 +10,11 @@ const publicKey = `-----BEGIN PUBLIC KEY-----\n${getEnv('KEYCLOAK_PUBLIC_KEY')}\
 const authChecker: AuthChecker<ExpressContext> = ({ context }, roles) => {
   const { req } = context;
 
+  // Check if the connection is from other services
+  if (req.headers.authorization === getEnv('API_KEY')) {
+    return true;
+  }
+
   const bearerHeader = req.headers.authorization;
   const token = bearerHeader && bearerHeader.startsWith('Bearer ') && bearerHeader.replace('Bearer ', '');
 

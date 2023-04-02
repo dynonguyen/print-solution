@@ -8,7 +8,7 @@ const corsConfig = {
   methods: 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
 
   //Configures the Access-Control-Allow-Headers
-  allowedHeaders: 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept,Authorization',
+  allowedHeaders: 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept,Authorization,api_key',
 
   // Configures the Access-Control-Allow-Credentials
   credentials: true,

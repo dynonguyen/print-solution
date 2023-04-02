@@ -15,6 +15,7 @@ const corsConfig = require('~/configs/cors');
 const { BASE_URL } = require('~/constants/common');
 const logger = require('~/configs/logger');
 const { SUCCESS_CODE } = require('~/constants/status-code');
+const { docsAxios } = require('~/configs/axios-instance');
 
 // Config port
 const app = express();
@@ -36,4 +37,8 @@ app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json
 // Listening
 app.listen(SERVER_PORT, () => {
   logger.info(`🚀 ACCOUNT SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
+  docsAxios
+    .get('/check-health')
+    .then((res) => console.log(res.data))
+    .catch((e) => {});
 });
