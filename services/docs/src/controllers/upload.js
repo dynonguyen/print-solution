@@ -24,10 +24,25 @@ uploadApi.post('/category-photo', async (req, res) => {
   return res.status(SUCCESS_CODE.OK).json({ photoUrl });
 });
 
-uploadApi.delete('/category-photo', (req, res) => {
+uploadApi.post('/product-photo', async (req, res) => {
+  const { dataBase64, fileName } = req.body;
+  const fileExt = getFileExt(fileName);
+
+  const photoUrl = `public/product/${crypto.randomBytes(20).toString('hex') + fileExt}`;
+
+  const [err] = await to(uploadFileBase64({ dataBase64, destPath: photoUrl }));
+  if (err) {
+    logger.error('Upload product photo failed: ', err);
+    return res.status(ERROR_CODE.BAD_REQUEST).json({ msg: 'Upload thất bại' });
+  }
+
+  return res.status(SUCCESS_CODE.OK).json({ photoUrl });
+});
+
+uploadApi.delete('/photo', (req, res) => {
   const { photoUrl } = req.query;
   minioClient.removeObject(MINIO_BUCKET, photoUrl);
-  return res.status(SUCCESS_CODE.OK);
+  return res.status(SUCCESS_CODE.OK).json({ msg: 'success' });
 });
 
 module.exports = uploadApi;

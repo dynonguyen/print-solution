@@ -45,7 +45,7 @@ const NewCategory = () => {
   };
 
   const handleAddCategoryError = (photoUrl: string, msg?: string) => {
-    docsAxios.delete(ENDPOINTS.DOCS_API.UPLOAD_CATEGORY_PHOTO, { params: { photoUrl } });
+    docsAxios.delete(ENDPOINTS.DOCS_API.DELETE_PHOTO, { params: { photoUrl } });
     toast.error(msg || 'Thêm danh mục thất bại, thử lại');
   };
 

@@ -42,7 +42,7 @@ const CategoryItem: React.FC<CategoryItemProps> = (props) => {
 
     const { data } = await deleteCategory();
     if (data?.deleteCategory.code === SUCCESS_CODE.OK) {
-      docsAxios.delete(ENDPOINTS.DOCS_API.UPLOAD_CATEGORY_PHOTO, { params: { photoUrl: photo } });
+      docsAxios.delete(ENDPOINTS.DOCS_API.DELETE_PHOTO, { params: { photoUrl: photo } });
       toast.success(`Xóa danh mục "${name}" thành công`);
     } else {
       toast.error(`Xóa danh mục "${name}" thất bại`);

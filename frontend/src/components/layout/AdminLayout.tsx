@@ -14,7 +14,19 @@ const sidebarItems: SidebarItems[] = [
   {
     menu: [
       { label: 'Quản lý danh mục', link: PATH.ADMIN.CATEGORY, icon: <Icon icon="ic:round-category" /> },
-      { label: 'Quản lý sản phẩm', link: PATH.ADMIN.PRODUCT.ROOT, icon: <Icon icon="carbon:carbon-for-ibm-product" /> },
+      {
+        label: 'Quản lý sản phẩm',
+        link: PATH.ADMIN.PRODUCT.ROOT,
+        icon: <Icon icon="carbon:carbon-for-ibm-product" />,
+        subMenu: [
+          {
+            label: 'Danh sách',
+            link: PATH.ADMIN.PRODUCT.LIST,
+            icon: <Icon icon="material-symbols:list-alt-rounded" />
+          },
+          { label: 'Thêm mới', link: PATH.ADMIN.PRODUCT.ADD, icon: <Icon icon="material-symbols:add-box-rounded" /> }
+        ]
+      },
       { label: 'Quản lý đơn hàng', link: PATH.ADMIN.ORDER, icon: <Icon icon="icon-park-solid:transaction-order" /> },
       { label: 'Hỗ trợ khách hàng', link: PATH.ADMIN.CHAT, icon: <Icon icon="material-symbols:support-agent" /> },
       { label: 'Doanh thu', link: PATH.ADMIN.REVENUE, icon: <Icon icon="ph:currency-circle-dollar-fill" /> },
@@ -64,7 +76,7 @@ const AdminLayout = () => {
           '& .cads-sidebar-top': { borderBottom: `solid 1px ${theme.palette.grey[300]}`, pb: 4 },
           '& .cads-sidebar-body': { mt: 4 }
         })}
-        howActiveLink={(link) => window.location.pathname.includes(link)}
+        howActiveLink={(link) => window.location.pathname === link}
         items={sidebarItems}
         homeLogo={withStatic('img/logo.png')}
         homeTitle="Administrator"

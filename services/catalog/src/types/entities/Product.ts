@@ -11,9 +11,24 @@ export class ProductInfo {
 }
 
 @ObjectType()
+export class ProductOption {
+  @Field((_type) => String)
+  optionType: string;
+
+  @Field((_type) => String)
+  label: string;
+
+  @Field((_type) => [String], { nullable: true })
+  values?: string[];
+}
+
+@ObjectType()
 class Product {
   @Field((_type) => ID)
   _id: MongoID;
+
+  @Field((_type) => String)
+  uuid: string;
 
   @Field((_type) => String)
   categoryId: MongoID;
@@ -27,11 +42,17 @@ class Product {
   @Field((_type) => String, { nullable: true, defaultValue: '' })
   htmlDesc: string;
 
+  @Field((_type) => String)
+  unit: string;
+
   @Field((_type) => Number, { defaultValue: 0 })
   price: number;
 
-  @Field((_type) => [ProductInfo], { defaultValue: [] })
+  @Field((_type) => [ProductInfo], { defaultValue: [], nullable: true })
   infos: ProductInfo[];
+
+  @Field((_type) => [ProductOption], { defaultValue: [], nullable: true })
+  options: ProductOption[];
 
   @Field((_type) => Number, { defaultValue: 0 })
   numOfViews: number;

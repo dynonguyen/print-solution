@@ -10,3 +10,12 @@ query AdminCategoryList($page: Int, $pageSize: Int, $sort: String, $search: Stri
     }
   }
 }
+
+query CategoryForSelect($page: Int, $sort: String, $pageSize: Int) {
+  catagories(page: $page, sort: $sort, pageSize: $pageSize) {
+    docs {
+      _id
+      name
+    }
+  }
+}
