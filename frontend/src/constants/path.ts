@@ -5,7 +5,21 @@ export const PATH = {
 
   CUSTOMER: {
     ROOT: '/customer',
-    ACCOUNT: '/customer/account'
+    ACCOUNT: '/customer/account',
+    PRODUCT: {
+      ROOT: '/customer/product',
+      LIST: '/customer/product',
+      DETAILS: '/customer/product/:productId'
+    }
+  },
+
+  GUEST: {
+    ROOT: '/guest',
+    PRODUCT: {
+      ROOT: '/guest/product',
+      LIST: '/guest/product',
+      DETAILS: '/guest/product/:productId'
+    }
   },
 
   ADMIN: {
