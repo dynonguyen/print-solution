@@ -52,7 +52,7 @@ export type CategoryPaginatedResponse = IQueryResponse & {
   __typename?: 'CategoryPaginatedResponse';
   code: Scalars['Int'];
   docs: Array<Category>;
-  message?: Maybe<Scalars['String']>;
+  msg?: Maybe<Scalars['String']>;
   page: Scalars['Int'];
   pageSize: Scalars['Int'];
   search?: Maybe<Scalars['String']>;
@@ -72,7 +72,7 @@ export type IMutationResponse = {
 
 export type IQueryResponse = {
   code: Scalars['Int'];
-  message?: Maybe<Scalars['String']>;
+  msg?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -113,10 +113,12 @@ export type MutationResponse = IMutationResponse & {
 export type Product = {
   __typename?: 'Product';
   _id: Scalars['ID'];
+  category?: Maybe<Category>;
   categoryId: Scalars['String'];
   createdAt: Scalars['DateTime'];
   htmlDesc?: Maybe<Scalars['String']>;
   infos?: Maybe<Array<ProductInfo>>;
+  isHidden: Scalars['Boolean'];
   name: Scalars['String'];
   numOfFavorites: Scalars['Float'];
   numOfViews: Scalars['Float'];
@@ -165,9 +167,22 @@ export type ProductOptionInput = {
   values?: InputMaybe<Array<Scalars['String']>>;
 };
 
+export type ProductPaginatedResponse = IQueryResponse & {
+  __typename?: 'ProductPaginatedResponse';
+  code: Scalars['Int'];
+  docs: Array<Product>;
+  msg?: Maybe<Scalars['String']>;
+  page: Scalars['Int'];
+  pageSize: Scalars['Int'];
+  search?: Maybe<Scalars['String']>;
+  sort?: Maybe<Scalars['String']>;
+  total: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
   catagories: CategoryPaginatedResponse;
+  products: ProductPaginatedResponse;
 };
 
 
@@ -175,6 +190,16 @@ export type QueryCatagoriesArgs = {
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
+  searchBy?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryProductsArgs = {
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  searchBy?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
 };
 
@@ -235,7 +260,7 @@ export type AdminCategoryListQueryVariables = Exact<{
 }>;
 
 
-export type AdminCategoryListQuery = { __typename?: 'Query', catagories: { __typename?: 'CategoryPaginatedResponse', code: number, message?: string | null, page: number, total: number, pageSize: number, docs: Array<{ __typename?: 'Category', _id: string, name: string, photo: string, numOfProducts: number, createdAt: any, updatedAt: any, isHidden: boolean }> } };
+export type AdminCategoryListQuery = { __typename?: 'Query', catagories: { __typename?: 'CategoryPaginatedResponse', code: number, msg?: string | null, page: number, total: number, pageSize: number, docs: Array<{ __typename?: 'Category', _id: string, name: string, photo: string, numOfProducts: number, createdAt: any, updatedAt: any, isHidden: boolean }> } };
 
 export type CategoryForSelectQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']>;
@@ -245,6 +270,17 @@ export type CategoryForSelectQueryVariables = Exact<{
 
 
 export type CategoryForSelectQuery = { __typename?: 'Query', catagories: { __typename?: 'CategoryPaginatedResponse', docs: Array<{ __typename?: 'Category', _id: string, name: string }> } };
+
+export type AdminProductListQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']>;
+  pageSize?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+  search?: InputMaybe<Scalars['String']>;
+  searchBy?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type AdminProductListQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedResponse', code: number, msg?: string | null, page: number, total: number, pageSize: number, docs: Array<{ __typename?: 'Product', _id: string, uuid: string, photo: string, name: string, price: number, isHidden: boolean, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', name: string } | null }> } };
 
 export const FullCategoryFragmentDoc = gql`
     fragment fullCategory on Category {
@@ -439,7 +475,7 @@ export const AdminCategoryListDocument = gql`
     query AdminCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
   catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {
     code
-    message
+    msg
     page
     total
     pageSize
@@ -520,3 +556,65 @@ export function useCategoryForSelectLazyQuery(baseOptions?: Apollo.LazyQueryHook
 export type CategoryForSelectQueryHookResult = ReturnType<typeof useCategoryForSelectQuery>;
 export type CategoryForSelectLazyQueryHookResult = ReturnType<typeof useCategoryForSelectLazyQuery>;
 export type CategoryForSelectQueryResult = Apollo.QueryResult<CategoryForSelectQuery, CategoryForSelectQueryVariables>;
+export const AdminProductListDocument = gql`
+    query AdminProductList($page: Int, $pageSize: Int, $sort: String, $search: String, $searchBy: String) {
+  products(
+    page: $page
+    pageSize: $pageSize
+    sort: $sort
+    search: $search
+    searchBy: $searchBy
+  ) {
+    code
+    msg
+    page
+    total
+    pageSize
+    docs {
+      _id
+      uuid
+      photo
+      name
+      price
+      isHidden
+      createdAt
+      updatedAt
+      category {
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useAdminProductListQuery__
+ *
+ * To run a query within a React component, call `useAdminProductListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminProductListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAdminProductListQuery({
+ *   variables: {
+ *      page: // value for 'page'
+ *      pageSize: // value for 'pageSize'
+ *      sort: // value for 'sort'
+ *      search: // value for 'search'
+ *      searchBy: // value for 'searchBy'
+ *   },
+ * });
+ */
+export function useAdminProductListQuery(baseOptions?: Apollo.QueryHookOptions<AdminProductListQuery, AdminProductListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminProductListQuery, AdminProductListQueryVariables>(AdminProductListDocument, options);
+      }
+export function useAdminProductListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminProductListQuery, AdminProductListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminProductListQuery, AdminProductListQueryVariables>(AdminProductListDocument, options);
+        }
+export type AdminProductListQueryHookResult = ReturnType<typeof useAdminProductListQuery>;
+export type AdminProductListLazyQueryHookResult = ReturnType<typeof useAdminProductListLazyQuery>;
+export type AdminProductListQueryResult = Apollo.QueryResult<AdminProductListQuery, AdminProductListQueryVariables>;

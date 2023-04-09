@@ -28,6 +28,7 @@ interface UploadFileProps {
   acceptFiles?: 'all' | string; // ex: '.docx,doc,.xlsx'
   maxSizePerFile?: number; // by MB
   maxFiles?: number;
+  ListProps?: Omit<React.ComponentProps<typeof List>, 'items'>;
   onFileChange?: (files: FileList | File[]) => any;
 }
 
@@ -37,7 +38,7 @@ export interface UploadFileRef {
 
 // -----------------------------
 const UploadFile = React.forwardRef<UploadFileRef, UploadFileProps>((props, ref) => {
-  const { uploadTitle, acceptFiles = ACCEPT_ALL, maxSizePerFile = 2, maxFiles = 1, onFileChange } = props;
+  const { uploadTitle, acceptFiles = ACCEPT_ALL, maxSizePerFile = 2, maxFiles = 1, onFileChange, ListProps } = props;
   const [files, setFiles] = React.useState<File[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -96,7 +97,8 @@ const UploadFile = React.forwardRef<UploadFileRef, UploadFileProps>((props, ref)
 
       {files.length > 0 ? (
         <List
-          sx={{ '& .cads-list-item': { borderRadius: 2 } }}
+          {...ListProps}
+          sx={{ '& .cads-list-item': { borderRadius: 2 }, ...ListProps?.sx }}
           items={files.map((file) => ({
             primary: file.name,
             secondary: `${(file.size / (1024 * 1024)).toFixed(2)}MB`,

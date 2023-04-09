@@ -61,7 +61,7 @@ module.exports = {
   skipEmptyScopes: true,
   scopeOverrides: {},
   subjectLimit: 100,
-  typePrefix: '[',
-  typeSuffix: ']',
+  typePrefix: '',
+  typeSuffix: '',
   skipQuestions: ['footer']
 };

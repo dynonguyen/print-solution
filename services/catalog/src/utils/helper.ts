@@ -7,3 +7,11 @@ export function generateId(length: number = 10): string {
   }
   return id;
 }
+
+export function toSearchQuery(keyword?: string, searchBy?: string) {
+  if (!searchBy || !keyword) return {};
+
+  const searchFields = searchBy.split(',');
+
+  return keyword ? { $or: searchFields.map((key) => ({ [key]: { $regex: keyword, $options: 'i' } })) } : {};
+}

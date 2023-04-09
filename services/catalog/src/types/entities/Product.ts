@@ -1,5 +1,6 @@
 import { Field, ID, ObjectType } from 'type-graphql';
 import { MongoID } from '../common';
+import Category from './Category';
 
 @ObjectType()
 export class ProductInfo {
@@ -60,11 +61,22 @@ class Product {
   @Field((_type) => Number, { defaultValue: 0 })
   numOfFavorites: number;
 
+  // A product cannot be deleted, can only be hidden
+  @Field((_type) => Boolean)
+  isHidden: boolean;
+
   @Field((_type) => Date)
   createdAt: Date;
 
   @Field((_type) => Date)
   updatedAt: Date;
+
+  // Mongoose fields for field resolver (can't access itself directly)
+  _doc?: Product;
+
+  // Field resolver
+  @Field((_type) => Category, { nullable: true })
+  category?: Category;
 }
 
 export default Product;

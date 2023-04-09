@@ -1,0 +1,22 @@
+query AdminProductList($page: Int, $pageSize: Int, $sort: String, $search: String, $searchBy: String) {
+  products(page: $page, pageSize: $pageSize, sort: $sort, search: $search, searchBy: $searchBy) {
+    code
+    msg
+    page
+    total
+    pageSize
+    docs {
+      _id
+      uuid
+      photo
+      name
+      price
+      isHidden
+      createdAt
+      updatedAt
+      category {
+        name
+      }
+    }
+  }
+}

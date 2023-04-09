@@ -1,3 +1,6 @@
+import { SortOptions } from '@cads-ui/core/components/table/TableProps';
+import { TABLE_SORT_TYPE } from '~/constants/common';
+
 export function getFileExt(filename: string) {
   return filename.slice(filename.lastIndexOf('.'));
 }
@@ -32,4 +35,17 @@ export function generateId(length: number = 10): string {
     id += chars[randomIndex];
   }
   return id;
+}
+
+export function getTableSortByQuery(sort: string, field: string): SortOptions | undefined {
+  const sortArr = sort.split(' ');
+  const index = sortArr.findIndex((s) => s === field || s === `-${field}`);
+
+  if (index !== -1)
+    return {
+      defaultOrder: sortArr[index][0] === '-' ? TABLE_SORT_TYPE.DESC : TABLE_SORT_TYPE.ASC,
+      multiple: index + 1
+    };
+
+  return undefined;
 }

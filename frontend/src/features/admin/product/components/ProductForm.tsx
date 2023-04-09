@@ -1,6 +1,7 @@
 import { Button, FieldLabel, Flex, Grid, Input, usePreventTabClose } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import to from 'await-to-js';
+import { getOperationAST } from 'graphql';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -12,7 +13,11 @@ import { CONTACT_PRICE } from '~/constants/common';
 import { ENDPOINTS } from '~/constants/endpoints';
 import { SUCCESS_CODE } from '~/constants/status-code';
 import { MAX } from '~/constants/validation';
-import { useAddProductMutation } from '~/graphql/catalog/generated/graphql';
+import {
+  AdminCategoryListDocument,
+  AdminProductListDocument,
+  useAddProductMutation
+} from '~/graphql/catalog/generated/graphql';
 import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
 import docsAxios from '~/libs/axios/docs';
 import { Product } from '~/types/Product';
@@ -73,7 +78,13 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
     formState: { errors }
   } = useForm<ProductFormValues>({ resolver: yupResolver(schema), defaultValues });
   const photoFile = React.useRef<File | null>(null);
-  const [addProductMutation] = useAddProductMutation();
+  const [addProductMutation] = useAddProductMutation({
+    refetchQueries: [
+      getOperationAST(AdminCategoryListDocument)?.name?.value || 'AdminCategoryList',
+      getOperationAST(AdminProductListDocument)?.name?.value || 'AdminProductList'
+    ],
+    awaitRefetchQueries: true
+  });
   const [loading, setLoading] = React.useState(false);
   const setResetForm = useSetRecoilState(resetFormAtom);
   const uploadFileRef = React.useRef<UploadFileRef>(null);
@@ -111,10 +122,10 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
 
     const { photoUrl: photo } = uploadResult.data;
 
-    const { errors, data } = await addProductMutation({ variables: { addProductInput: form } });
+    const [err, res] = await to(addProductMutation({ variables: { addProductInput: { ...form, photo } } }));
 
-    if (errors?.length || data?.addProduct.code !== SUCCESS_CODE.CREATED) {
-      handleAddProductError(photo, data?.addProduct.msg || '');
+    if (err || res?.data?.addProduct.code !== SUCCESS_CODE.CREATED) {
+      handleAddProductError(photo, res?.data?.addProduct.msg || '');
     } else {
       handleAddProductSuccess();
     }
@@ -149,6 +160,8 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
         <FieldLabel label="Hình ảnh đại diện *" error={Boolean(errors.photo)} message={errors.photo?.message}>
           <UploadFile
             ref={uploadFileRef}
+            acceptFiles=".jpg,.png,.jpeg,.webp"
+            ListProps={{ sx: { '& .cads-list-item': { p: 0, __bgColor: 'unset', cursor: 'default' } } }}
             onFileChange={(files) => {
               photoFile.current = files[0] || null;
               setValue('photo', files[0]?.name || '');

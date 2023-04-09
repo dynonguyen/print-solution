@@ -15,6 +15,7 @@ const schema: Schema = new Schema<Product>({
   htmlDesc: { type: String, default: '' },
   numOfFavorites: { type: Number, required: true, default: 0 },
   numOfViews: { type: Number, required: true, default: 0 },
+  isHidden: { type: Boolean, required: false, default: false },
   createdAt: { type: Date, required: true, default: new Date() },
   updatedAt: { type: Date, required: true, default: new Date() }
 });

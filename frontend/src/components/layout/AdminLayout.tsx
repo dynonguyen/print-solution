@@ -1,6 +1,6 @@
-import { alpha, AppBar, Box, Flex, Sidebar, SidebarItems, useEffectNotFirst } from '@cads-ui/core';
+import { alpha, AppBar, Box, Flex, Sidebar, SidebarItems, Spinner, useEffectNotFirst } from '@cads-ui/core';
 import Notification from '@cads-ui/x/Notification';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import HeaderAccount from '~/components/HeaderAccount';
 import Icon from '~/components/Icon';
@@ -94,11 +94,24 @@ const AdminLayout = () => {
         }}
       />
       <Box
-        sx={{ flexGrow: 1, ml: isSmall ? `${SIDEBAR_SMALL_WIDTH}px` : `${SIDEBAR_WIDTH}px`, transition: 'margin 0.3s' }}
+        sx={{
+          flexGrow: 1,
+          ml: isSmall ? `${SIDEBAR_SMALL_WIDTH}px` : `${SIDEBAR_WIDTH}px`,
+          transition: 'margin 0.3s',
+          overflowX: 'hidden'
+        }}
       >
         <TopBar />
         <Box sx={{ p: 8 }}>
-          <Outlet />
+          <Suspense
+            fallback={
+              <Flex sx={{ w: 1, h: `calc(100vh - ${TOP_BAR_HEIGHT + 68}px)` }} center>
+                <Spinner size="large" />
+              </Flex>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </Box>
       </Box>
     </Flex>

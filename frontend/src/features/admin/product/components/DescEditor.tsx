@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   quillRoot: {
     mt: 2,
     '& .quill': {
-      maxH: 350,
+      maxH: 500,
       overflow: 'auto',
       position: 'relative',
       shadow: 4,

@@ -6,7 +6,7 @@ export abstract class IQueryResponse {
   code: number;
 
   @Field((_type) => String, { nullable: true })
-  message?: string;
+  msg?: string;
 }
 
 export function PaginatedResponse<T>(TClass: ClassType<T>) {
