@@ -73,3 +73,21 @@ query ProductDetail($uuid: String!) {
     }
   }
 }
+
+query GuestProductList($sort: String, $search: String, $searchBy: String) {
+  products(sort: $sort, search: $search, searchBy: $searchBy) {
+    code
+    docs {
+      _id
+      uuid
+      photo
+      name
+      price
+      unit
+      isHidden
+      category {
+        name
+      }
+    }
+  }
+}
