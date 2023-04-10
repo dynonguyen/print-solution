@@ -6,11 +6,12 @@ import DEFAULTS from '~/constants/default';
 import { ERROR_CODE, SUCCESS_CODE } from '~/constants/status-code';
 import CategoryModel from '~/models/category';
 import ProductModel from '~/models/product';
+import MutationResponse from '~/types/core/MutationResponse';
 import { PaginationArgs } from '~/types/core/PaginationArg';
 import Category from '~/types/entities/Category';
 import Product from '~/types/entities/Product';
-import { ProductInput } from '~/types/input/Product';
-import { AddProductResponse, ProductPaginatedResponse } from '~/types/response/Product';
+import { ProductInput, QueryProductArgs } from '~/types/input/Product';
+import { AddProductResponse, ProductPaginatedResponse, ProductResponse } from '~/types/response/Product';
 import { generateId, toSearchQuery } from '~/utils/helper';
 import mongoosePaginate from '~/utils/mongoose-paginate';
 
@@ -35,6 +36,15 @@ class ProductResolver {
     return { code: SUCCESS_CODE.OK, ...productDocs, sort, search };
   }
 
+  @Query((_return) => ProductResponse)
+  async product(@Args() { uuid }: QueryProductArgs): Promise<ProductResponse> {
+    const product = await ProductModel.findOne({ uuid });
+    if (!product) {
+      return { code: ERROR_CODE.NOT_FOUND, doc: null, msg: 'Product not found' };
+    }
+    return { code: SUCCESS_CODE.OK, doc: product };
+  }
+
   @Authorized(USER_ROLES.ADMIN)
   @Mutation((_return) => AddProductResponse)
   async addProduct(@Arg('addProductInput') args: ProductInput): Promise<AddProductResponse> {
@@ -57,6 +67,23 @@ class ProductResolver {
     await CategoryModel.updateOne({ _id: newProduct.categoryId }, { $inc: { numOfProducts: 1 } });
 
     return { success: true, code: SUCCESS_CODE.CREATED, doc: newProduct };
+  }
+
+  @Authorized(USER_ROLES.ADMIN)
+  @Mutation((_return) => MutationResponse)
+  async updateProduct(@Arg('updateProductInput') args: ProductInput): Promise<MutationResponse> {
+    const isExist = await ProductModel.exists({ uuid: args.uuid });
+    if (!isExist) {
+      return { code: ERROR_CODE.BAD_REQUEST, msg: 'Sản phẩm không tồn tại.', success: false };
+    }
+
+    const [err] = await to(ProductModel.updateOne({ uuid: args.uuid }, { $set: { ...args } }));
+
+    if (err) {
+      return { success: false, code: ERROR_CODE.BAD_REQUEST };
+    }
+
+    return { success: true, code: SUCCESS_CODE.OK };
   }
 }
 

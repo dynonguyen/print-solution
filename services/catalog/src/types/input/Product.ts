@@ -1,4 +1,4 @@
-import { Field, InputType } from 'type-graphql';
+import { ArgsType, Field, InputType } from 'type-graphql';
 import { MongoID } from '../common';
 
 @InputType()
@@ -24,6 +24,9 @@ export class ProductOptionInput {
 
 @InputType()
 export class ProductInput {
+  @Field((_type) => String, { nullable: true })
+  uuid?: string;
+
   @Field((_type) => String)
   categoryId: MongoID;
 
@@ -53,4 +56,10 @@ export class ProductInput {
 
   @Field((_type) => Number, { nullable: true, defaultValue: 0 })
   numOfFavorites: number;
+}
+
+@ArgsType()
+export class QueryProductArgs {
+  @Field((_type) => String)
+  uuid: string;
 }

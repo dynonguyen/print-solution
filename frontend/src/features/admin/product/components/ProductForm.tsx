@@ -1,13 +1,15 @@
-import { Button, FieldLabel, Flex, Grid, Input, usePreventTabClose } from '@cads-ui/core';
+import { Box, Button, FieldLabel, Flex, Grid, Input, usePreventTabClose } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import to from 'await-to-js';
 import { getOperationAST } from 'graphql';
+import omit from 'lodash/omit';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from 'recoil';
 import * as yup from 'yup';
 import CategorySelect from '~/components/CategorySelect';
+import Icon from '~/components/Icon';
 import UploadFile, { UploadFileRef } from '~/components/UploadFile';
 import { CONTACT_PRICE } from '~/constants/common';
 import { ENDPOINTS } from '~/constants/endpoints';
@@ -16,20 +18,25 @@ import { MAX } from '~/constants/validation';
 import {
   AdminCategoryListDocument,
   AdminProductListDocument,
-  useAddProductMutation
+  useAddProductMutation,
+  useUpdateProductMutation
 } from '~/graphql/catalog/generated/graphql';
 import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
 import docsAxios from '~/libs/axios/docs';
 import { Product } from '~/types/Product';
 import { fileReader } from '~/utils/file-reader';
 import { toVND } from '~/utils/helper';
+import { withMinio } from '~/utils/withStatic';
 import { resetFormAtom } from '../atom/reset-form';
 import DescEditor from '../components/DescEditor';
 import ProductInfoFields from './ProductInfoFields';
 import ProductOptionFields from './ProductOptionFields';
 
 // -----------------------------
-interface ProductFormProps {}
+interface ProductFormProps {
+  isEdit?: boolean;
+  editedProduct?: Partial<Product>;
+}
 type ProductFormValues = Omit<Product, '_id' | 'uuid' | 'numOfViews' | 'numOfFavorites' | 'createdAt' | 'updatedAt'>;
 
 // -----------------------------
@@ -65,9 +72,7 @@ const defaultValues: ProductFormValues = {
 };
 
 // -----------------------------
-
-// -----------------------------
-const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props) => {
+const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isEdit = false, editedProduct = {} }) => {
   const {
     register,
     handleSubmit,
@@ -76,7 +81,10 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
     reset,
     getValues,
     formState: { errors }
-  } = useForm<ProductFormValues>({ resolver: yupResolver(schema), defaultValues });
+  } = useForm<ProductFormValues>({
+    resolver: yupResolver(schema),
+    defaultValues: isEdit ? editedProduct : defaultValues
+  });
   const photoFile = React.useRef<File | null>(null);
   const [addProductMutation] = useAddProductMutation({
     refetchQueries: [
@@ -85,12 +93,33 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
     ],
     awaitRefetchQueries: true
   });
+  const [updateProductMutation] = useUpdateProductMutation({
+    refetchQueries: [getOperationAST(AdminProductListDocument)?.name?.value || 'AdminProductList'],
+    awaitRefetchQueries: true
+  });
+
   const [loading, setLoading] = React.useState(false);
   const setResetForm = useSetRecoilState(resetFormAtom);
   const uploadFileRef = React.useRef<UploadFileRef>(null);
 
-  const handleAddProductSuccess = () => {
-    toast.success('Thêm sản phẩm thành công');
+  const uploadProductPhoto = async () => {
+    const fileDataUrl = await fileReader(photoFile.current!);
+    const [uploadErr, uploadResult] = await to(
+      docsAxios.post(ENDPOINTS.DOCS_API.UPLOAD_PRODUCT_PHOTO, {
+        dataBase64: fileDataUrl,
+        fileName: photoFile.current!.name
+      })
+    );
+
+    if (uploadErr) {
+      console.log(uploadErr);
+      toast.error('Upload ảnh thất bại');
+      return '';
+    }
+
+    const { photoUrl } = uploadResult.data;
+
+    return photoUrl;
   };
 
   const handleAddProductError = (photoUrl: string, msg?: string) => {
@@ -104,36 +133,63 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
     uploadFileRef.current?.reset();
   };
 
-  const submitForm = async (form: ProductFormValues) => {
+  const handleAddProduct = async (form: ProductFormValues) => {
     setLoading(true);
-    const fileDataUrl = await fileReader(photoFile.current!);
-    const [uploadErr, uploadResult] = await to(
-      docsAxios.post(ENDPOINTS.DOCS_API.UPLOAD_PRODUCT_PHOTO, {
-        dataBase64: fileDataUrl,
-        fileName: photoFile.current!.name
-      })
-    );
 
-    if (uploadErr) {
-      console.log(uploadErr);
+    const photo = await uploadProductPhoto();
+
+    if (!photo) {
       setLoading(false);
-      return toast.error('Upload ảnh thất bại');
+      return;
     }
-
-    const { photoUrl: photo } = uploadResult.data;
 
     const [err, res] = await to(addProductMutation({ variables: { addProductInput: { ...form, photo } } }));
 
     if (err || res?.data?.addProduct.code !== SUCCESS_CODE.CREATED) {
       handleAddProductError(photo, res?.data?.addProduct.msg || '');
     } else {
-      handleAddProductSuccess();
+      toast.success('Thêm sản phẩm thành công');
     }
 
     setLoading(false);
   };
 
-  usePreventTabClose(true);
+  const handleUpdateProduct = async (form: ProductFormValues) => {
+    setLoading(true);
+    const photo = photoFile.current ? await uploadProductPhoto() : getValues('photo');
+
+    if (!photo) {
+      setLoading(false);
+      return;
+    }
+
+    const [err, res] = await to(
+      updateProductMutation({
+        variables: {
+          updateProductInput: {
+            ...(omit(form, ['__typename', '_id']) as ProductFormValues),
+            photo,
+            uuid: editedProduct.uuid
+          }
+        },
+        fetchPolicy: 'no-cache'
+      })
+    );
+
+    if (err || res?.data?.updateProduct.code !== SUCCESS_CODE.OK) {
+      if (photoFile.current) {
+        handleAddProductError(photo, res?.data?.updateProduct.msg || '');
+      } else {
+        toast.error(res?.data?.updateProduct.msg || 'Cập nhật sản phẩm thất bại, thử lại');
+      }
+    } else {
+      toast.success('Cập nhật sản phẩm thành công');
+    }
+
+    setLoading(false);
+  };
+
+  usePreventTabClose(false);
 
   return (
     <Grid container rowSpacing={3} columnSpacing={5}>
@@ -157,18 +213,46 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
       </Grid>
       {/* Photo */}
       <Grid item xs={12}>
-        <FieldLabel label="Hình ảnh đại diện *" error={Boolean(errors.photo)} message={errors.photo?.message}>
-          <UploadFile
-            ref={uploadFileRef}
-            acceptFiles=".jpg,.png,.jpeg,.webp"
-            ListProps={{ sx: { '& .cads-list-item': { p: 0, __bgColor: 'unset', cursor: 'default' } } }}
-            onFileChange={(files) => {
-              photoFile.current = files[0] || null;
-              setValue('photo', files[0]?.name || '');
-              if (files.length) trigger('photo');
-            }}
-          />
-        </FieldLabel>
+        <FieldLabel
+          label="Hình ảnh đại diện *"
+          error={Boolean(errors.photo)}
+          message={errors.photo?.message}
+          renderInput={() => (
+            <React.Fragment>
+              {isEdit && getValues('photo') && !photoFile.current ? (
+                <Flex spacing={2}>
+                  <Box sx={{ w: 150, h: 150 }} component="img" src={withMinio(getValues('photo'))} />
+                  <Icon
+                    onClick={() => {
+                      setValue('photo', '');
+                      trigger('photo');
+                    }}
+                    sx={{
+                      w: 28,
+                      h: 28,
+                      color: 'text.secondary',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      _hover: { color: 'error.main' }
+                    }}
+                    icon="mdi:bin"
+                  />
+                </Flex>
+              ) : (
+                <UploadFile
+                  ref={uploadFileRef}
+                  acceptFiles=".jpg,.png,.jpeg,.webp"
+                  ListProps={{ sx: { '& .cads-list-item': { p: 0, __bgColor: 'unset', cursor: 'default' } } }}
+                  onFileChange={(files) => {
+                    photoFile.current = files[0] || null;
+                    setValue('photo', files[0]?.name || '');
+                    if (files.length) trigger('photo');
+                  }}
+                />
+              )}
+            </React.Fragment>
+          )}
+        />
       </Grid>
       {/* Price */}
       <Grid item xs={12} md={6}>
@@ -190,13 +274,16 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
       {/* Infos */}
       <Grid item xs={12}>
         <FieldLabel label="Thông số cơ bản">
-          <ProductInfoFields onChange={(infos) => setValue('infos', infos)} />
+          <ProductInfoFields defaultValue={editedProduct.infos} onChange={(infos) => setValue('infos', infos)} />
         </FieldLabel>
       </Grid>
       {/* options */}
       <Grid item xs={12}>
         <FieldLabel label="Tùy chọn của khách hàng">
-          <ProductOptionFields onChange={(options) => setValue('options', options)} />
+          <ProductOptionFields
+            defaultValue={editedProduct.options}
+            onChange={(options) => setValue('options', options)}
+          />
         </FieldLabel>
       </Grid>
       {/* desc */}
@@ -211,9 +298,15 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider((props
           <Button color="error" onClick={handleResetForm} disabled={loading}>
             Reset
           </Button>
-          <Button onClick={handleSubmit(submitForm)} loading={loading}>
-            Thêm sản phẩm
-          </Button>
+          {isEdit ? (
+            <Button onClick={handleSubmit(handleUpdateProduct)} loading={loading}>
+              Cập nhật sản phẩm
+            </Button>
+          ) : (
+            <Button onClick={handleSubmit(handleAddProduct)} loading={loading}>
+              Thêm sản phẩm
+            </Button>
+          )}
         </Flex>
       </Grid>
     </Grid>

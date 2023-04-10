@@ -10,11 +10,14 @@ import { resetFormAtom } from '../atom/reset-form';
 // -----------------------------
 interface ProductOptionFieldsProps {
   onChange: (options: ProductOption[]) => void;
+  defaultValue?: ProductOption[];
 }
 
 // -----------------------------
-const ProductOptionFields: React.FC<ProductOptionFieldsProps> = ({ onChange }) => {
-  const [options, setOptions] = React.useState<Array<ProductOption & { id: string }>>([]);
+const ProductOptionFields: React.FC<ProductOptionFieldsProps> = ({ onChange, defaultValue }) => {
+  const [options, setOptions] = React.useState<Array<ProductOption & { id: string }>>(
+    defaultValue ? defaultValue.map((val) => ({ id: generateId(), ...val })) : []
+  );
   const resetFormFlag = useRecoilValue(resetFormAtom);
 
   useEffectNotFirst(() => {
@@ -35,6 +38,7 @@ const ProductOptionFields: React.FC<ProductOptionFieldsProps> = ({ onChange }) =
         <Flex spacing={2} key={option.id}>
           <Select
             fullWidth
+            defaultValue={option.optionType}
             value={option.optionType}
             options={PRODUCT_OPTION_TYPES_OPTIONS}
             placeholder="Loại tùy chọn"
@@ -46,6 +50,7 @@ const ProductOptionFields: React.FC<ProductOptionFieldsProps> = ({ onChange }) =
             placeholder="Tên tùy chọn"
             debounceTime={250}
             fullWidth
+            defaultValue={option.label}
             onChange={(e) =>
               setOptions(options.map((o) => (o.id !== option.id ? o : { ...o, label: e.target.value.trim() })))
             }
@@ -56,6 +61,7 @@ const ProductOptionFields: React.FC<ProductOptionFieldsProps> = ({ onChange }) =
               fullWidth
               multiple
               OptionMenu={<></>}
+              defaultValue={option.values}
               autocompleteMode
               renderEndIcon={() => null}
               placeholder="Nhập tùy chọn và nhấn Enter"

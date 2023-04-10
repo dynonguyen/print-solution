@@ -6,3 +6,11 @@ mutation AddProduct($addProductInput: ProductInput!) {
     }
   }
 }
+
+mutation UpdateProduct($updateProductInput: ProductInput!) {
+  updateProduct(updateProductInput: $updateProductInput) {
+    code
+    msg
+    success
+  }
+}

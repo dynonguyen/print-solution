@@ -2,9 +2,11 @@ import { Avatar, Button, Flex, Table, Tooltip, Typography } from '@cads-ui/core'
 import { OnFilterValue, TableColumn } from '@cads-ui/core/components/table/TableProps';
 import moment from 'moment';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Icon from '~/components/Icon';
 import { CONTACT_PRICE, TABLE_SORT_TYPE, TABLE_TRANSLATION } from '~/constants/common';
 import { DEFAULTS } from '~/constants/default';
+import { PATH } from '~/constants/path';
 import { useAdminProductListQuery } from '~/graphql/catalog/generated/graphql';
 import useQueryPagination, { SetQueryParams } from '~/hooks/useQueryPagination';
 import { getTableSortByQuery, toVND } from '~/utils/helper';
@@ -41,6 +43,7 @@ const ProductList = () => {
       render: (price) => (price === CONTACT_PRICE ? 'Liên hệ' : toVND(price)),
       sorter: getTableSortByQuery(sort, 'price')
     },
+    { key: 'unit', title: 'Đơn vị', maxWidth: 80 },
     {
       key: 'createdAt',
       title: 'Ngày tạo',
@@ -52,12 +55,14 @@ const ProductList = () => {
       key: '_action',
       title: 'Action',
       align: 'right',
-      render: (_, { isHidden }) => (
+      render: (_, { isHidden, uuid }) => (
         <Flex justifyContent="flex-end">
           <Tooltip title="Chỉnh sửa" placement="left">
-            <Button isIconBtn>
-              <Icon icon="material-symbols:edit" />
-            </Button>
+            <Link to={`${PATH.ADMIN.PRODUCT.EDIT_ROOT}/${uuid}`}>
+              <Button isIconBtn>
+                <Icon icon="material-symbols:edit" />
+              </Button>
+            </Link>
           </Tooltip>
           <Tooltip title="Ẩn sản phẩm" placement="left">
             <Button isIconBtn color="error">
@@ -70,8 +75,8 @@ const ProductList = () => {
   ];
 
   const rows = products.map((product) => {
-    const { uuid, photo, name, category, price, createdAt, updatedAt } = product;
-    return { uuid, photo, name, category: category?.name || '', price, createdAt, updatedAt };
+    const { category, __typename, _id, ...other } = product;
+    return { category: category?.name || '', ...other };
   });
 
   const handleFilterChange = (filter: OnFilterValue) => {
