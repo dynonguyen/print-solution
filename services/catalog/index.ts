@@ -63,6 +63,7 @@ async function runServer() {
   // Apollo server
   const apolloServer = new ApolloServer({
     schema: graphqlSchema,
+    parseOptions: {},
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {

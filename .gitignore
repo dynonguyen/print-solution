@@ -30,6 +30,7 @@ docker-volumes/minio/.minio.sys/buckets/.usage-cache.bin
 docker-volumes/minio/.minio.sys/buckets/.usage.json
 docker-volumes/minio/.minio.sys/tmp
 docker-volumes/minio/.minio.sys/buckets/print-solution/.usage-cache.bin
+docker-volumes/minio/.minio.sys/config/iam/sts/M3RZHZ31GF65DWNHW5A1/identity.json/xl.meta
 docker-volumes/minio/print-solution/private/*
 !docker-volumes/minio/print-solution/private/note.txt
 !docker-volumes/mongo-export

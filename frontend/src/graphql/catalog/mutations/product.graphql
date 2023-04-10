@@ -1,0 +1,8 @@
+mutation AddProduct($addProductInput: ProductInput!) {
+  addProduct(addProductInput: $addProductInput) {
+    ...mutationResponseWithDoc
+    doc {
+      ...fullProduct
+    }
+  }
+}

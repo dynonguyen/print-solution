@@ -20,6 +20,16 @@ const createAxiosInstance = (baseURL: string, configs?: CreateAxiosDefaults) => 
     }
   );
 
+  axiosInstance.interceptors.response.use(
+    (res) => res,
+    (error) => {
+      if (error.response?.status == 401 && keycloak.login) {
+        keycloak.login();
+      }
+      throw error;
+    }
+  );
+
   return axiosInstance;
 };
 

@@ -28,8 +28,8 @@ export const PATH = {
     CHAT: '/admin/chat',
     PRODUCT: {
       ROOT: '/admin/product',
-      LIST: '/admin/product',
-      DETAILS: '/admin/product/:productId'
+      LIST: '/admin/product/list',
+      ADD: '/admin/product/add'
     },
     ORDER: '/admin/order',
     REVENUE: '/admin/revenue',
