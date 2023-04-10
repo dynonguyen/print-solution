@@ -8,6 +8,10 @@ export const PATH = {
     ACCOUNT: '/customer/account'
   },
 
+  ORDER: {
+    ROOT: '/order'
+  },
+
   ADMIN: {
     ROOT: '/admin',
     CATEGORY: '/admin/category',

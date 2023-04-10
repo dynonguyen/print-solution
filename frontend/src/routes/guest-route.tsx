@@ -7,6 +7,7 @@ import { PATH } from '~/constants/path';
 
 // -----------------------------
 const HomePage = React.lazy(() => import('~/features/home'));
+const OrderPage = React.lazy(() => import('~/features/order'));
 
 // -----------------------------
 const guestRoute: RouteObject[] = [
@@ -15,6 +16,12 @@ const guestRoute: RouteObject[] = [
     element: <GuestGuard />,
     errorElement: <ServerErrorPage />,
     children: [{ element: <GuestLayout />, children: [{ path: '', element: <HomePage /> }] }]
+  },
+  {
+    path: PATH.ORDER.ROOT,
+    element: <GuestGuard />,
+    errorElement: <ServerErrorPage />,
+    children: [{ element: <GuestLayout />, children: [{ path: '', element: <OrderPage /> }] }]
   }
 ];
 
