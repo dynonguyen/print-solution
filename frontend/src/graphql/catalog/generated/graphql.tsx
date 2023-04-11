@@ -182,6 +182,7 @@ export type ProductPaginatedResponse = IQueryResponse & {
 export type Query = {
   __typename?: 'Query';
   catagories: CategoryPaginatedResponse;
+  product: Product;
   products: ProductPaginatedResponse;
 };
 
@@ -192,6 +193,11 @@ export type QueryCatagoriesArgs = {
   search?: InputMaybe<Scalars['String']>;
   searchBy?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryProductArgs = {
+  uuid: Scalars['String'];
 };
 
 
@@ -281,6 +287,13 @@ export type AdminProductListQueryVariables = Exact<{
 
 
 export type AdminProductListQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedResponse', code: number, msg?: string | null, page: number, total: number, pageSize: number, docs: Array<{ __typename?: 'Product', _id: string, uuid: string, photo: string, name: string, price: number, isHidden: boolean, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', name: string } | null }> } };
+
+export type ProductDetailQueryVariables = Exact<{
+  uuid: Scalars['String'];
+}>;
+
+
+export type ProductDetailQuery = { __typename?: 'Query', product: { __typename?: 'Product', _id: string, uuid: string, name: string, photo: string, htmlDesc?: string | null, unit: string, price: number, numOfViews: number, numOfFavorites: number, isHidden: boolean, infos?: Array<{ __typename?: 'ProductInfo', label: string, value: string }> | null, options?: Array<{ __typename?: 'ProductOption', optionType: string, label: string, values?: Array<string> | null }> | null } };
 
 export const FullCategoryFragmentDoc = gql`
     fragment fullCategory on Category {
@@ -618,3 +631,56 @@ export function useAdminProductListLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type AdminProductListQueryHookResult = ReturnType<typeof useAdminProductListQuery>;
 export type AdminProductListLazyQueryHookResult = ReturnType<typeof useAdminProductListLazyQuery>;
 export type AdminProductListQueryResult = Apollo.QueryResult<AdminProductListQuery, AdminProductListQueryVariables>;
+export const ProductDetailDocument = gql`
+    query ProductDetail($uuid: String!) {
+  product(uuid: $uuid) {
+    _id
+    uuid
+    name
+    photo
+    htmlDesc
+    unit
+    price
+    infos {
+      label
+      value
+    }
+    options {
+      optionType
+      label
+      values
+    }
+    numOfViews
+    numOfFavorites
+    isHidden
+  }
+}
+    `;
+
+/**
+ * __useProductDetailQuery__
+ *
+ * To run a query within a React component, call `useProductDetailQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProductDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useProductDetailQuery({
+ *   variables: {
+ *      uuid: // value for 'uuid'
+ *   },
+ * });
+ */
+export function useProductDetailQuery(baseOptions: Apollo.QueryHookOptions<ProductDetailQuery, ProductDetailQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ProductDetailQuery, ProductDetailQueryVariables>(ProductDetailDocument, options);
+      }
+export function useProductDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProductDetailQuery, ProductDetailQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ProductDetailQuery, ProductDetailQueryVariables>(ProductDetailDocument, options);
+        }
+export type ProductDetailQueryHookResult = ReturnType<typeof useProductDetailQuery>;
+export type ProductDetailLazyQueryHookResult = ReturnType<typeof useProductDetailLazyQuery>;
+export type ProductDetailQueryResult = Apollo.QueryResult<ProductDetailQuery, ProductDetailQueryVariables>;

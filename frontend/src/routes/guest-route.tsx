@@ -4,7 +4,7 @@ import ServerErrorPage from '~/components/feedback/ServerErrorPage';
 import GuestGuard from '~/components/guard/GuestGuard';
 import GuestLayout from '~/components/layout/GuestLayout';
 import { PATH } from '~/constants/path';
-import GuestProductDetail from '~/features/guest/detail';
+import ProductDetail from '~/features/products';
 
 // -----------------------------
 const HomePage = React.lazy(() => import('~/features/home'));
@@ -20,7 +20,7 @@ const guestRoute: RouteObject[] = [
         element: <GuestLayout />,
         children: [
           { path: '', element: <HomePage /> },
-          { path: PATH.GUEST.PRODUCT.DETAILS, element: <GuestProductDetail /> }
+          { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> }
         ]
       }
     ]
