@@ -2,12 +2,19 @@ import { Avatar, Button, Flex, Table, Tooltip, Typography } from '@cads-ui/core'
 import { OnFilterValue, TableColumn } from '@cads-ui/core/components/table/TableProps';
 import moment from 'moment';
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
 import { CONTACT_PRICE, TABLE_SORT_TYPE, TABLE_TRANSLATION } from '~/constants/common';
 import { DEFAULTS } from '~/constants/default';
-import { useAdminProductListQuery } from '~/graphql/catalog/generated/graphql';
+import { PATH } from '~/constants/path';
+import {
+  AdminProductListDocument,
+  useAdminProductListQuery,
+  useToggleHiddenProductMutation
+} from '~/graphql/catalog/generated/graphql';
 import useQueryPagination, { SetQueryParams } from '~/hooks/useQueryPagination';
-import { getTableSortByQuery, toVND } from '~/utils/helper';
+import { getApolloQueryName, getTableSortByQuery, toVND } from '~/utils/helper';
 import { withMinio } from '~/utils/withStatic';
 
 const ProductList = () => {
@@ -24,6 +31,7 @@ const ProductList = () => {
   });
   const { loading, data } = useAdminProductListQuery({ variables: { page, pageSize, sort, search, searchBy } });
   const { docs: products = [], total = 1 } = data?.products || {};
+  const [toggleHiddenProduct] = useToggleHiddenProductMutation();
 
   const columns: TableColumn[] = [
     {
@@ -41,6 +49,7 @@ const ProductList = () => {
       render: (price) => (price === CONTACT_PRICE ? 'Liên hệ' : toVND(price)),
       sorter: getTableSortByQuery(sort, 'price')
     },
+    { key: 'unit', title: 'Đơn vị', maxWidth: 80 },
     {
       key: 'createdAt',
       title: 'Ngày tạo',
@@ -52,15 +61,27 @@ const ProductList = () => {
       key: '_action',
       title: 'Action',
       align: 'right',
-      render: (_, { isHidden }) => (
+      render: (_, { isHidden, uuid }) => (
         <Flex justifyContent="flex-end">
           <Tooltip title="Chỉnh sửa" placement="left">
-            <Button isIconBtn>
-              <Icon icon="material-symbols:edit" />
-            </Button>
+            <Link to={`${PATH.ADMIN.PRODUCT.EDIT_ROOT}/${uuid}`}>
+              <Button isIconBtn color="info">
+                <Icon icon="material-symbols:edit" />
+              </Button>
+            </Link>
           </Tooltip>
-          <Tooltip title="Ẩn sản phẩm" placement="left">
-            <Button isIconBtn color="error">
+          <Tooltip title={isHidden ? 'Hiện sản phẩm' : 'Ẩn sản phẩm'} placement="left">
+            <Button
+              isIconBtn
+              color="grey"
+              onClick={() => {
+                toggleHiddenProduct({
+                  variables: { hideProductInput: { isHidden: !isHidden, uuid } },
+                  refetchQueries: [getApolloQueryName(AdminProductListDocument)]
+                });
+                toast.success(`${isHidden ? 'Hiện' : 'Ẩn'} sản phẩm thành công`);
+              }}
+            >
               <Icon icon={!isHidden ? 'mdi:eye' : 'mdi:eye-off'} />
             </Button>
           </Tooltip>
@@ -70,8 +91,8 @@ const ProductList = () => {
   ];
 
   const rows = products.map((product) => {
-    const { uuid, photo, name, category, price, createdAt, updatedAt } = product;
-    return { uuid, photo, name, category: category?.name || '', price, createdAt, updatedAt };
+    const { category, __typename, _id, ...other } = product;
+    return { category: category?.name || '', ...other };
   });
 
   const handleFilterChange = (filter: OnFilterValue) => {

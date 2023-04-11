@@ -11,6 +11,7 @@ query AdminProductList($page: Int, $pageSize: Int, $sort: String, $search: Strin
       photo
       name
       price
+      unit
       isHidden
       createdAt
       updatedAt
@@ -20,6 +21,7 @@ query AdminProductList($page: Int, $pageSize: Int, $sort: String, $search: Strin
     }
   }
 }
+
 
 query ProductDetail($uuid: String!) {
   product(uuid: $uuid) {
@@ -42,5 +44,30 @@ query ProductDetail($uuid: String!) {
     numOfViews
     numOfFavorites
     isHidden
+  }
+}
+
+query AdminProductToEdit($uuid: String!) {
+  product(uuid: $uuid) {
+    code
+    doc {
+      _id
+      uuid
+      name
+      categoryId
+      photo
+      price
+      unit
+      infos {
+        label
+        value
+      }
+      options {
+        optionType
+        label
+        values
+      }
+      htmlDesc
+    }
   }
 }

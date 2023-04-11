@@ -6,3 +6,19 @@ mutation AddProduct($addProductInput: ProductInput!) {
     }
   }
 }
+
+mutation UpdateProduct($updateProductInput: ProductInput!) {
+  updateProduct(updateProductInput: $updateProductInput) {
+    code
+    msg
+    success
+  }
+}
+
+mutation ToggleHiddenProduct($hideProductInput: HideProductInput!) {
+  hideProduct(hideProductInput: $hideProductInput) {
+    code
+    msg
+    success
+  }
+}

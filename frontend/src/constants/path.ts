@@ -24,7 +24,9 @@ export const PATH = {
     PRODUCT: {
       ROOT: '/admin/product',
       LIST: '/admin/product/list',
-      ADD: '/admin/product/add'
+      ADD: '/admin/product/add',
+      EDIT_ROOT: '/admin/product/edit',
+      EDIT: '/admin/product/edit/:uuid'
     },
     ORDER: '/admin/order',
     REVENUE: '/admin/revenue',

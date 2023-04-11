@@ -9,11 +9,14 @@ import { resetFormAtom } from '../atom/reset-form';
 // -----------------------------
 interface ProductInfoFieldsProps {
   onChange: (infos: ProductInfo[]) => void;
+  defaultValue?: ProductInfo[];
 }
 
 // -----------------------------
-const ProductInfoFields: React.FC<ProductInfoFieldsProps> = ({ onChange }) => {
-  const [infos, setInfos] = React.useState<Array<ProductInfo & { id: string }>>([]);
+const ProductInfoFields: React.FC<ProductInfoFieldsProps> = ({ onChange, defaultValue }) => {
+  const [infos, setInfos] = React.useState<Array<ProductInfo & { id: string }>>(
+    defaultValue ? defaultValue.map((val) => ({ id: generateId(), ...val })) : []
+  );
   const resetFormFlag = useRecoilValue(resetFormAtom);
 
   useEffectNotFirst(() => {
@@ -37,6 +40,7 @@ const ProductInfoFields: React.FC<ProductInfoFieldsProps> = ({ onChange }) => {
           <Input
             placeholder="Tên thông số. VD: Màu sắc"
             fullWidth
+            defaultValue={info.label}
             debounceTime={250}
             onChange={(e) => handleInputChange(info.id, 'label', e.target.value.trim())}
           />
@@ -44,6 +48,7 @@ const ProductInfoFields: React.FC<ProductInfoFieldsProps> = ({ onChange }) => {
             placeholder="Giá trị thông số. VD: Nhiều màu"
             fullWidth
             debounceTime={250}
+            defaultValue={info.value}
             onChange={(e) => handleInputChange(info.id, 'value', e.target.value.trim())}
           />
           <Icon

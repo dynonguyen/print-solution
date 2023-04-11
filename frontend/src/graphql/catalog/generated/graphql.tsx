@@ -64,6 +64,11 @@ export type DeleteCategoryInput = {
   _id: Scalars['String'];
 };
 
+export type HideProductInput = {
+  isHidden: Scalars['Boolean'];
+  uuid: Scalars['String'];
+};
+
 export type IMutationResponse = {
   code: Scalars['Int'];
   msg?: Maybe<Scalars['String']>;
@@ -80,7 +85,9 @@ export type Mutation = {
   addCategory: AddCategoryResponse;
   addProduct: AddProductResponse;
   deleteCategory: MutationResponse;
+  hideProduct: MutationResponse;
   updateCategory: MutationResponse;
+  updateProduct: MutationResponse;
 };
 
 
@@ -99,8 +106,18 @@ export type MutationDeleteCategoryArgs = {
 };
 
 
+export type MutationHideProductArgs = {
+  hideProductInput: HideProductInput;
+};
+
+
 export type MutationUpdateCategoryArgs = {
   updateCategoryInput: UpdateCategoryInput;
+};
+
+
+export type MutationUpdateProductArgs = {
+  updateProductInput: ProductInput;
 };
 
 export type MutationResponse = IMutationResponse & {
@@ -152,6 +169,7 @@ export type ProductInput = {
   photo: Scalars['String'];
   price?: Scalars['Float'];
   unit: Scalars['String'];
+  uuid?: InputMaybe<Scalars['String']>;
 };
 
 export type ProductOption = {
@@ -179,10 +197,18 @@ export type ProductPaginatedResponse = IQueryResponse & {
   total: Scalars['Int'];
 };
 
+export type ProductResponse = IQueryResponse & {
+  __typename?: 'ProductResponse';
+  code: Scalars['Int'];
+  doc?: Maybe<Product>;
+  msg?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   catagories: CategoryPaginatedResponse;
   product: Product;
+  product: ProductResponse;
   products: ProductPaginatedResponse;
 };
 
@@ -258,6 +284,20 @@ export type AddProductMutationVariables = Exact<{
 
 export type AddProductMutation = { __typename?: 'Mutation', addProduct: { __typename?: 'AddProductResponse', code: number, msg?: string | null, success: boolean, doc?: { __typename?: 'Product', _id: string, uuid: string, categoryId: string, name: string, photo: string, price: number, unit: string, numOfFavorites: number, numOfViews: number, createdAt: any, updatedAt: any, infos?: Array<{ __typename?: 'ProductInfo', label: string, value: string }> | null, options?: Array<{ __typename?: 'ProductOption', optionType: string, label: string, values?: Array<string> | null }> | null } | null } };
 
+export type UpdateProductMutationVariables = Exact<{
+  updateProductInput: ProductInput;
+}>;
+
+
+export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'MutationResponse', code: number, msg?: string | null, success: boolean } };
+
+export type ToggleHiddenProductMutationVariables = Exact<{
+  hideProductInput: HideProductInput;
+}>;
+
+
+export type ToggleHiddenProductMutation = { __typename?: 'Mutation', hideProduct: { __typename?: 'MutationResponse', code: number, msg?: string | null, success: boolean } };
+
 export type AdminCategoryListQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']>;
   pageSize?: InputMaybe<Scalars['Int']>;
@@ -286,7 +326,14 @@ export type AdminProductListQueryVariables = Exact<{
 }>;
 
 
-export type AdminProductListQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedResponse', code: number, msg?: string | null, page: number, total: number, pageSize: number, docs: Array<{ __typename?: 'Product', _id: string, uuid: string, photo: string, name: string, price: number, isHidden: boolean, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', name: string } | null }> } };
+export type AdminProductListQuery = { __typename?: 'Query', products: { __typename?: 'ProductPaginatedResponse', code: number, msg?: string | null, page: number, total: number, pageSize: number, docs: Array<{ __typename?: 'Product', _id: string, uuid: string, photo: string, name: string, price: number, unit: string, isHidden: boolean, createdAt: any, updatedAt: any, category?: { __typename?: 'Category', name: string } | null }> } };
+
+export type AdminProductToEditQueryVariables = Exact<{
+  uuid: Scalars['String'];
+}>;
+
+
+export type AdminProductToEditQuery = { __typename?: 'Query', product: { __typename?: 'ProductResponse', code: number, doc?: { __typename?: 'Product', _id: string, uuid: string, name: string, categoryId: string, photo: string, price: number, unit: string, htmlDesc?: string | null, infos?: Array<{ __typename?: 'ProductInfo', label: string, value: string }> | null, options?: Array<{ __typename?: 'ProductOption', optionType: string, label: string, values?: Array<string> | null }> | null } | null } };
 
 export type ProductDetailQueryVariables = Exact<{
   uuid: Scalars['String'];
@@ -484,6 +531,76 @@ export function useAddProductMutation(baseOptions?: Apollo.MutationHookOptions<A
 export type AddProductMutationHookResult = ReturnType<typeof useAddProductMutation>;
 export type AddProductMutationResult = Apollo.MutationResult<AddProductMutation>;
 export type AddProductMutationOptions = Apollo.BaseMutationOptions<AddProductMutation, AddProductMutationVariables>;
+export const UpdateProductDocument = gql`
+    mutation UpdateProduct($updateProductInput: ProductInput!) {
+  updateProduct(updateProductInput: $updateProductInput) {
+    code
+    msg
+    success
+  }
+}
+    `;
+export type UpdateProductMutationFn = Apollo.MutationFunction<UpdateProductMutation, UpdateProductMutationVariables>;
+
+/**
+ * __useUpdateProductMutation__
+ *
+ * To run a mutation, you first call `useUpdateProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProductMutation, { data, loading, error }] = useUpdateProductMutation({
+ *   variables: {
+ *      updateProductInput: // value for 'updateProductInput'
+ *   },
+ * });
+ */
+export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProductMutation, UpdateProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateProductMutation, UpdateProductMutationVariables>(UpdateProductDocument, options);
+      }
+export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
+export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
+export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
+export const ToggleHiddenProductDocument = gql`
+    mutation ToggleHiddenProduct($hideProductInput: HideProductInput!) {
+  hideProduct(hideProductInput: $hideProductInput) {
+    code
+    msg
+    success
+  }
+}
+    `;
+export type ToggleHiddenProductMutationFn = Apollo.MutationFunction<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>;
+
+/**
+ * __useToggleHiddenProductMutation__
+ *
+ * To run a mutation, you first call `useToggleHiddenProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleHiddenProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleHiddenProductMutation, { data, loading, error }] = useToggleHiddenProductMutation({
+ *   variables: {
+ *      hideProductInput: // value for 'hideProductInput'
+ *   },
+ * });
+ */
+export function useToggleHiddenProductMutation(baseOptions?: Apollo.MutationHookOptions<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>(ToggleHiddenProductDocument, options);
+      }
+export type ToggleHiddenProductMutationHookResult = ReturnType<typeof useToggleHiddenProductMutation>;
+export type ToggleHiddenProductMutationResult = Apollo.MutationResult<ToggleHiddenProductMutation>;
+export type ToggleHiddenProductMutationOptions = Apollo.BaseMutationOptions<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>;
 export const AdminCategoryListDocument = gql`
     query AdminCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
   catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {
@@ -589,6 +706,7 @@ export const AdminProductListDocument = gql`
       photo
       name
       price
+      unit
       isHidden
       createdAt
       updatedAt
@@ -631,6 +749,7 @@ export function useAdminProductListLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type AdminProductListQueryHookResult = ReturnType<typeof useAdminProductListQuery>;
 export type AdminProductListLazyQueryHookResult = ReturnType<typeof useAdminProductListLazyQuery>;
 export type AdminProductListQueryResult = Apollo.QueryResult<AdminProductListQuery, AdminProductListQueryVariables>;
+
 export const ProductDetailDocument = gql`
     query ProductDetail($uuid: String!) {
   product(uuid: $uuid) {
@@ -655,6 +774,32 @@ export const ProductDetailDocument = gql`
     isHidden
   }
 }
+
+export const AdminProductToEditDocument = gql`
+    query AdminProductToEdit($uuid: String!) {
+  product(uuid: $uuid) {
+    code
+    doc {
+      _id
+      uuid
+      name
+      categoryId
+      photo
+      price
+      unit
+      infos {
+        label
+        value
+      }
+      options {
+        optionType
+        label
+        values
+      }
+      htmlDesc
+    }
+  }
+}
     `;
 
 /**
@@ -662,17 +807,28 @@ export const ProductDetailDocument = gql`
  *
  * To run a query within a React component, call `useProductDetailQuery` and pass it any options that fit your needs.
  * When your component renders, `useProductDetailQuery` returns an object from Apollo Client that contains loading, error, and data properties
+
+ * __useAdminProductToEditQuery__
+ *
+ * To run a query within a React component, call `useAdminProductToEditQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAdminProductToEditQuery` returns an object from Apollo Client that contains loading, error, and data properties
+
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
+
  * const { data, loading, error } = useProductDetailQuery({
+
+ * const { data, loading, error } = useAdminProductToEditQuery({
+
  *   variables: {
  *      uuid: // value for 'uuid'
  *   },
  * });
  */
+
 export function useProductDetailQuery(baseOptions: Apollo.QueryHookOptions<ProductDetailQuery, ProductDetailQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ProductDetailQuery, ProductDetailQueryVariables>(ProductDetailDocument, options);
@@ -684,3 +840,16 @@ export function useProductDetailLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type ProductDetailQueryHookResult = ReturnType<typeof useProductDetailQuery>;
 export type ProductDetailLazyQueryHookResult = ReturnType<typeof useProductDetailLazyQuery>;
 export type ProductDetailQueryResult = Apollo.QueryResult<ProductDetailQuery, ProductDetailQueryVariables>;
+
+export function useAdminProductToEditQuery(baseOptions: Apollo.QueryHookOptions<AdminProductToEditQuery, AdminProductToEditQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AdminProductToEditQuery, AdminProductToEditQueryVariables>(AdminProductToEditDocument, options);
+      }
+export function useAdminProductToEditLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AdminProductToEditQuery, AdminProductToEditQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AdminProductToEditQuery, AdminProductToEditQueryVariables>(AdminProductToEditDocument, options);
+        }
+export type AdminProductToEditQueryHookResult = ReturnType<typeof useAdminProductToEditQuery>;
+export type AdminProductToEditLazyQueryHookResult = ReturnType<typeof useAdminProductToEditLazyQuery>;
+export type AdminProductToEditQueryResult = Apollo.QueryResult<AdminProductToEditQuery, AdminProductToEditQueryVariables>;
+
