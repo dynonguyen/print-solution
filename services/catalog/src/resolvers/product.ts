@@ -105,4 +105,14 @@ export class ProductFieldResolver {
   }
 }
 
+@Resolver()
+export class ProductDetailResolver {
+  @Query((_return) => Product)
+  async product(@Arg('uuid', (_type) => String) uuid: string): Promise<Product | null> {
+    const [err, productDetail] = await to(ProductModel.findOne({ uuid: uuid }));
+    if (err) return null;
+    else return productDetail;
+  }
+}
+
 export default ProductResolver;

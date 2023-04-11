@@ -22,6 +22,31 @@ query AdminProductList($page: Int, $pageSize: Int, $sort: String, $search: Strin
   }
 }
 
+
+query ProductDetail($uuid: String!) {
+  product(uuid: $uuid) {
+    _id
+    uuid
+    name
+    photo
+    htmlDesc
+    unit
+    price
+    infos {
+      label
+      value
+    }
+    options {
+      optionType
+      label
+      values
+    }
+    numOfViews
+    numOfFavorites
+    isHidden
+  }
+}
+
 query AdminProductToEdit($uuid: String!) {
   product(uuid: $uuid) {
     code

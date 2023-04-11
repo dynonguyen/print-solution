@@ -3,9 +3,18 @@ export const PATH = {
   NOT_FOUND: '/404',
   SERVER_ERROR: '/oop',
 
+  PRODUCT: {
+    ROOT: '/product',
+    DETAILS: '/product/:productId'
+  },
+
   CUSTOMER: {
     ROOT: '/customer',
     ACCOUNT: '/customer/account'
+  },
+
+  GUEST: {
+    ROOT: '/guest'
   },
 
   ADMIN: {
