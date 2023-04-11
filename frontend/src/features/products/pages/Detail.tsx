@@ -12,7 +12,7 @@ import ProductInfo from '../components/ProductInfo';
 const ProductDetail = withCatalogApolloProvider((_props) => {
   const param = useParams<{ productId: string }>();
   const { loading, data } = useProductDetailQuery({ variables: { uuid: param.productId ? param.productId : '' } });
-  const product = data?.product;
+  const product = data?.product.doc;
 
   if (!product && !loading) {
     return <Navigate to={PATH.NOT_FOUND} />;

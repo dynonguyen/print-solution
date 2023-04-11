@@ -107,11 +107,13 @@ export class ProductFieldResolver {
 
 @Resolver()
 export class ProductDetailResolver {
-  @Query((_return) => Product)
-  async product(@Arg('uuid', (_type) => String) uuid: string): Promise<Product | null> {
-    const [err, productDetail] = await to(ProductModel.findOne({ uuid: uuid }));
-    if (err) return null;
-    else return productDetail;
+  @Query((_return) => ProductResponse)
+  async product(@Args() { uuid }: QueryProductArgs): Promise<ProductResponse> {
+    const product = await ProductModel.findOne({ uuid });
+    if (!product) {
+      return { code: ERROR_CODE.NOT_FOUND, doc: null, msg: 'Product not found' };
+    }
+    return { code: SUCCESS_CODE.OK, doc: product };
   }
 }
 
