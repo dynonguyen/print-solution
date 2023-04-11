@@ -10,7 +10,7 @@ import MutationResponse from '~/types/core/MutationResponse';
 import { PaginationArgs } from '~/types/core/PaginationArg';
 import Category from '~/types/entities/Category';
 import Product from '~/types/entities/Product';
-import { ProductInput, QueryProductArgs } from '~/types/input/Product';
+import { HideProductInput, ProductInput, QueryProductArgs } from '~/types/input/Product';
 import { AddProductResponse, ProductPaginatedResponse, ProductResponse } from '~/types/response/Product';
 import { generateId, toSearchQuery } from '~/utils/helper';
 import mongoosePaginate from '~/utils/mongoose-paginate';
@@ -84,6 +84,13 @@ class ProductResolver {
     }
 
     return { success: true, code: SUCCESS_CODE.OK };
+  }
+
+  @Authorized(USER_ROLES.ADMIN)
+  @Mutation((_return) => MutationResponse)
+  async hideProduct(@Arg('hideProductInput') { uuid, isHidden }: HideProductInput): Promise<MutationResponse> {
+    await ProductModel.updateOne({ uuid }, { $set: { isHidden } });
+    return { code: SUCCESS_CODE.OK, success: true };
   }
 }
 

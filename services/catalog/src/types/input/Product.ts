@@ -57,6 +57,14 @@ export class ProductInput {
   @Field((_type) => Number, { nullable: true, defaultValue: 0 })
   numOfFavorites: number;
 }
+@InputType()
+export class HideProductInput {
+  @Field((_type) => String)
+  uuid: string;
+
+  @Field((_type) => Boolean)
+  isHidden: boolean;
+}
 
 @ArgsType()
 export class QueryProductArgs {

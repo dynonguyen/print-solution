@@ -1,7 +1,7 @@
+import { useApolloClient } from '@apollo/client';
 import { Box, Button, FieldLabel, Flex, Grid, Input, usePreventTabClose } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
 import to from 'await-to-js';
-import { getOperationAST } from 'graphql';
 import omit from 'lodash/omit';
 import React from 'react';
 import { useForm } from 'react-hook-form';
@@ -15,12 +15,7 @@ import { CONTACT_PRICE } from '~/constants/common';
 import { ENDPOINTS } from '~/constants/endpoints';
 import { SUCCESS_CODE } from '~/constants/status-code';
 import { MAX } from '~/constants/validation';
-import {
-  AdminCategoryListDocument,
-  AdminProductListDocument,
-  useAddProductMutation,
-  useUpdateProductMutation
-} from '~/graphql/catalog/generated/graphql';
+import { useAddProductMutation, useUpdateProductMutation } from '~/graphql/catalog/generated/graphql';
 import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
 import docsAxios from '~/libs/axios/docs';
 import { Product } from '~/types/Product';
@@ -86,17 +81,9 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isE
     defaultValues: isEdit ? editedProduct : defaultValues
   });
   const photoFile = React.useRef<File | null>(null);
-  const [addProductMutation] = useAddProductMutation({
-    refetchQueries: [
-      getOperationAST(AdminCategoryListDocument)?.name?.value || 'AdminCategoryList',
-      getOperationAST(AdminProductListDocument)?.name?.value || 'AdminProductList'
-    ],
-    awaitRefetchQueries: true
-  });
-  const [updateProductMutation] = useUpdateProductMutation({
-    refetchQueries: [getOperationAST(AdminProductListDocument)?.name?.value || 'AdminProductList'],
-    awaitRefetchQueries: true
-  });
+  const [addProductMutation] = useAddProductMutation();
+  const [updateProductMutation] = useUpdateProductMutation();
+  const apolloClient = useApolloClient();
 
   const [loading, setLoading] = React.useState(false);
   const setResetForm = useSetRecoilState(resetFormAtom);
@@ -149,6 +136,7 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isE
       handleAddProductError(photo, res?.data?.addProduct.msg || '');
     } else {
       toast.success('Thêm sản phẩm thành công');
+      apolloClient.cache.reset();
     }
 
     setLoading(false);
@@ -183,6 +171,11 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isE
         toast.error(res?.data?.updateProduct.msg || 'Cập nhật sản phẩm thất bại, thử lại');
       }
     } else {
+      if (photoFile.current) {
+        console.log(editedProduct.photo);
+        docsAxios.delete(ENDPOINTS.DOCS_API.DELETE_PHOTO, { params: { photoUrl: editedProduct.photo } });
+      }
+      apolloClient.cache.reset();
       toast.success('Cập nhật sản phẩm thành công');
     }
 

@@ -64,6 +64,11 @@ export type DeleteCategoryInput = {
   _id: Scalars['String'];
 };
 
+export type HideProductInput = {
+  isHidden: Scalars['Boolean'];
+  uuid: Scalars['String'];
+};
+
 export type IMutationResponse = {
   code: Scalars['Int'];
   msg?: Maybe<Scalars['String']>;
@@ -80,6 +85,7 @@ export type Mutation = {
   addCategory: AddCategoryResponse;
   addProduct: AddProductResponse;
   deleteCategory: MutationResponse;
+  hideProduct: MutationResponse;
   updateCategory: MutationResponse;
   updateProduct: MutationResponse;
 };
@@ -97,6 +103,11 @@ export type MutationAddProductArgs = {
 
 export type MutationDeleteCategoryArgs = {
   deleteCategoryInput: DeleteCategoryInput;
+};
+
+
+export type MutationHideProductArgs = {
+  hideProductInput: HideProductInput;
 };
 
 
@@ -278,6 +289,13 @@ export type UpdateProductMutationVariables = Exact<{
 
 
 export type UpdateProductMutation = { __typename?: 'Mutation', updateProduct: { __typename?: 'MutationResponse', code: number, msg?: string | null, success: boolean } };
+
+export type ToggleHiddenProductMutationVariables = Exact<{
+  hideProductInput: HideProductInput;
+}>;
+
+
+export type ToggleHiddenProductMutation = { __typename?: 'Mutation', hideProduct: { __typename?: 'MutationResponse', code: number, msg?: string | null, success: boolean } };
 
 export type AdminCategoryListQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']>;
@@ -540,6 +558,41 @@ export function useUpdateProductMutation(baseOptions?: Apollo.MutationHookOption
 export type UpdateProductMutationHookResult = ReturnType<typeof useUpdateProductMutation>;
 export type UpdateProductMutationResult = Apollo.MutationResult<UpdateProductMutation>;
 export type UpdateProductMutationOptions = Apollo.BaseMutationOptions<UpdateProductMutation, UpdateProductMutationVariables>;
+export const ToggleHiddenProductDocument = gql`
+    mutation ToggleHiddenProduct($hideProductInput: HideProductInput!) {
+  hideProduct(hideProductInput: $hideProductInput) {
+    code
+    msg
+    success
+  }
+}
+    `;
+export type ToggleHiddenProductMutationFn = Apollo.MutationFunction<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>;
+
+/**
+ * __useToggleHiddenProductMutation__
+ *
+ * To run a mutation, you first call `useToggleHiddenProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleHiddenProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleHiddenProductMutation, { data, loading, error }] = useToggleHiddenProductMutation({
+ *   variables: {
+ *      hideProductInput: // value for 'hideProductInput'
+ *   },
+ * });
+ */
+export function useToggleHiddenProductMutation(baseOptions?: Apollo.MutationHookOptions<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>(ToggleHiddenProductDocument, options);
+      }
+export type ToggleHiddenProductMutationHookResult = ReturnType<typeof useToggleHiddenProductMutation>;
+export type ToggleHiddenProductMutationResult = Apollo.MutationResult<ToggleHiddenProductMutation>;
+export type ToggleHiddenProductMutationOptions = Apollo.BaseMutationOptions<ToggleHiddenProductMutation, ToggleHiddenProductMutationVariables>;
 export const AdminCategoryListDocument = gql`
     query AdminCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
   catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {

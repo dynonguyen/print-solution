@@ -1,4 +1,5 @@
 import { SortOptions } from '@cads-ui/core/components/table/TableProps';
+import { DocumentNode, getOperationAST } from 'graphql';
 import { TABLE_SORT_TYPE } from '~/constants/common';
 
 export function getFileExt(filename: string) {
@@ -48,4 +49,8 @@ export function getTableSortByQuery(sort: string, field: string): SortOptions | 
     };
 
   return undefined;
+}
+
+export function getApolloQueryName(doc: DocumentNode) {
+  return getOperationAST(doc)?.name?.value || '';
 }

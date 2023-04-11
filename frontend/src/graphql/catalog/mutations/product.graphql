@@ -14,3 +14,11 @@ mutation UpdateProduct($updateProductInput: ProductInput!) {
     success
   }
 }
+
+mutation ToggleHiddenProduct($hideProductInput: HideProductInput!) {
+  hideProduct(hideProductInput: $hideProductInput) {
+    code
+    msg
+    success
+  }
+}
