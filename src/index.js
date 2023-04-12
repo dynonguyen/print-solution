@@ -19,7 +19,9 @@ app.get("/", (req, res) => {
 app.post("/upload", upload.any(), async function (req, res) {
   try {
     // Loop through each uploaded file
+    console.log("_______________________\n");
     await countPageFromListFiles(req.files);
+    console.log("_______________________");
     res.status(200).send(`Done`);
   } catch (err) {
     console.error(err);

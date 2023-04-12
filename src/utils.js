@@ -25,7 +25,11 @@ async function convertToPdfAndCountPage(path) {
     const pageCountTemp = await PDFDocument.load(response.data);
     return pageCountTemp.getPages().length;
   } catch (error) {
-    console.error(error);
+    if (error.code === "ECONNREFUSED") {
+      console.error("ERROR: pls start gotenberg server");
+    } else {
+      console.error(error);
+    }
     return null;
   }
 }
