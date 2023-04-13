@@ -43,6 +43,10 @@
   docker compose -p print-solution-dev -f ./docker-compose.dev.yml build --no-cache
   docker compose -p print-solution-dev -f ./docker-compose.dev.yml up -d
 
+  # Generate graphql.tsx sau khi khởi tạo frontend
+  cd frontend
+  yarn graphql-codegen
+
   # Chạy môi trường production
   docker compose -p print-solution-prod build --no-cache
   docker compose -p print-solution-prod up -d

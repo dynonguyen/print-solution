@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "graphql-codegen": "graphql-codegen-catalog && graphql-codegen-notification && graphql-codegen-chat",
+    "graphql-codegen": "yarn graphql-codegen-catalog && yarn graphql-codegen-notification && yarn graphql-codegen-chat",
     "graphql-codegen-catalog": "graphql-codegen --config ./src/graphql/catalog/codegen.ts",
     "graphql-codegen-chat": "graphql-codegen --config ./src/graphql/chat/codegen.ts",
     "graphql-codegen-notification": "graphql-codegen --config ./src/graphql/chat/codegen.ts"
