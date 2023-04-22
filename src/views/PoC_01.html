@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page total</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="w-[100vw] h-[100vh] flex items-center justify-center p-10 flex-col relative"
+  >
+    <a
+      href="/"
+      class="fixed top-10 left-10 bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white"
+    >
+      Back
+    </a>
+    <h1 class="text-4xl font-bold">Count page of file uploaded</h1>
+    <form
+      id="upload-form"
+      method="POST"
+      enctype="multipart/form-data"
+      class="mt-[80px]"
+      style="display: flex; flex-direction: column; row-gap: 40px"
+    >
+      <div>
+        <input
+          class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+          type="file"
+          name="folder"
+          webkitdirectory
+          directory
+          multiple
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-3 rounded-md font-bold text-lg text-white"
+      >
+        Upload
+      </button>
+    </form>
+  </body>
+  <script>
+    const form = document.getElementById("upload-form");
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const formData = new FormData(form);
+
+      const response = await fetch("/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.text();
+
+      console.log(data);
+    });
+  </script>
+</html>

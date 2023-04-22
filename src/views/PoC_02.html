@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bank QR code</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .spinner {
+        animation: rotate 2s linear infinite;
+        z-index: 2;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -25px 0 0 -25px;
+        width: 50px;
+        height: 50px;
+      }
+      .spinner .path {
+        stroke: hsl(210, 55%, 39%);
+        stroke-linecap: round;
+        animation: dash 1.5s ease-in-out infinite;
+      }
+
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes dash {
+        0% {
+          stroke-dasharray: 1, 150;
+          stroke-dashoffset: 0;
+        }
+        50% {
+          stroke-dasharray: 90, 150;
+          stroke-dashoffset: -35;
+        }
+        100% {
+          stroke-dasharray: 90, 150;
+          stroke-dashoffset: -124;
+        }
+      }
+    </style>
+  </head>
+  <body class="w-[100vw] h-[100vh] flex items-center p-10 flex-col relative">
+    <a
+      href="/"
+      class="fixed top-10 left-10 bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white"
+    >
+      Back
+    </a>
+    <h1 class="text-4xl font-bold">Bank QR code generator</h1>
+    <div class="w-full mt-[20px]">
+      <form
+        id="generate-qr-form"
+        method="POST"
+        enctype="multipart/form-data"
+        class="mt-[40px] flex flex-col items-center justify-center"
+      >
+        <div class="w-full grid grid-cols-2 grid-rows-2 gap-4">
+          <div class="p-4 border-t">
+            <label for="select-bank">Select a bank</label>
+            <select
+              id="select-bank"
+              class="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 relative"
+            >
+              <option value="970416">ACB: ACB - NGÂN HÀNG TMCP Á CHÂU</option>
+              <option value="970425">
+                ABBANK: ABBANK - Ngân hàng TMCP An Bình
+              </option>
+              <option value="970409">
+                BAB: BAC A BANK - Ngân hàng TMCP Bắc Á
+              </option>
+              <option value="970438">
+                BAOVIET: BAOVIET Bank - Ngân hàng Bảo Việt
+              </option>
+              <option value="970418">
+                BIDV: BIDV - Ngân hàng TMCP Đầu tư và Phát triển Việt Nam
+              </option>
+              <option value="970406">
+                DAB: DongABank - Ngân Hàng TMCP Đông Á
+              </option>
+              <option value="970431">
+                EXB: Eximbank - Ngân hàng TMCP Xuất nhập khẩu Việt Nam
+              </option>
+              <option value="970408">
+                GPB: GPBank - Ngân hàng TM TNHH MTV Dầu Khí Toàn Cầu
+              </option>
+              <option value="970437">
+                HDB: HDBank - Ngân hàng TMCP Phát Triển Thành Phố Hồ Chí Minh
+              </option>
+              <option value="970442">
+                HLB: Hongleong Bank - Ngân hàng TNHH MTV Hongleong Việt Nam
+              </option>
+              <option value="970434">
+                INDB: IVB - Ngân hàng TNHH Indovina
+              </option>
+              <option value="970452">
+                kienlongbank: Kienlongbank - Ngân hàng TMCP Kiên Long
+              </option>
+              <option value="970449">
+                LPB: LienVietPostBank - NGÂN HÀNG TMCP BƯU ĐIỆN LIÊN VIỆT
+              </option>
+              <option value="970422">MB: MB - Ngân hàng TMCP Quân đội</option>
+              <option value="970426">
+                MRTB: MSB - Ngân hàng TMCP Hàng Hải Việt Nam
+              </option>
+              <option value="970428">
+                NAB: NamABank - Ngân hàng TMCP Nam Á
+              </option>
+              <option value="970419">NCB: NCB -Ngân hàng TMCP Quốc Dân</option>
+              <option value="970448">
+                OCB: OCB - Ngân hàng TMCP Phương Đông
+              </option>
+              <option value="970414">
+                OCEB: OceanBank - Ngân hàng TMCP Đại Dương
+              </option>
+              <option value="970430">
+                PGB: PG Bank - Ngân hàng TMCP Xăng Dầu Petrolimex
+              </option>
+              <option value="970439">
+                PUB: Public Bank - Ngân hàng TNHH MTV Public Việt Nam
+              </option>
+              <option value="970412">
+                PVB: PVcomBank - Ngân hàng TMCP Đại Chúng Việt Nam
+              </option>
+              <option value="970403">
+                STB: Sacombank - Ngân Hàng TMCP Sài Gòn Thương Tín
+              </option>
+              <option value="970400">
+                SGB: Saigonbank - Ngân hàng TMCP Sài Gòn Công Thương
+              </option>
+              <option value="970429">SCB: SCB - Ngân hàng TMCP Sài Gòn</option>
+              <option value="970440">
+                SEA: SeABank - Ngân hàng TMCP Đông Nam Á
+              </option>
+              <option value="970443">
+                SHB: SHB - Ngân hàng TMCP Sài Gòn – Hà Nội
+              </option>
+              <option value="970424">
+                SIB: Shinhan Bank - Ngân hàng TNHH MTV Shinhan Việt Nam
+              </option>
+              <option value="970407">
+                TCB: Techcombank - Ngân hàng TMCP Kỹ thương Việt Nam
+              </option>
+              <option value="970423">TPB: TPBank - NGÂN HÀNG TIÊN PHONG</option>
+              <option value="970441">VIB: VIB - Ngân hàng quốc tế</option>
+              <option value="970454">
+                VietCapital: Viet Capital Bank - Ngân hàng TMCP Bản Việt
+              </option>
+              <option value="970427">
+                VAB: VietABank - Ngân hàng TMCP Việt Á
+              </option>
+              <option value="970433">
+                VIETB: Vietbank - Ngân hàng TMCP Việt Nam Thương Tín
+              </option>
+              <option value="970436">
+                VCB: Vietcombank - Ngân hàng TMCP Ngoại thương Việt Nam
+              </option>
+              <option value="970415">
+                VTB: VietinBank - Ngân Hàng TMCP Công Thương Việt Nam
+              </option>
+              <option value="970432">
+                VPB: VPBank - Ngân hàng TMCP Việt Nam Thịnh Vượng
+              </option>
+              <option value="970421">
+                VRB: VRB - Ngân hàng Liên Doanh Việt Nga
+              </option>
+              <option value="970457">
+                WRB: Woori Bank - Ngân hàng Wooribank
+              </option>
+            </select>
+          </div>
+          <div class="p-4 border-t">
+            <label for="input-bank-account">STK:</label>
+            <input
+              type="number"
+              id="input-bank-account"
+              name="input-bank-account"
+              class="w-full border border-gray-300 mt-2 p-1.5 rounded-md"
+            />
+          </div>
+          <div class="p-4 border-t">
+            <label for="input-amount">Amount:</label>
+            <input
+              type="number"
+              id="input-amount"
+              name="input-amount"
+              class="w-full border border-gray-300 mt-2 p-1.5 rounded-md"
+            />
+          </div>
+          <div class="p-4 border-t">
+            <label for="input-description">Nội dung chuyển khoản:</label>
+            <input
+              type="text"
+              id="input-description"
+              name="input-description"
+              class="w-full border border-gray-300 mt-2 p-1.5 rounded-md"
+            />
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="mt-4 px-8 bg-violet-500 hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 p-3 rounded-md font-bold text-lg text-white"
+        >
+          Submit
+        </button>
+      </form>
+      <div class="w-full flex items-center justify-center mt-8">
+        <div id="loader" class="hidden">
+          <svg class="spinner" viewBox="0 0 50 50">
+            <circle
+              class="path"
+              cx="25"
+              cy="25"
+              r="20"
+              fill="none"
+              stroke-width="5"
+            ></circle>
+          </svg>
+        </div>
+        <div id="api-content" class="hidden"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    function delay(ms) {
+      return new Promise((resolve) => setTimeout(resolve, ms));
+    }
+
+    const form = document.getElementById("generate-qr-form");
+    const urlServerGenerateQr =
+      "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=";
+    const loader = document.getElementById("loader");
+    const apiContent = document.getElementById("api-content");
+
+    form.addEventListener("submit", async (event) => {
+      apiContent.classList.add("hidden");
+      loader.classList.remove("hidden");
+      event.preventDefault();
+
+      // form data
+      const formData = {};
+      const bankSelect = document.getElementById("select-bank");
+      formData.bank = bankSelect.value;
+
+      const stkInput = document.getElementById("input-bank-account");
+      formData.stk = stkInput.value;
+
+      const amountInput = document.getElementById("input-amount");
+      formData.amount = amountInput.value;
+
+      const descriptionInput = document.getElementById("input-description");
+      formData.description = descriptionInput.value;
+
+      const response = await fetch("/generate-qr-code", {
+        method: "POST",
+        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.text();
+      await delay(1000);
+
+      // render html
+      var img = document.createElement("img");
+      img.src = urlServerGenerateQr + data;
+
+      loader.classList.add("hidden");
+      apiContent.appendChild(img);
+      apiContent.classList.remove("hidden");
+    });
+  </script>
+</html>
