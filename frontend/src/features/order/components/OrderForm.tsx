@@ -1,29 +1,69 @@
-import { Container, Grid, TextField, Typography } from '@mui/material';
-import CategoryInput from './CategoryInput';
-import Uploader from './Uploader';
+import { Box } from '@cads-ui/core';
+import { Container, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import UploadFile from '~/components/UploadFile';
+import CategoryList from './CategoryList';
 
-type Props = {};
+// -----------------------------
+interface OrderFormProps {}
 
-const OrderForm = (props: Props) => {
+// -----------------------------
+const OrderForm: React.FC<OrderFormProps> = (props) => {
+  const MAX_FILE = 5;
+  const MAX_SIZE = 500;
+  const [selectedCategory, setSelectedCategory] = useState<number>();
+
+  const CATEGORY_LIST = [
+    {
+      id: 1,
+      label: 'Danh thiếp',
+      description: ''
+    },
+    {
+      id: 2,
+      label: 'Bao thư',
+      description: ''
+    },
+    {
+      id: 3,
+      label: 'Bìa đựng hồ sơ',
+      description: ''
+    },
+    {
+      id: 4,
+      label: 'Poster - Băng rôn - Standee',
+      description: ''
+    },
+    {
+      id: 5,
+
+      label: 'Tờ rơi',
+      description: ''
+    },
+    {
+      id: 6,
+      label: 'Tờ gấp',
+      description: ''
+    }
+  ];
+
+  const handleCategoryChange = (val: number) => setSelectedCategory(val);
+
   return (
     <Container>
-      <Typography variant="body2" color="text.secondary" align="center">
-        Dat hang
+      <Typography variant="h4" align="center" m={5} sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
+        Tạo đơn hàng của bạn
       </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Uploader />
-        </Grid>
-        <Grid item xs={12}>
-          <CategoryInput />
-        </Grid>
-        <Grid item xs={4}>
-          <TextField id="outlined-basic" label="So dien thoai lien he" variant="outlined" />
-          <TextField id="outlined-basic" label="So zalo nhan bao gia" variant="outlined" />
-          <TextField id="outlined-basic" label="Ten cua ban" variant="outlined" />
-          <TextField id="outlined-basic" label="Email cua ban" variant="outlined" />
-        </Grid>
-      </Grid>
+      <Typography variant="h5" mt={3} mb={2}>
+        Tải lên tài liệu
+      </Typography>
+      <Box style={{ marginBottom: '1rem' }}>
+        <UploadFile maxFiles={MAX_FILE} maxSizePerFile={MAX_SIZE} />
+      </Box>
+      <Typography variant="h5" mt={3} mb={2}>
+        Chọn thể loại in
+      </Typography>
+      <CategoryList data={CATEGORY_LIST} selected={selectedCategory} onChange={handleCategoryChange} />
     </Container>
   );
 };
