@@ -13,7 +13,7 @@ export interface IProduct {
 interface ProductListProps {
   data: IProduct[];
   selected: number | undefined;
-  onChange: (val: number) => any;
+  onChange: (event: any) => any;
 }
 
 // -----------------------------
@@ -26,13 +26,14 @@ const ProductList: React.FC<ProductListProps> = (props) => {
         defaultValue={selected}
         name="radio-buttons-group"
         row
+        onChange={onChange}
       >
         {data?.map((item) => {
-          const { label, description, image } = item;
+          const { id, label, description, image } = item;
 
           return (
             <FormControlLabel
-              value={item.id}
+              value={id}
               control={<Radio />}
               label={<ProductItem label={label} description={description} image={image} />}
               sx={{ marginBottom: '3rem' }}
