@@ -21,6 +21,7 @@
     "module-alias": "^2.2.2",
     "moment": "^2.29.4",
     "morgan": "^1.10.0",
+    "pdf-lib": "^1.17.1",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.29.3"

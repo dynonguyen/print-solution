@@ -4,9 +4,10 @@ import UploadFile from '~/components/UploadFile';
 import CategoryList from './CategoryList';
 import ProductList from './ProductList';
 import { CATEGORY_LIST, PRODUCT_LIST } from './data';
+import Uploader from './Uploader';
 
 // -----------------------------
-interface OrderFormProps {}
+interface OrderFormProps { }
 
 // -----------------------------
 const OrderForm: React.FC<OrderFormProps> = (props) => {
@@ -25,6 +26,7 @@ const OrderForm: React.FC<OrderFormProps> = (props) => {
 
   return (
     <Container>
+      <Uploader />q
       <Typography variant="h4" align="center" m={5} sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
         Tạo đơn hàng của bạn
       </Typography>

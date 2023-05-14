@@ -10,7 +10,8 @@ export const ENDPOINTS = {
     ROOT: `${GATEWAY_URL}/api/account`
   },
   ORDER_API: {
-    ROOT: `${GATEWAY_URL}/api/order`
+    ROOT: `${GATEWAY_URL}/api/order`,
+    UPLOAD_FILES: '/upload/files'
   },
   PAYMENT_API: {
     ROOT: `${GATEWAY_URL}/api/payment`
