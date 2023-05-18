@@ -19,3 +19,18 @@ query CategoryForSelect($page: Int, $sort: String, $pageSize: Int) {
     }
   }
 }
+
+query GuestCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
+  catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {
+    code
+    msg
+    page
+    total
+    pageSize
+    docs {
+      _id
+      name
+      photo
+    }
+  }
+}
