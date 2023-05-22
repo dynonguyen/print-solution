@@ -17,6 +17,10 @@ export const PATH = {
     ROOT: '/guest'
   },
 
+  ORDER: {
+    ROOT: '/order'
+  },
+
   ADMIN: {
     ROOT: '/admin',
     CATEGORY: '/admin/category',
