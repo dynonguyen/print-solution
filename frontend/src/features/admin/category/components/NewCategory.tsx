@@ -1,6 +1,5 @@
 import { Alert, Button, Dialog, FieldLabel, Flex, Input } from '@cads-ui/core';
 import to from 'await-to-js';
-import { getOperationAST } from 'graphql';
 import React from 'react';
 import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
@@ -12,7 +11,7 @@ import { MAX } from '~/constants/validation';
 import { AdminCategoryListDocument, useAddCategoryMutation } from '~/graphql/catalog/generated/graphql';
 import docsAxios from '~/libs/axios/docs';
 import { fileReader } from '~/utils/file-reader';
-import { getFileExt } from '~/utils/helper';
+import { getApolloQueryName, getFileExt } from '~/utils/helper';
 
 // -----------------------------
 interface CategoryForm {
@@ -29,7 +28,7 @@ const NewCategory = () => {
   const form = React.useRef<CategoryForm>({ ...defaultForm });
   const [loading, setLoading] = React.useState(false);
   const [addCategoryMutation] = useAddCategoryMutation({
-    refetchQueries: [getOperationAST(AdminCategoryListDocument)?.name?.value || 'AdminCategoryList'],
+    refetchQueries: [getApolloQueryName(AdminCategoryListDocument)],
     awaitRefetchQueries: true
   });
 
@@ -45,7 +44,7 @@ const NewCategory = () => {
   };
 
   const handleAddCategoryError = (photoUrl: string, msg?: string) => {
-    docsAxios.delete(ENDPOINTS.DOCS_API.UPLOAD_CATEGORY_PHOTO, { params: { photoUrl } });
+    docsAxios.delete(ENDPOINTS.DOCS_API.DELETE_PHOTO, { params: { photoUrl } });
     toast.error(msg || 'Thêm danh mục thất bại, thử lại');
   };
 

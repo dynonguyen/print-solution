@@ -1,0 +1,22 @@
+fragment fullProduct on Product {
+  _id
+  uuid
+  categoryId
+  name
+  photo
+  price
+  unit
+  numOfFavorites
+  numOfViews
+  infos {
+    label
+    value
+  }
+  options {
+    optionType
+    label
+    values
+  }
+  createdAt
+  updatedAt
+}

@@ -1,5 +1,4 @@
 import { Avatar, Flex, List, ListItemProps, Popover, Tooltip, Typography } from '@cads-ui/core';
-import { getOperationAST } from 'graphql';
 import React from 'react';
 import { toast } from 'react-toastify';
 import Icon from '~/components/Icon';
@@ -11,6 +10,7 @@ import {
   useUpdateCategoryMutation
 } from '~/graphql/catalog/generated/graphql';
 import docsAxios from '~/libs/axios/docs';
+import { getApolloQueryName } from '~/utils/helper';
 import { withMinio } from '~/utils/withStatic';
 
 // -----------------------------
@@ -29,11 +29,11 @@ const CategoryItem: React.FC<CategoryItemProps> = (props) => {
 
   const [deleteCategory, { loading: deleting }] = useDeleteCategoryMutation({
     variables: { deleteCategoryInput: { _id } },
-    refetchQueries: [getOperationAST(AdminCategoryListDocument)?.name?.value || 'AdminCategoryList'],
+    refetchQueries: [getApolloQueryName(AdminCategoryListDocument)],
     awaitRefetchQueries: true
   });
   const [updateCategory, { loading: updating }] = useUpdateCategoryMutation({
-    refetchQueries: [getOperationAST(AdminCategoryListDocument)?.name?.value || 'AdminCategoryList'],
+    refetchQueries: [getApolloQueryName(AdminCategoryListDocument)],
     awaitRefetchQueries: true
   });
 
@@ -42,7 +42,7 @@ const CategoryItem: React.FC<CategoryItemProps> = (props) => {
 
     const { data } = await deleteCategory();
     if (data?.deleteCategory.code === SUCCESS_CODE.OK) {
-      docsAxios.delete(ENDPOINTS.DOCS_API.UPLOAD_CATEGORY_PHOTO, { params: { photoUrl: photo } });
+      docsAxios.delete(ENDPOINTS.DOCS_API.DELETE_PHOTO, { params: { photoUrl: photo } });
       toast.success(`Xóa danh mục "${name}" thành công`);
     } else {
       toast.error(`Xóa danh mục "${name}" thất bại`);

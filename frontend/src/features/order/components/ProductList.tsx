@@ -33,6 +33,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
 
           return (
             <FormControlLabel
+              key={id}
               value={id}
               control={<Radio />}
               label={<ProductItem label={label} description={description} image={image} />}

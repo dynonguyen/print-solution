@@ -63,6 +63,7 @@ async function runServer() {
   // Apollo server
   const apolloServer = new ApolloServer({
     schema: graphqlSchema,
+    parseOptions: {},
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
       {
@@ -88,7 +89,11 @@ async function runServer() {
   app.use(cors(corsConfig));
   app.use(cookieParser());
   app.use(expressMiddleware(apolloServer, { context: async ({ req, res }) => ({ req, res }) }));
-
+  app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8000');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+  });
   // Modified server startup
   await new Promise<void>((resolve) => httpServer.listen({ port: SERVER_PORT }, resolve));
   logger.info(`🚀 CATALOG SERVICE IS LISTENING ON ${SERVER_PORT}`);

@@ -10,7 +10,12 @@ const createApolloClient = (uri: string, options?: Omit<ApolloClientOptions<any>
     return { headers: { ...headers, authorization: token ? `Bearer ${token}` : '' } };
   });
 
-  return new ApolloClient({ link: authLink.concat(httpLink), cache: new InMemoryCache(), headers: {}, ...options });
+  return new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache({}),
+    headers: {},
+    ...options
+  });
 };
 
 export default createApolloClient;

@@ -1,0 +1,24 @@
+mutation AddProduct($addProductInput: ProductInput!) {
+  addProduct(addProductInput: $addProductInput) {
+    ...mutationResponseWithDoc
+    doc {
+      ...fullProduct
+    }
+  }
+}
+
+mutation UpdateProduct($updateProductInput: ProductInput!) {
+  updateProduct(updateProductInput: $updateProductInput) {
+    code
+    msg
+    success
+  }
+}
+
+mutation ToggleHiddenProduct($hideProductInput: HideProductInput!) {
+  hideProduct(hideProductInput: $hideProductInput) {
+    code
+    msg
+    success
+  }
+}

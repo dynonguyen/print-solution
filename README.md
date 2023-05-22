@@ -43,6 +43,10 @@
   docker compose -p print-solution-dev -f ./docker-compose.dev.yml build --no-cache
   docker compose -p print-solution-dev -f ./docker-compose.dev.yml up -d
 
+  # Generate graphql.tsx sau khi khởi tạo frontend
+  cd frontend
+  yarn graphql-codegen
+
   # Chạy môi trường production
   docker compose -p print-solution-prod build --no-cache
   docker compose -p print-solution-prod up -d
@@ -133,6 +137,15 @@
     // State management redux, RTK query for caching REST API
     "@reduxjs/toolkit": "^1.9.3",
     "react-redux": "^8.0.5",
+    "recoil": "^0.7.7",
+
+    // Form management & validation
+    "@hookform/resolvers": "^3.0.1",
+    "react-hook-form": "^7.43.9",
+    "react-hook-form": "^7.43.9",
+
+    // Content editor
+    "react-quill": "^2.0.0",
 
     // Format thời gian
     "moment": "^2.29.4",

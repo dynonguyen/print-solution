@@ -3,3 +3,9 @@ fragment mutationResponse on MutationResponse {
   msg
   success
 }
+
+fragment mutationResponseWithDoc on IMutationResponse {
+  code
+  msg
+  success
+}

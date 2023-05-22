@@ -1,5 +1,13 @@
+import GuestCategoryList from './components/GuestCategoryList';
+import GuestProductList from './components/GuestProductList';
+
 const HomePage = () => {
-  return <div>Hello home page</div>;
+  return (
+    <>
+      <GuestCategoryList />
+      <GuestProductList />
+    </>
+  );
 };
 
 export default HomePage;

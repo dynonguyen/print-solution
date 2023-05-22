@@ -8,7 +8,7 @@ import NewCategory from '../components/NewCategory';
 interface AdminCategoryListProps {}
 
 // -----------------------------
-const AdminCategoryList = withCatalogApolloProvider<AdminCategoryListProps>((props) => {
+const AdminCategoryListPage = withCatalogApolloProvider<AdminCategoryListProps>((props) => {
   return (
     <React.Fragment>
       <Box sx={{ my: 5, mb: 8 }}>
@@ -19,4 +19,4 @@ const AdminCategoryList = withCatalogApolloProvider<AdminCategoryListProps>((pro
   );
 });
 
-export default AdminCategoryList;
+export default AdminCategoryListPage;
