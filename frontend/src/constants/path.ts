@@ -18,7 +18,8 @@ export const PATH = {
   },
 
   ORDER: {
-    ROOT: '/order'
+    ROOT: '/order',
+    CUS_CONTACT: '/order/customer-contact'
   },
 
   ADMIN: {
