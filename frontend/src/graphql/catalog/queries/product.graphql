@@ -67,6 +67,9 @@ query ProductDetail($uuid: String!) {
         label
         values
       }
+      category {
+        name
+      }
       numOfViews
       numOfFavorites
       isHidden

@@ -1,9 +1,10 @@
-import { Flex } from '@cads-ui/core';
-import { Container, Divider, Grid } from '@mui/material';
+import { Flex, Spinner } from '@cads-ui/core';
+import { Divider, Grid } from '@mui/material';
 import { Navigate, useParams } from 'react-router-dom';
 import { PATH } from '~/constants/path';
 import { useProductDetailQuery } from '~/graphql/catalog/generated/graphql';
 import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
+import ProductBreadcrumbs from '../components/ProductBreadcrumbs';
 import ProductDesc from '../components/ProductDesc';
 import ProductImage from '../components/ProductImage';
 import ProductInfo from '../components/ProductInfo';
@@ -17,9 +18,10 @@ const ProductDetail = withCatalogApolloProvider((_props) => {
   if (!product && !loading) {
     return <Navigate to={PATH.NOT_FOUND} />;
   }
-  if (product)
+  if (!loading)
     return (
-      <Container maxWidth="lg" sx={{ mt: 3 }}>
+      <>
+        <ProductBreadcrumbs product={product} />
         <Flex direction="column">
           <Grid container spacing={2}>
             <Grid item md={6} xs={12}>
@@ -32,9 +34,14 @@ const ProductDetail = withCatalogApolloProvider((_props) => {
           <Divider sx={{ mt: 3 }} />
           <ProductDesc desc={product?.htmlDesc} />
         </Flex>
-      </Container>
+      </>
     );
-  else return <></>;
+  else
+    return (
+      <Flex center sx={{ m: 5 }}>
+        <Spinner size="largest" />
+      </Flex>
+    );
 });
 
 export default ProductDetail;
