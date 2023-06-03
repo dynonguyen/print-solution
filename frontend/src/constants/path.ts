@@ -5,7 +5,8 @@ export const PATH = {
 
   PRODUCT: {
     ROOT: '/product',
-    DETAILS: '/product/:productId'
+    DETAILS: '/product/:productId',
+    SEARCH:'/product/search',
   },
 
   CUSTOMER: {

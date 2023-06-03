@@ -117,4 +117,28 @@ export class ProductDetailResolver {
   }
 }
 
+@Resolver()
+export class ProductsSearchResolver{
+  @Query((_return) => ProductPaginatedResponse)
+  async products(@Args() args: PaginationArgs): Promise<ProductPaginatedResponse> {
+    let { page = 1, pageSize = DEFAULTS.PAGE_SIZE, sort, search, searchBy } = args;
+
+    if (page < 1) page = 1;
+    if (pageSize < 1) pageSize = DEFAULTS.PAGE_SIZE;
+
+    const [err, productDocs] = await to(
+      mongoosePaginate(ProductModel, { ...toSearchQuery(search, searchBy) }, { page, pageSize }, { sort })
+    );
+
+    if (err) {
+      logger.error('products query error: ', err);
+      return { code: ERROR_CODE.BAD_REQUEST, ...DEFAULTS.PAGINATED_RESPONSE };
+    }
+
+    return { code: SUCCESS_CODE.OK, ...productDocs, sort, search };
+  }
+}
+
+
+
 export default ProductResolver;
