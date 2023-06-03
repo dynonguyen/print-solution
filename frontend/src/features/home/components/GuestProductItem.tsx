@@ -1,4 +1,4 @@
-import { Avatar, Flex, Typography } from '@cads-ui/core';
+import { Flex, Typography } from '@cads-ui/core';
 import { Box } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -25,13 +25,20 @@ interface Product {
 const ProductItemGuest: React.FC<Product> = (props) => {
   return (
     <React.Fragment>
-      <Flex direction="column" justifyContent="center" alignItems="center" sx={{ m: 1, p: 0.5, position: 'relative' }}>
-        <Link to={`/product/${props.uuid}`}>
-          <Box bgcolor="#f5f5f5" sx={{ p: 2, borderRadius: 2 }}>
-            <Avatar
-              shape="rounded"
+      <Link to={`/product/${props.uuid}`}>
+        <Flex direction="column" justifyContent="space-between" alignItems="center" sx={{ m: 1, p: 0.5 }}>
+          <Box bgcolor="#f5f5f5" sx={{ p: 2, borderRadius: 2, height: '15em' }}>
+            <Box
+              component="img"
               src={withMinio(props.photo)}
-              sx={{ bgColor: '#fff', color: 'primary.main', width: 1, height: 1 }}
+              sx={{
+                bgColor: '#fff',
+                color: 'primary.main',
+                borderRadius: 5,
+                width: 1,
+                height: 1,
+                objectFit: 'contain'
+              }}
             />
           </Box>
           <Box>
@@ -55,8 +62,8 @@ const ProductItemGuest: React.FC<Product> = (props) => {
               {props.price > 0 ? `Chỉ từ ${toVND(props.price)} / ${props.unit}` : 'Liên hệ'}
             </Typography>
           </Box>
-        </Link>
-      </Flex>
+        </Flex>
+      </Link>
     </React.Fragment>
   );
 };
