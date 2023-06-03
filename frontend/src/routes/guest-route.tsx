@@ -9,6 +9,8 @@ import ProductSearchPage from '~/features/searchProduct';
 
 // -----------------------------
 const HomePage = React.lazy(() => import('~/features/home'));
+const OrderPage = React.lazy(() => import('~/features/order'));
+const CusContactPage = React.lazy(() => import('~/features/order/pages/CustomerContact'));
 
 // -----------------------------
 const guestRoute: RouteObject[] = [
@@ -21,9 +23,12 @@ const guestRoute: RouteObject[] = [
         element: <GuestLayout />,
         children: [
           { path: '', element: <HomePage /> },
+
           { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> },
           { path: PATH.PRODUCT.SEARCH, element: <ProductSearchPage /> }
-
+          { path: PATH.ORDER.ROOT, element: <OrderPage /> },
+          { path: PATH.ORDER.CUS_CONTACT, element: <CusContactPage /> },
+          { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> }
         ]
       }
     ]

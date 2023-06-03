@@ -23,5 +23,8 @@
     "IMPROVE": { "icon": "zap", "iconColour": "#DF2A98", "background": "#DF2A98", "foreground": "#FFF" }
   },
   "cSpell.words": ["Codegen", "keycloak", "MINIO"],
-  "todo-tree.tree.scanMode": "workspace"
+  "todo-tree.tree.scanMode": "workspace",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }

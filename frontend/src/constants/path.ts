@@ -18,6 +18,11 @@ export const PATH = {
     ROOT: '/guest'
   },
 
+  ORDER: {
+    ROOT: '/order',
+    CUS_CONTACT: '/order/customer-contact'
+  },
+
   ADMIN: {
     ROOT: '/admin',
     CATEGORY: '/admin/category',

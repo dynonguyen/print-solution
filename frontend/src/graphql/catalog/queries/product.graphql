@@ -67,12 +67,16 @@ query ProductDetail($uuid: String!) {
         label
         values
       }
+      category {
+        name
+      }
       numOfViews
       numOfFavorites
       isHidden
     }
   }
 }
+
 
 query ProductsSearch($page: Int, $pageSize: Int, $sort: String, $search: String, $searchBy: String) {
   products(page: $page, pageSize: $pageSize, sort: $sort, search: $search, searchBy: $searchBy) {
@@ -86,5 +90,23 @@ query ProductsSearch($page: Int, $pageSize: Int, $sort: String, $search: String,
     page
     pageSize
     total
+  }
+}
+
+query GuestProductList($sort: String, $search: String, $searchBy: String) {
+  products(sort: $sort, search: $search, searchBy: $searchBy) {
+    code
+    docs {
+      _id
+      uuid
+      photo
+      name
+      price
+      unit
+      isHidden
+      category {
+        name
+      }
+    }
   }
 }
