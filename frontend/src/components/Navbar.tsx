@@ -18,6 +18,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [searchKey,setSearchKey]=useState("")
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const { login } = useAuth();
@@ -29,6 +30,16 @@ const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleSearchProducts=(e:any)=>{
+    e.preventDefault()
+    setSearchKey(e.target.value.trim())
+    e.target.value("")
+  }
+
+  const handleSearchClick=()=>{
+    navigate(`/product/search?name=${searchKey}`)
+  }
 
   return (
     <AppBar position="static" sx={{ bgcolor: '#424242' }} elevation={0}>
@@ -54,8 +65,13 @@ const Navbar = () => {
             placeholder="Tìm sản phẩm in…"
             fullWidth
             sx={{ fontSize: 16, backgroundColor: '#fff', paddingLeft: 3, borderRadius: '5px' }}
+            onChange={handleSearchProducts}
           />
-          <IconButton color="inherit">
+          <IconButton 
+          color="inherit"
+          onClick={handleSearchClick
+          }
+          >
             <Search />
           </IconButton>
         </Stack>

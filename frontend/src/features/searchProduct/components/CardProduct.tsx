@@ -42,10 +42,11 @@ const CardProduct = (props: ProductInfo) => {
             onMouseEnter={handleEnterProduct}
             onMouseLeave={handleLeaveProduct}
         >
-            {
-                hover && (<CardProductHover id={props.id} />)
-            }
+            
+                {
+                hover ? <CardProductHover id={props.id} />:
             <ProductResult imageURL={props.imageURL} name={props.name} />
+            }
         </Card>
     );
 };

@@ -25,7 +25,7 @@ const guestRoute: RouteObject[] = [
           { path: '', element: <HomePage /> },
 
           { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> },
-          { path: PATH.PRODUCT.SEARCH, element: <ProductSearchPage /> }
+          { path: PATH.PRODUCT.SEARCH, element: <ProductSearchPage /> },
           { path: PATH.ORDER.ROOT, element: <OrderPage /> },
           { path: PATH.ORDER.CUS_CONTACT, element: <CusContactPage /> },
           { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> }

@@ -8,7 +8,8 @@ import CardProduct from "../components/CardProduct";
 
 const SearchResult = withCatalogApolloProvider(() => {
     const search = useLocation().search
-    const name = new URLSearchParams(search).get('key')
+    const name = new URLSearchParams(search).get('name')
+    console.log(name)
     const { loading, data } = useProductsSearchQuery({
         variables: {
             "page": null,
@@ -32,13 +33,13 @@ const SearchResult = withCatalogApolloProvider(() => {
                         display: 'flex',
                         flexWrap: 'wrap',
                         bgcolor: 'background.paper',
-                        justifyContent: 'space-between',
+                        
                         alignItems: "center",
                     }}
                 >
                     {
                         products?.map(product => (
-                            <Grid item xs={4} key={product.uuid} sx={{ jutifyContent: "space-between", mb: 2 }}>
+                            <Grid item xs={4} key={product.uuid} sx={{mb: 2 }}>
                                 <CardProduct id={product.uuid} imageURL={product.photo} name={product.name} />
                             </Grid>
                         ))

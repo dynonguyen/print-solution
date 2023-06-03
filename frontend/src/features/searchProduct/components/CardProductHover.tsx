@@ -15,7 +15,7 @@ const CardProductHover = ({ id }: any) => {
 
         }}>
             <Link to={`${PATH.PRODUCT.ROOT}/${id}`}>
-                <Button variant="contained" color="success">Đặt hàng</Button>
+                <Button variant="contained" color="success">Xem chi tiết</Button>
             </Link>
         </Card>
     );
