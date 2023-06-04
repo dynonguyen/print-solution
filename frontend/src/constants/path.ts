@@ -18,7 +18,8 @@ export const PATH = {
   },
 
   ORDER: {
-    ROOT: '/order'
+    ROOT: '/order',
+    QUOTATION: '/order/quotation'
   },
 
   ADMIN: {
