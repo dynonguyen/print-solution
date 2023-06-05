@@ -23,7 +23,8 @@
     "morgan": "^1.10.0",
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.29.3"
+    "sequelize": "^6.29.3",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",

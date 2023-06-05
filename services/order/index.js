@@ -21,6 +21,9 @@ const { SUCCESS_CODE } = require('~/constants/status-code');
 const app = express();
 const SERVER_PORT = Number(getEnv('PORT') || 3001);
 
+// Import Router
+const orderRouter = require("./src/controllers/order.controller");
+
 // Setup logger
 if (getEnv('NODE_ENV') === 'production') app.use(morgan('common'));
 else app.use(morgan('dev'));
@@ -33,6 +36,9 @@ app.use(cors(corsConfig));
 
 // APIs
 app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json({ msg: 'OK' }));
+
+// Router
+app.use('/api/order', orderRouter);
 
 // Listening
 postgresConnect()
