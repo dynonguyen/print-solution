@@ -1,7 +1,7 @@
-import AdminProductList from './pages/List';
+import AdminProductListPage from './pages/List';
 
 const AdminProduct = () => {
-  return <AdminProductList />;
+  return <AdminProductListPage />;
 };
 
 export default AdminProduct;

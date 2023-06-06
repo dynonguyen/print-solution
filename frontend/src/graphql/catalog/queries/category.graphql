@@ -1,12 +1,36 @@
 query AdminCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
   catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {
     code
-    message
+    msg
     page
     total
     pageSize
     docs {
       ...fullCategory
+    }
+  }
+}
+
+query CategoryForSelect($page: Int, $sort: String, $pageSize: Int) {
+  catagories(page: $page, sort: $sort, pageSize: $pageSize) {
+    docs {
+      _id
+      name
+    }
+  }
+}
+
+query GuestCategoryList($page: Int, $pageSize: Int, $sort: String, $search: String) {
+  catagories(page: $page, pageSize: $pageSize, sort: $sort, search: $search) {
+    code
+    msg
+    page
+    total
+    pageSize
+    docs {
+      _id
+      name
+      photo
     }
   }
 }

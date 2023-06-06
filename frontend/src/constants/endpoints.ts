@@ -21,9 +21,10 @@ export const ENDPOINTS = {
   },
   DOCS_API: {
     ROOT: `${GATEWAY_URL}/api/docs`,
-    UPLOAD_CATEGORY_PHOTO: '/upload/category-photo'
+    DELETE_PHOTO: '/upload/photo',
+    UPLOAD_CATEGORY_PHOTO: '/upload/category-photo',
+    UPLOAD_PRODUCT_PHOTO: '/upload/product-photo'
   },
-
   CATALOG_API: {
     ROOT: `${GATEWAY_URL}/api/catalog`
   },

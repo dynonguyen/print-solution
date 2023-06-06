@@ -39,12 +39,6 @@ app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json
 app.use(`${BASE_URL}/upload`, authenticate, uploadApi);
 
 // Listening
-postgresConnect()
-  .then(() => {
-    app.listen(SERVER_PORT, () => {
-      logger.info(`🚀 DOCS SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
-    });
-  })
-  .catch((err) => {
-    logger.error('Connect to postgresql failed ! ', err);
-  });
+app.listen(SERVER_PORT, () => {
+  logger.info(`🚀 DOCS SERVICE IS LISTENING ON PORT ${SERVER_PORT} !`);
+});

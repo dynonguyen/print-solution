@@ -3,19 +3,37 @@ import { DEFAULTS } from '~/constants/default';
 import { toNumber } from '~/utils/helper';
 
 // -----------------------------
-const useQueryPagination = () => {
+interface UseQueryPaginationProps {
+  defaultValues?: {
+    page?: number;
+    pageSize?: number;
+    search?: string;
+    sort?: string;
+    searchBy?: string;
+  };
+}
+
+export type SetQueryParams = Array<{ key: string; value: string | number }>;
+
+// -----------------------------
+const useQueryPagination = ({ defaultValues }: UseQueryPaginationProps = {}) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const page = toNumber(searchParams.get('page'), 1, { allowNegative: false, allowNull: false, allowZero: false });
-  const pageSize = toNumber(searchParams.get('pageSize'), DEFAULTS.PAGE_SIZE, {
+  const page = toNumber(searchParams.get('page'), defaultValues?.page || 1, {
     allowNegative: false,
     allowNull: false,
     allowZero: false
   });
-  const sort = searchParams.get('sort');
-  const search = searchParams.get('search');
+  const pageSize = toNumber(searchParams.get('pageSize'), defaultValues?.pageSize || DEFAULTS.PAGE_SIZE, {
+    allowNegative: false,
+    allowNull: false,
+    allowZero: false
+  });
+  const sort = searchParams.get('sort') || defaultValues?.sort;
+  const search = searchParams.get('search') || defaultValues?.search;
+  const searchBy = searchParams.get('searchBy') || defaultValues?.searchBy;
 
-  const setParams = (params: Array<{ key: string; value: string | number }>) => {
+  const setParams = (params: SetQueryParams) => {
     params.forEach(({ key, value }) => searchParams.set(key, `${value}`));
     searchParams.delete('state');
     searchParams.delete('session_state');
@@ -28,7 +46,7 @@ const useQueryPagination = () => {
     setSearchParams(searchParams);
   };
 
-  return { page, pageSize, sort, search, setParams, deleteParams };
+  return { page, pageSize, sort, search, searchBy, setParams, deleteParams };
 };
 
 export default useQueryPagination;

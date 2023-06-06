@@ -1,4 +1,11 @@
 export const MAX = {
   PRODUCT_NAME: 200,
-  CATEGORY_NAME: 100
+  CATEGORY_NAME: 100,
+  PRODUCT_PRICE: 1_000_000_000,
+  PRODUCT_UNIT: 50,
+  AMOUNT: 100
+};
+
+export const MIN = {
+  AMOUNT: 1
 };

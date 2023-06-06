@@ -12,7 +12,7 @@ interface ICategory {
 interface CategoryListProps {
   data: ICategory[];
   selected: number | undefined;
-  onChange: (params: any) => any;
+  onChange: (event: any) => any;
 }
 
 // -----------------------------

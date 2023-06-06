@@ -14,4 +14,7 @@ export class PaginationArgs {
 
   @Field((_type) => String, { nullable: true, defaultValue: '' })
   search?: string;
+
+  @Field((_type) => String, { nullable: true, defaultValue: '' })
+  searchBy?: string;
 }

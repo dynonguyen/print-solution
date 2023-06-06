@@ -28,12 +28,17 @@ interface UploadFileProps {
   acceptFiles?: 'all' | string; // ex: '.docx,doc,.xlsx'
   maxSizePerFile?: number; // by MB
   maxFiles?: number;
+  ListProps?: Omit<React.ComponentProps<typeof List>, 'items'>;
   onFileChange?: (files: FileList | File[]) => any;
 }
 
+export interface UploadFileRef {
+  reset: Function;
+}
+
 // -----------------------------
-const UploadFile: React.FC<UploadFileProps> = (props) => {
-  const { uploadTitle, acceptFiles = ACCEPT_ALL, maxSizePerFile = 2, maxFiles = 1, onFileChange } = props;
+const UploadFile = React.forwardRef<UploadFileRef, UploadFileProps>((props, ref) => {
+  const { uploadTitle, acceptFiles = ACCEPT_ALL, maxSizePerFile = 2, maxFiles = 1, onFileChange, ListProps } = props;
   const [files, setFiles] = React.useState<File[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -65,11 +70,19 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
 
   const handleDeleteFile = (file: File) => {
     setFiles(files.filter((f) => f.name !== file.name));
+    if (inputRef.current) inputRef.current.value = '';
   };
 
   useEffectNotFirst(() => {
     onFileChange && onFileChange(files);
   }, [files]);
+
+  React.useImperativeHandle(ref, () => ({
+    reset: () => {
+      setFiles([]);
+      if (inputRef.current) inputRef.current.value = '';
+    }
+  }));
 
   return (
     <React.Fragment>
@@ -84,7 +97,8 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
 
       {files.length > 0 ? (
         <List
-          sx={{ '& .cads-list-item': { borderRadius: 2 } }}
+          {...ListProps}
+          sx={{ '& .cads-list-item': { borderRadius: 2 }, ...ListProps?.sx }}
           items={files.map((file) => ({
             primary: file.name,
             secondary: `${(file.size / (1024 * 1024)).toFixed(2)}MB`,
@@ -136,6 +150,6 @@ const UploadFile: React.FC<UploadFileProps> = (props) => {
       )}
     </React.Fragment>
   );
-};
+});
 
 export default UploadFile;
