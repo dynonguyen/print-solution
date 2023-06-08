@@ -1,6 +1,5 @@
 import GuestCategoryList from './components/GuestCategoryList';
 import GuestProductList from './components/GuestProductList';
-
 const HomePage = () => {
   return (
     <>

@@ -1,6 +1,6 @@
-import { Button, Grid } from '@cads-ui/core';
+import { Button } from '@cads-ui/core';
 import { Search, ShoppingCart } from '@mui/icons-material';
-import { AppBar, Badge, IconButton, InputBase, Toolbar, Typography } from '@mui/material';
+import { AppBar, Badge, IconButton, InputBase, Stack, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -18,6 +18,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [searchKey,setSearchKey]=useState("")
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const { login } = useAuth();
@@ -30,6 +31,16 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
+  const handleSearchProducts=(e:any)=>{
+    e.preventDefault()
+    setSearchKey(e.target.value.trim())
+    e.target.value("")
+  }
+
+  const handleSearchClick=()=>{
+    navigate(`/product/search?name=${searchKey}`)
+  }
+
   return (
     <AppBar position="static" sx={{ bgcolor: '#424242' }} elevation={0}>
       <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
@@ -39,44 +50,47 @@ const Navbar = () => {
             navigate(PATH.HOME);
           }}
         >
+          <img
+            src="https://res.cloudinary.com/dynonary/image/upload/v1678890436/print-solution/logo.png"
+            width="30px"
+            alt="Logo"
+          />
           <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#fff' }}>
             Print Solution
           </Typography>
         </Button>
-        <Grid sx={{ mt: 1.5 }} container spacing={2}>
+        <Stack sx={{ my: 2, flexGrow: 2, maxWidth: '550px' }} direction="row" spacing={1}>
           {/* Could replace the search component here */}
-          <Grid item>
-            <InputBase
-              placeholder="Tìm sản phẩm in…"
-              sx={{ fontSize: 16, width: '550px', backgroundColor: '#fff', paddingLeft: 3, borderRadius: '5px' }}
-            />
-          </Grid>
-          <Grid item>
-            <IconButton sx={{ color: '#fff' }}>
-              <Search />
-            </IconButton>
-          </Grid>
-        </Grid>
-        <Grid container spacing={2}>
-          <Grid item>
-            <IconButton sx={{ color: '#fff', ml: 2 }}>
-              <StyledBadge badgeContent={4} color="secondary">
-                <ShoppingCart />
-              </StyledBadge>
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Button
-              onClick={() => {
-                login();
-              }}
-              sx={{ borderColor: '#fff', color: '#fff', ml: 5 }}
-              variant="outlined"
-            >
-              Đăng nhập
-            </Button>
-          </Grid>
-        </Grid>
+          <InputBase
+            placeholder="Tìm sản phẩm in…"
+            fullWidth
+            sx={{ fontSize: 16, backgroundColor: '#fff', paddingLeft: 3, borderRadius: '5px' }}
+            onChange={handleSearchProducts}
+          />
+          <IconButton 
+          color="inherit"
+          onClick={handleSearchClick
+          }
+          >
+            <Search />
+          </IconButton>
+        </Stack>
+        <Stack spacing={2} direction="row">
+          <IconButton sx={{ color: '#fff', ml: 2 }}>
+            <StyledBadge badgeContent={4} color="secondary">
+              <ShoppingCart />
+            </StyledBadge>
+          </IconButton>
+          <Button
+            onClick={() => {
+              login();
+            }}
+            sx={{ borderColor: '#fff', color: '#fff', ml: 5 }}
+            variant="outlined"
+          >
+            Đăng nhập
+          </Button>
+        </Stack>
         {/* Below is the icon of user after login */}
         {/* <IconButton
             onClick={handleMenu}

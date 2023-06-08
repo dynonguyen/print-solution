@@ -10,6 +10,8 @@ const ProductImage = (props: any) => {
         sx={{
           height: 1,
           width: 1,
+          minWidth: '200px',
+          minHeight: '200px',
           border: '12px solid #ccc',
           borderRadius: 2,
           alignItems: 'center'

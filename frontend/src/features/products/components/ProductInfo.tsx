@@ -15,7 +15,7 @@ const ProductInfo = ({ product }: any) => {
       <Divider />
       {product?.infos.length > 0 ? <ProductParameter infos={product?.infos} /> : ''}
       {product?.options.length > 0 ? <ProductOptions options={product?.options} /> : ''}
-      <ProductPrice price={product?.price} />
+      <ProductPrice price={product?.price} unit={product?.unit} />
       <Button
         variant="contained"
         size="large"

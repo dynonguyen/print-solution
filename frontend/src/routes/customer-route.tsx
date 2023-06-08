@@ -3,7 +3,7 @@ import ServerErrorPage from '~/components/feedback/ServerErrorPage';
 import CustomerGuard from '~/components/guard/CustomerGuard';
 import CustomerLayout from '~/components/layout/CustomerLayout';
 import { PATH } from '~/constants/path';
-import ProductDetail from '~/features/products';
+import { default as ProductDetail, default as ProductSearchPage } from '~/features/products';
 
 // -----------------------------
 const customerRoute: RouteObject[] = [
@@ -25,7 +25,10 @@ const customerRoute: RouteObject[] = [
     children: [
       {
         element: <CustomerLayout />,
-        children: [{ path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> }]
+        children: [
+          { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> },
+          { path: PATH.PRODUCT.SEARCH, element: <ProductSearchPage /> }
+      ]
       }
     ]
   }

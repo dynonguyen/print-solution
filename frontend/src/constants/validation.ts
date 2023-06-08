@@ -3,7 +3,12 @@ export const MAX = {
   CATEGORY_NAME: 100,
   PRODUCT_PRICE: 1_000_000_000,
   PRODUCT_UNIT: 50,
+  AMOUNT: 100
   CUSTOMER_NAME: 100
+};
+
+export const MIN = {
+  AMOUNT: 1
 };
 
 export const REGEX = {
