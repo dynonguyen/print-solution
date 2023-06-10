@@ -32,6 +32,7 @@ const ProductList: React.FC<ProductListProps> = (props) => {
       <RadioGroup
         aria-labelledby="demo-radio-buttons-group-label"
         defaultValue={selected}
+        value={selected}
         name="radio-buttons-group"
         row
         onChange={onChange}

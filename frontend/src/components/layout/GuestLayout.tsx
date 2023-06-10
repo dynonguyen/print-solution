@@ -1,10 +1,11 @@
 import { Container } from '@mui/material';
-import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Footer from '../Footer';
 import Navbar from '../Navbar';
+import React, { Suspense } from 'react';
+import { Flex, Spinner } from '@cads-ui/core';
 // -----------------------------
-interface GuestLayoutProps {}
+interface GuestLayoutProps { }
 
 // -----------------------------
 const GuestLayout: React.FC<GuestLayoutProps> = () => {
@@ -12,7 +13,15 @@ const GuestLayout: React.FC<GuestLayoutProps> = () => {
     <>
       <Navbar />
       <Container fixed>
-        <Outlet />
+        <Suspense
+          fallback={
+            <Flex sx={{ w: 1, h: `calc(100vh - ${72 + 68}px)` }} center>
+              <Spinner size="large" />
+            </Flex>
+          }
+        >
+          <Outlet />
+        </Suspense>
       </Container>
       <Footer />
     </>

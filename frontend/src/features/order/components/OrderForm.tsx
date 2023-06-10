@@ -15,7 +15,7 @@ import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
 import { useCategoryForSelectQuery, useGuestCategoryListQuery, useGuestProductListQuery } from '~/graphql/catalog/generated/graphql';
 import useQueryPagination from '~/hooks/useQueryPagination';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { PATH } from '~/constants/path';
 
 // -----------------------------
@@ -23,6 +23,9 @@ interface OrderFormProps { }
 
 // -----------------------------
 const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) => {
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
   const { data: dataCategory } = useGuestCategoryListQuery({ variables: { page: 1, pageSize: 1000, sort: 'name' } });
   const { search, setParams } = useQueryPagination();
   const navigate = useNavigate();
@@ -38,6 +41,8 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
   const [error, setError] = React.useState({ field: '', msg: '' });
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedProduct, setSelectedProduct] = useState<string>("");
+  const [amount, setAmount] = useState(1)
+  const [selectedOptions, setSelectedOptions] = useState("")
   const [files, setFiles] = React.useState<File[] | FileList>([])
   const [formValues, setFormValues] = useState({
     tel: '',
@@ -46,9 +51,22 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
     address: '',
     details: ''
   });
+
+  console.log("___________selectedProduct: ", selectedProduct);
+
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const product = searchParams.get('product');
+    const amount = searchParams.get('amount');
+    const options = searchParams.get('options');
+    setSelectedProduct(product ?? "")
+    setAmount(parseInt(amount ?? "1"))
+    setSelectedOptions(options ?? "")
+  }, [location.search])
+
+
   const [loadingCreateOrder, setLoadingCreateOrder] = React.useState(false);
-
-
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setError({ field: '', msg: '' });
@@ -73,6 +91,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
 
   const handleProductChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const prodId = (event.target as HTMLInputElement).value
+    setSelectedProduct(prodId)
   };
 
   const handlePreview = () => {
