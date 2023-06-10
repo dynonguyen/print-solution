@@ -16,7 +16,8 @@ const { BASE_URL } = require('~/constants/common');
 const logger = require('~/configs/logger');
 const { postgresConnect } = require('~/configs/database');
 const { SUCCESS_CODE } = require('~/constants/status-code');
-const uploadApi = require('~/controllers/upload');
+const orderApi = require('~/controllers/order');
+const authenticate = require('~/middleware/authenticate');
 
 // Config port
 const app = express();
@@ -34,7 +35,7 @@ app.use(cors(corsConfig));
 
 // APIs
 app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json({ msg: 'OK' }));
-app.use(`${BASE_URL}/upload`, uploadApi);
+app.use(`${BASE_URL}`, authenticate, orderApi);
 
 // Listening
 postgresConnect()

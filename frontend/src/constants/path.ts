@@ -6,7 +6,7 @@ export const PATH = {
   PRODUCT: {
     ROOT: '/product',
     DETAILS: '/product/:productId',
-    SEARCH:'/product/search',
+    SEARCH: '/product/search',
   },
 
   CUSTOMER: {
@@ -20,6 +20,7 @@ export const PATH = {
 
   ORDER: {
     ROOT: '/order',
+    DETAILS: '/order/details',
     CUS_CONTACT: '/order/customer-contact'
   },
 
@@ -34,7 +35,11 @@ export const PATH = {
       EDIT_ROOT: '/admin/product/edit',
       EDIT: '/admin/product/edit/:uuid'
     },
-    ORDER: '/admin/order',
+    ORDER: {
+      ROOT: '/admin/order',
+      LIST: '/admin/order/list',
+      // EDIT: '/admin/product/edit/:uuid'
+    },
     REVENUE: '/admin/revenue',
     PROFILE: '/admin/profile',
     SETTINGS: '/admin/settings'

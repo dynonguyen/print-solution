@@ -53,7 +53,7 @@ const UploadFiles = () => {
       console.log("dataUploading: ", formData);
 
       const [uploadErr, uploadResult] = await to(
-        orderAxios.post(ENDPOINTS.ORDER_API.UPLOAD_FILES, {
+        orderAxios.post(ENDPOINTS.ORDER_API.CREATE, {
           listFiles: formData,
           listFilesName: listFilesName
         })

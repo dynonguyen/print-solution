@@ -3,46 +3,135 @@ import React, { useEffect, useState } from 'react';
 import UploadFile from '~/components/UploadFile';
 import CategoryList from './CategoryList';
 import ProductList from './ProductList';
-import { CATEGORY_LIST, PRODUCT_LIST } from './data';
+import { } from './data';
 import Uploader from './Uploader';
+import UploadFiles from './UploadFiles';
+import { Alert, FieldLabel } from '@cads-ui/core';
+import { ENDPOINTS } from '~/constants/endpoints';
+import orderAxios from '~/libs/axios/order';
+import { fileReader } from '~/utils/file-reader';
+import to from 'await-to-js';
+import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
+import { useCategoryForSelectQuery, useGuestCategoryListQuery, useGuestProductListQuery } from '~/graphql/catalog/generated/graphql';
+import useQueryPagination from '~/hooks/useQueryPagination';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '~/constants/path';
 
 // -----------------------------
 interface OrderFormProps { }
 
 // -----------------------------
-const OrderForm: React.FC<OrderFormProps> = (props) => {
+const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) => {
+  const { data: dataCategory } = useGuestCategoryListQuery({ variables: { page: 1, pageSize: 1000, sort: 'name' } });
+  const { search, setParams } = useQueryPagination();
+  const navigate = useNavigate();
+
+  const { data: dataProductList } = useGuestProductListQuery({
+    variables: { sort: '-createdAt name' },
+  });
+  const PRODUCT_LIST = dataProductList?.products?.docs
+  const CATEGORY_LIST = dataCategory?.catagories?.docs
+
   const MAX_FILE = 5;
   const MAX_SIZE = 500;
-  const [selectedCategory, setSelectedCategory] = useState<number>(1);
-  const [selectedProduct, setSelectedProduct] = useState<number>(1);
+  const [error, setError] = React.useState({ field: '', msg: '' });
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [selectedProduct, setSelectedProduct] = useState<string>("");
+  const [files, setFiles] = React.useState<File[] | FileList>([])
+  const [formValues, setFormValues] = useState({
+    tel: '',
+    zalo: '',
+    name: '',
+    address: '',
+    details: ''
+  });
+  const [loadingCreateOrder, setLoadingCreateOrder] = React.useState(false);
+
+
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setError({ field: '', msg: '' });
+    const { id, value } = event.target;
+    setFormValues((prevFormValues) => ({
+      ...prevFormValues,
+      [id]: value,
+    }));
+  };
 
   useEffect(() => {
-    setSelectedCategory(CATEGORY_LIST[0].id);
-    setSelectedCategory(PRODUCT_LIST[0].id);
-  }, []);
+    setSelectedCategory(CATEGORY_LIST?.[0]?._id || "");
+    setSelectedProduct(PRODUCT_LIST?.[0]?._id || "");
+
+  }, [dataProductList, dataCategory]);
 
   const handleCategoryChange = (event: SelectChangeEvent) => {
-    const catId = parseInt(event.target.value);
+    const catId = event.target.value;
+    setParams([{ key: 'category._id', value: catId }]);
     setSelectedCategory(catId);
   };
 
   const handleProductChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const prodId = parseInt((event.target as HTMLInputElement).value);
-    console.log(prodId);
+    const prodId = (event.target as HTMLInputElement).value
   };
 
+  const handlePreview = () => {
+    console.log("____form: ", formValues, selectedCategory, selectedProduct, files)
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setLoadingCreateOrder(true)
+    try {
+      if (!files || files.length === 0) return setError({ field: 'filesUpload', msg: 'Vui lòng chọn ít nhất 1 file' });
+
+      const formData = [];
+      const listFilesName = [];
+
+      for (const file of files) {
+        const fileDataUrl = await fileReader(file);
+        formData.push(fileDataUrl)
+        listFilesName.push(file.name)
+      }
+
+      const [uploadErr, uploadResult] = await to(
+        orderAxios.post(ENDPOINTS.ORDER_API.CREATE, {
+          listFiles: formData,
+          listFilesName: listFilesName,
+          selectedCategory,
+          selectedProduct,
+          ...formValues,
+        })
+      );
+
+      if (uploadErr) {
+        return toast.error('Đặt lệnh thất bại');
+      } else {
+        navigate(PATH.ORDER.DETAILS + `?id=${uploadResult.data.data.id}`)
+      }
+    } catch (error) {
+      console.log("____ERROR: ", error)
+    } finally {
+      setLoadingCreateOrder(false)
+    }
+  }
+
   return (
-    <Container>
-      <Uploader />q
+    <Container component='form' onSubmit={handleSubmit}>
+      {/* <Uploader /> */}
       <Typography variant="h4" align="center" m={5} sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
         Tạo đơn hàng của bạn
       </Typography>
       <Typography variant="h5" mt={3} mb={2}>
         Tải lên tài liệu
       </Typography>
-      <Box style={{ marginBottom: '1rem' }}>
-        <UploadFile maxFiles={MAX_FILE} maxSizePerFile={MAX_SIZE} />
-      </Box>
+      {/* <Box style={{ marginBottom: '1rem' }}> */}
+      {error.msg && <Alert type="error">{error.msg}</Alert>}
+      <FieldLabel error={error.field === 'filesUpload'}>
+        <UploadFile maxFiles={MAX_FILE} maxSizePerFile={MAX_SIZE} onFileChange={(files) => setFiles(files)} />
+      </FieldLabel>
+      {/* </Box> */}
       <Typography variant="h5" mt={3} mb={2}>
         Thể loại in
       </Typography>
@@ -55,6 +144,8 @@ const OrderForm: React.FC<OrderFormProps> = (props) => {
         Quy cách in
       </Typography>
       <TextField
+        id="details"
+        value={formValues.details} onChange={handleInputChange}
         placeholder="Mô tả quy cách in tài liệu"
         multiline
         rows={4}
@@ -65,34 +156,34 @@ const OrderForm: React.FC<OrderFormProps> = (props) => {
       </Typography>
       <Grid container style={{ marginBottom: '1rem' }} spacing={2}>
         <Grid item xs={6}>
-          <TextField required id="tel" label="Số điện thoại liên hệ" fullWidth />
+          <TextField error={error.field === 'tel'} type='number' required id="tel" label="Số điện thoại liên hệ" fullWidth value={formValues.tel} onChange={handleInputChange} />
         </Grid>
         <Grid item xs={6}>
-          <TextField required id="zalo" label="Địa chỉ email (Nhận báo giá)" fullWidth />
+          <TextField required id="zalo" label="Địa chỉ email (Nhận báo giá)" fullWidth value={formValues.zalo} onChange={handleInputChange} />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={6}>
-          <TextField id="tel" label="Tên của bạn" fullWidth />
+          <TextField id="name" label="Tên của bạn" fullWidth value={formValues.name} onChange={handleInputChange} />
         </Grid>
         <Grid item xs={6}>
-          <TextField id="zalo" label="Địa chỉ giao hàng" fullWidth />
+          <TextField id="address" label="Địa chỉ giao hàng" fullWidth value={formValues.address} onChange={handleInputChange} />
         </Grid>
       </Grid>
       <Grid container spacing={2} marginBottom={100} marginTop={5}>
         <Grid item xs={4}>
-          <Button style={{ width: '100%' }} variant="outlined">
+          <Button onClick={handlePreview} style={{ width: '100%' }} variant="outlined">
             Xem trước đơn hàng
           </Button>
         </Grid>
         <Grid item xs={8}>
-          <Button style={{ width: '100%' }} variant="contained">
+          <Button style={{ width: '100%' }} variant="contained" type='submit'>
             Đặt in ngay
           </Button>
         </Grid>
       </Grid>
     </Container>
   );
-};
+});
 
 export default OrderForm;

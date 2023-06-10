@@ -4,14 +4,15 @@ import React from 'react';
 // -----------------------------
 
 interface ICategory {
-  id: number;
-  label: string;
-  description?: string;
+  __typename?: "Category" | undefined;
+  _id: string;
+  name: string;
+  photo: string;
 }
 
 interface CategoryListProps {
-  data: ICategory[];
-  selected: number | undefined;
+  data: ICategory[] | undefined;
+  selected: string | undefined;
   onChange: (event: any) => any;
 }
 
@@ -22,8 +23,8 @@ const CategoryList: React.FC<CategoryListProps> = (props) => {
   const generateCategoryList = () =>
     data?.map((item) => {
       return (
-        <MenuItem key={item.id} value={item.id}>
-          {item.label}
+        <MenuItem key={item._id} value={item._id}>
+          {item.name}
         </MenuItem>
       );
     });

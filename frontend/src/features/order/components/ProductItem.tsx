@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 import React from 'react';
 import { withMinio } from '~/utils/withStatic';
 
@@ -17,7 +17,10 @@ const ProductItem: React.FC<ProductItemProps> = (props) => {
     <Card>
       <React.Fragment>
         <CardContent>
-          <img src={withMinio(image)} />
+          <CardMedia
+            sx={{ height: 150, maxWidth: 345 }}
+            image={withMinio(image)}
+          />
           <Typography color="text.secondary" gutterBottom>
             {label}
           </Typography>

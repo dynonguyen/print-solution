@@ -23,7 +23,6 @@ const guestRoute: RouteObject[] = [
         element: <GuestLayout />,
         children: [
           { path: '', element: <HomePage /> },
-
           { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> },
           { path: PATH.PRODUCT.SEARCH, element: <ProductSearchPage /> },
           { path: PATH.ORDER.ROOT, element: <OrderPage /> },

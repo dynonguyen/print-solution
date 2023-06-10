@@ -10,6 +10,7 @@ const AdminCategory = React.lazy(() => import('~/features/admin/category'));
 const AdminProductListPage = React.lazy(() => import('~/features/admin/product/pages/List'));
 const AdminNewProductPage = React.lazy(() => import('~/features/admin/product/pages/New'));
 const AdminEditProductPage = React.lazy(() => import('~/features/admin/product/pages/Edit'));
+const AdminOrderListPage = React.lazy(() => import('~/features/admin/order/pages/List'));
 
 // -----------------------------
 const adminRoute: RouteObject[] = [
@@ -26,6 +27,7 @@ const adminRoute: RouteObject[] = [
           { path: PATH.ADMIN.PRODUCT.ROOT, element: <Navigate to={PATH.ADMIN.PRODUCT.LIST} /> },
           { path: PATH.ADMIN.PRODUCT.LIST, element: <AdminProductListPage /> },
           { path: PATH.ADMIN.PRODUCT.ADD, element: <AdminNewProductPage /> },
+          { path: PATH.ADMIN.ORDER.LIST, element: <AdminOrderListPage /> },
           {
             path: PATH.ADMIN.PRODUCT.EDIT,
             element: <AdminEditProductPage />

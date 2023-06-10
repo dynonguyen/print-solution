@@ -1,3 +1,12 @@
+const ORDER_STATUS = {
+  INIT: 1,
+  APPROVED: 2,
+  PROCESSING: 3,
+  DELIVERING: 4,
+  COMPLETED: 5,
+  REJECT: 6
+}
+
 const libreExtensionAccept = [
   "bib",
   "doc",
@@ -80,4 +89,4 @@ const libreExtensionAccept = [
   "xltx",
 ];
 
-module.exports = { libreExtensionAccept };
+module.exports = { libreExtensionAccept, ORDER_STATUS };
