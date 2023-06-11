@@ -42,6 +42,10 @@ const Order = db.define('Orders', {
     allowNull: true,
     defaultValue: 0
   },
+  options: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   tel: {
     type: DataTypes.STRING,
     allowNull: false

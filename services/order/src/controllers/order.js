@@ -17,11 +17,12 @@ orderApi.post('/create', async (req, res) => {
       name = '',
       address = '',
       details = '',
+      options = '',
       selectedCategory: category,
       selectedProduct: product,
       createdBy = ''
     } = req.body;
-    console.log('____ params: ', tel, email, name, address, details, category, product);
+    console.log('____ params: ', req.body);
     const listFileNameErr = [];
     const order = await Order.create({
       status: ORDER_STATUS.CONFIRMED.id,
@@ -32,6 +33,7 @@ orderApi.post('/create', async (req, res) => {
       details,
       category,
       product,
+      options,
       createdBy: req?.user?.sub ? req.user.sub : createdBy
     });
 
