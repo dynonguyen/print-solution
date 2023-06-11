@@ -70,8 +70,6 @@ const OptionShow = ({ option, selectedValues, setOptions }: any) => {
 };
 
 const ProductOptions = ({ options, selectedValues, setOptions }: any) => {
-  console.log("_____options: ", options);
-
   return (
     <>
       <Typography variant="h6" color={indigo[500]} sx={{ mt: 4 }}>

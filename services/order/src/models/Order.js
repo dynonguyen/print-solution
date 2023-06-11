@@ -4,6 +4,11 @@ const UploadFile = require('./UploadFile');
 const { db } = require('~/configs/database');
 
 const Order = db.define('Orders', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
   status: {
     type: DataTypes.INTEGER,
     allowNull: false,

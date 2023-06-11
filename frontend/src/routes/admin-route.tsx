@@ -27,6 +27,7 @@ const adminRoute: RouteObject[] = [
           { path: PATH.ADMIN.PRODUCT.ROOT, element: <Navigate to={PATH.ADMIN.PRODUCT.LIST} /> },
           { path: PATH.ADMIN.PRODUCT.LIST, element: <AdminProductListPage /> },
           { path: PATH.ADMIN.PRODUCT.ADD, element: <AdminNewProductPage /> },
+          { path: PATH.ADMIN.ORDER.ROOT, element: <Navigate to={PATH.ADMIN.ORDER.LIST} /> },
           { path: PATH.ADMIN.ORDER.LIST, element: <AdminOrderListPage /> },
           {
             path: PATH.ADMIN.PRODUCT.EDIT,

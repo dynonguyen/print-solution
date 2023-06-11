@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import UploadFile from '~/components/UploadFile';
 import CategoryList from './CategoryList';
 import ProductList from './ProductList';
-import { } from './data';
 import Uploader from './Uploader';
 import UploadFiles from './UploadFiles';
 import { Alert, FieldLabel } from '@cads-ui/core';
@@ -24,7 +23,6 @@ interface OrderFormProps { }
 // -----------------------------
 const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) => {
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
 
   const { data: dataCategory } = useGuestCategoryListQuery({ variables: { page: 1, pageSize: 1000, sort: 'name' } });
   const { search, setParams } = useQueryPagination();
@@ -51,9 +49,6 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
     address: '',
     details: ''
   });
-
-  console.log("___________selectedProduct: ", selectedProduct);
-
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);

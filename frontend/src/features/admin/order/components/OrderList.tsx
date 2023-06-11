@@ -1,40 +1,16 @@
-import { Button, Flex, Table, Tooltip, Typography } from '@cads-ui/core';
+import { Table, Typography } from '@cads-ui/core';
 import { PaginationProps as CadsPaginationProps } from '@cads-ui/core/components/pagination/PaginationProps';
 import { OnFilterValue, TableColumn } from '@cads-ui/core/components/table/TableProps';
 import to from 'await-to-js';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Icon from '~/components/Icon';
 import { TABLE_SORT_TYPE, TABLE_TRANSLATION } from '~/constants/common';
 import { DEFAULTS } from '~/constants/default';
 import { ENDPOINTS } from '~/constants/endpoints';
-import { PATH } from '~/constants/path';
 import useQueryPagination, { SetQueryParams } from '~/hooks/useQueryPagination';
 import orderAxios from '~/libs/axios/order';
+import { Order } from '~/types/Order';
 import { getTableSortByQuery } from '~/utils/helper';
-
-type Order = {
-  id: number;
-  status: number;
-  tel: string;
-  zalo: string;
-  name: string;
-  address: string;
-  details: string;
-  category: string;
-  product: string;
-  files: UploadFile[];
-  createdBy: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type UploadFile = {
-  name: string;
-  base64: string;
-  totalPage: number | null;
-};
 
 type DataFetch = {
   orders: {
@@ -68,7 +44,7 @@ const OrderList = () => {
         params: { id: null, page, pageSize, sort, search, searchBy }
       })
     );
-    setData(rs?.data)
+    setData(rs?.data);
     setLoading(false);
   };
 
@@ -128,7 +104,7 @@ const OrderList = () => {
     {
       key: '_action',
       title: 'Action',
-      align: 'right',
+      align: 'right'
       // render: (_, { isHidden, uuid }) => (
       //   <Flex justifyContent="flex-end">
       //     <Tooltip title="Chỉnh sửa" placement="left">
@@ -145,7 +121,7 @@ const OrderList = () => {
 
   const rows = orders.map((order, idx) => {
     const { id, ...other } = order;
-    return { uuid: id ? id : idx + Date.now() + "", ...other };
+    return { uuid: id ? id : idx + Date.now() + '', ...other };
   });
 
   const handleFilterChange = (filter: OnFilterValue) => {

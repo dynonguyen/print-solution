@@ -49,7 +49,7 @@ const OrdersDetail = () => {
   const canceledOrders = userOrders.filter((order) => order.status === ORDER_STATUS.CANCELED);
 
   return (
-    <Paper sx={{ mt: 2, p: 2 }}>
+    <Paper sx={{ my: 4, mx: 4, minHeight: 'calc(100vh - 260px)' }}>
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="Trạng thái đơn hàng" variant="fullWidth">

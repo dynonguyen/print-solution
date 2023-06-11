@@ -58,15 +58,24 @@ orderApi.post('/create', async (req, res) => {
     });
 
     await Promise.all(uploadFilePromises);
-    console.log('____x', order.id,  order.dataValues, order );
-    return res.status(SUCCESS_CODE.OK).json({ msg: 'Success', data: {...order.dataValues, listFilesName} });
+    console.log('____x', order.id, order.dataValues, order);
+    return res.status(SUCCESS_CODE.OK).json({ msg: 'Success', data: { ...order.dataValues, listFilesName } });
   } catch (error) {
     return res.status(ERROR_CODE.BAD_REQUEST).json({ msg: 'Tạo đơn hàng thất bại' });
   }
 });
+
 orderApi.get('', async (req, res) => {
+  console.log('___________go here: ', req.query);
   try {
-    const { page, pageSize, sort, search, searchBy } = req.query;
+    const { id, page, pageSize, sort, search, searchBy } = req.query;
+
+    if (id) {
+      const x = await Order.findByPk(id);
+      if (!req.user.idAdmin && x.createdBy !== req.user.sub)
+        return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [], total: 0 } });
+      return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [x], total: 1 } });
+    }
 
     const conditions = {};
 
@@ -99,7 +108,7 @@ orderApi.get('', async (req, res) => {
 
     // Combine the search conditions with the existing conditions
     const combinedConditions = { ...conditions, ...searchConditions };
-
+    console.log('________-combinedConditions: ', combinedConditions);
     // Count the number of rows that match the conditions
     const count = await Order.count({
       where: combinedConditions
@@ -124,7 +133,8 @@ orderApi.get('', async (req, res) => {
 
     return res.status(SUCCESS_CODE.OK).json({ orders: { docs, total: count } });
   } catch (error) {
-    logger.error('Failed to fetch orders:', error);
+    // logger.error('Failed to fetch orders:', error);
+    // console.log("_____________CATCH: ", error);
     return res.status(ERROR_CODE.INTERNAL_SERVER_ERROR).json({ msg: 'Lỗi khi lấy danh sách đơn hàng' });
   }
 });
