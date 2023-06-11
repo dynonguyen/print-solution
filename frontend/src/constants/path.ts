@@ -5,7 +5,8 @@ export const PATH = {
 
   PRODUCT: {
     ROOT: '/product',
-    DETAILS: '/product/:productId'
+    DETAILS: '/product/:productId',
+    SEARCH: '/product/search',
   },
 
   CUSTOMER: {
@@ -21,6 +22,7 @@ export const PATH = {
     ROOT: '/order',
     CUS_CONTACT: '/order/customer-contact',
     DETAIL: 'order/detail'
+
   },
 
   ADMIN: {
@@ -34,7 +36,11 @@ export const PATH = {
       EDIT_ROOT: '/admin/product/edit',
       EDIT: '/admin/product/edit/:uuid'
     },
-    ORDER: '/admin/order',
+    ORDER: {
+      ROOT: '/admin/order',
+      LIST: '/admin/order/list',
+      // EDIT: '/admin/product/edit/:uuid'
+    },
     REVENUE: '/admin/revenue',
     PROFILE: '/admin/profile',
     SETTINGS: '/admin/settings'

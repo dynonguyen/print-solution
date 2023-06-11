@@ -5,8 +5,8 @@ import useAuth from '~/hooks/useAuth';
 
 // -----------------------------
 const CustomerGuard = () => {
-  const { hasRealmRole, authenticated, login } = useAuth();
 
+  const { hasRealmRole, authenticated, login } = useAuth();
   if (!authenticated) {
     login();
     return null;
