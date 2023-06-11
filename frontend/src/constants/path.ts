@@ -20,8 +20,9 @@ export const PATH = {
 
   ORDER: {
     ROOT: '/order',
-    DETAILS: '/order/details',
-    CUS_CONTACT: '/order/customer-contact'
+    CUS_CONTACT: '/order/customer-contact',
+    DETAIL: 'order/detail'
+
   },
 
   ADMIN: {

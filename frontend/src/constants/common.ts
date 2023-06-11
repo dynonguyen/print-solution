@@ -34,3 +34,11 @@ export const TABLE_TRANSLATION: TableTranslation = {
   search: 'Tìm kiếm',
   colFilter: 'Ẩn cột'
 };
+
+export const ORDER_STATUS = {
+  CANCELED: 'Đã hủy',
+  WAITING: 'Chờ thanh toán',
+  CONFIRMED: 'Đã xác nhận',
+  SHIPPING: 'Đang giao',
+  COMPLETED: 'Đã hoàn thành'
+};
