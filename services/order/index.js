@@ -35,7 +35,7 @@ app.use(cors(corsConfig));
 
 // APIs
 app.get(`${BASE_URL}/check-health`, (_, res) => res.status(SUCCESS_CODE.OK).json({ msg: 'OK' }));
-app.use(`${BASE_URL}`, authenticate, orderApi);
+app.use(`${BASE_URL}`, orderApi);
 
 // Listening
 postgresConnect()

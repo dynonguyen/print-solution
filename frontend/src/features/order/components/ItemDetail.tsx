@@ -56,7 +56,6 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 
 export default function ItemDetail(props: any) {
   const { item, handleClose, open } = props;
-  console.log(item);
 
   return (
     <div>

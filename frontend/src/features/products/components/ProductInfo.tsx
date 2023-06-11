@@ -12,6 +12,8 @@ import { PATH } from '~/constants/path';
 const ProductInfo = ({ product }: any) => {
   const [amount, setAmount] = useState(1)
   const [selectedValues, setOptions] = useState<String | String[]>("")
+  console.log("____selectedValues: ", selectedValues);
+
 
   const navigate = useNavigate();
 

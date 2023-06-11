@@ -12,7 +12,7 @@ const GuestLayout: React.FC<GuestLayoutProps> = () => {
   return (
     <>
       <Navbar />
-      <Container fixed>
+      <Container fixed sx={{ backgroundColor: "white" }}>
         <Suspense
           fallback={
             <Flex sx={{ w: 1, h: `calc(100vh - ${72 + 68}px)` }} center>

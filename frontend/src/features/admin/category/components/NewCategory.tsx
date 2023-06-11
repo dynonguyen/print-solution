@@ -66,7 +66,6 @@ const NewCategory = () => {
     );
 
     if (uploadErr) {
-      console.log(uploadErr);
       return toast.error('Upload ảnh thất bại');
     }
 

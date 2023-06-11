@@ -88,8 +88,8 @@ const OrderList = () => {
       maxWidth: 200 // sorter: getTableSortByQuery(sort, 'name')
     },
     {
-      key: 'zalo',
-      title: 'Zalo',
+      key: 'email',
+      title: 'Email',
       maxWidth: 200 // sorter: getTableSortByQuery(sort, 'name')
     },
     { key: 'category', title: 'Danh mục', maxWidth: 150, sorter: getTableSortByQuery(sort, 'category') },

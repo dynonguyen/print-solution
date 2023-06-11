@@ -47,6 +47,9 @@
   cd frontend
   yarn graphql-codegen
 
+  # Shorthand
+  docker compose -p print-solution-dev down && cd scripts && sh ./copy-env.sh && cd .. && docker compose -p print-solution-dev -f ./docker-compose.dev.yml build --no-cache && docker compose -p print-solution-dev -f ./docker-compose.dev.yml up -d && cd frontend && yarn graphql-codegen && cd ..
+
   # Chạy môi trường production
   docker compose -p print-solution-prod build --no-cache
   docker compose -p print-solution-prod up -d

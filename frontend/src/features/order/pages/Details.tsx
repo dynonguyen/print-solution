@@ -1,17 +1,12 @@
-import { Box, Button, Container, Grid, SelectChangeEvent, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import UploadFile from '~/components/UploadFile';
-import { Alert, FieldLabel } from '@cads-ui/core';
-import { ENDPOINTS } from '~/constants/endpoints';
-import orderAxios from '~/libs/axios/order';
-import { fileReader } from '~/utils/file-reader';
+import { Container, Typography } from '@mui/material';
 import to from 'await-to-js';
-import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
-import { useCategoryForSelectQuery, useGuestCategoryListQuery, useGuestProductListQuery } from '~/graphql/catalog/generated/graphql';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ENDPOINTS } from '~/constants/endpoints';
+import { useGuestCategoryListQuery, useGuestProductListQuery } from '~/graphql/catalog/generated/graphql';
 import useQueryPagination from '~/hooks/useQueryPagination';
-import { toast } from 'react-toastify';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { PATH } from '~/constants/path';
+import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
+import orderAxios from '~/libs/axios/order';
 import { Order } from '~/types/Order';
 
 // -----------------------------
@@ -26,14 +21,14 @@ const OrderDetails: React.FC<OrderDetailsProps> = withCatalogApolloProvider((pro
   const navigate = useNavigate();
 
   const { data: dataProductList } = useGuestProductListQuery({
-    variables: { sort: '-createdAt name' },
+    variables: { sort: '-createdAt name' }
   });
 
-  const PRODUCT_LIST = dataProductList?.products?.docs
-  const CATEGORY_LIST = dataCategory?.catagories?.docs
+  const PRODUCT_LIST = dataProductList?.products?.docs;
+  const CATEGORY_LIST = dataCategory?.catagories?.docs;
 
-  const [data, setData] = useState<Order | Order[]>()
-  const [loadingFetchOrder, setLoadingFetchOrder] = useState(false)
+  const [data, setData] = useState<Order | Order[]>();
+  const [loadingFetchOrder, setLoadingFetchOrder] = useState(false);
 
   const fetchOrders = async (params: any = {}) => {
     setLoadingFetchOrder(true);
@@ -42,7 +37,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = withCatalogApolloProvider((pro
         params
       })
     );
-    console.log("____err, rs: ", err, rs);
+    console.log('____err, rs: ', err, rs);
 
     setData(rs?.data);
     setLoadingFetchOrder(false);
@@ -51,19 +46,17 @@ const OrderDetails: React.FC<OrderDetailsProps> = withCatalogApolloProvider((pro
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
-    console.log("____id: ", id);
+    console.log('____id: ', id);
 
     fetchOrders({ id });
   }, [location.search]);
 
-  console.log("_______data order: ", data);
-
   return (
     <Container sx={{ minHeight: 'calc(100vh - 196px)', py: 5, px: 0 }}>
       {/* <Uploader /> */}
-      < Typography variant="h4" align="center" sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
+      <Typography variant="h4" align="center" sx={{ textTransform: 'uppercase', fontWeight: 'bold' }}>
         Chi tiết đơn hàng
-      </Typography >
+      </Typography>
       {/* <Typography variant="h5" mt={3} mb={2}>
         Tải lên tài liệu
       </Typography> */}
@@ -89,7 +82,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = withCatalogApolloProvider((pro
           <TextField error={error.field === 'tel'} type='number' required id="tel" label="Số điện thoại liên hệ" fullWidth value={formValues.tel} onChange={handleInputChange} />
         </Grid>
         <Grid item xs={6}>
-          <TextField required id="zalo" label="Địa chỉ email (Nhận báo giá)" fullWidth value={formValues.zalo} onChange={handleInputChange} />
+          <TextField required id="email" label="Địa chỉ email (Nhận báo giá)" fullWidth value={formValues.email} onChange={handleInputChange} />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
@@ -112,7 +105,7 @@ const OrderDetails: React.FC<OrderDetailsProps> = withCatalogApolloProvider((pro
           </Button>
         </Grid>
       </Grid> */}
-    </Container >
+    </Container>
   );
 });
 

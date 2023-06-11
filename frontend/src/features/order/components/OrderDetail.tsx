@@ -5,6 +5,7 @@ import { blue, red } from '@mui/material/colors';
 import moment from 'moment';
 import { toVND } from '~/utils/helper';
 import OrderDetailItem from './OrderDetailItem';
+import { isArray } from 'lodash';
 
 interface OrderItem {
   product: {
@@ -74,14 +75,14 @@ const OrderDetail = (props: any) => {
         <Typography variant="h5" color={blue[800]}>
           Đơn hàng {order._id}
         </Typography>
-        {order.listProduct.map((item: OrderItem) => (
+        {isArray(order?.listProduct) && order?.listProduct?.map((item: OrderItem) => (
           <OrderDetailItem key={item.product.uuid} item={item} />
         ))}
         <Flex justifyContent="space-between" wrap>
           <Typography variant="body2">Ngày đặt đơn: {moment(order.createdAt).format('HH:SS DD/MM/YYYY')}</Typography>
           <Flex direction="column" spacing={3}>
             <Typography variant="h6" textAlign="right" color={red[500]}>
-              {toVND(order.totalCost)}
+              {toVND(order?.totalCost || 0)}
             </Typography>
             <Flex justifyContent="flex-end" wrap>
               {buttons}

@@ -99,7 +99,6 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isE
     );
 
     if (uploadErr) {
-      console.log(uploadErr);
       toast.error('Upload ảnh thất bại');
       return '';
     }

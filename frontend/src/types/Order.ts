@@ -1,8 +1,8 @@
 export interface Order {
   id: number;
-  status: number;
+  status: string;
   tel?: string;
-  zalo?: string;
+  email?: string;
   name?: string;
   address: string;
   details: string;

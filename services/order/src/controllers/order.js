@@ -13,7 +13,7 @@ orderApi.post('/create', async (req, res) => {
       listFiles = [],
       listFilesName = [],
       tel = '',
-      zalo = '',
+      email = '',
       name = '',
       address = '',
       details = '',
@@ -21,19 +21,18 @@ orderApi.post('/create', async (req, res) => {
       selectedProduct: product,
       createdBy = ''
     } = req.body;
-    console.log('____here: ', req.body);
-    console.log('____here 2: ', tel, zalo, name, address, details, category, product);
+    console.log('____ params: ', tel, email, name, address, details, category, product);
     const listFileNameErr = [];
     const order = await Order.create({
-      status: ORDER_STATUS.INIT,
+      status: ORDER_STATUS.CONFIRMED.id,
       tel,
-      zalo,
+      email,
       name,
       address,
       details,
       category,
       product,
-      createdBy: req.user.isAdmin ? createdBy : req.user.sub
+      createdBy: req?.user?.sub ? req.user.sub : createdBy
     });
 
     // Create UploadFile records and associate them with the Order
@@ -58,28 +57,34 @@ orderApi.post('/create', async (req, res) => {
     });
 
     await Promise.all(uploadFilePromises);
-    console.log('____x', order.id, order.dataValues, order);
-    return res.status(SUCCESS_CODE.OK).json({ msg: 'Success', data: { ...order.dataValues, listFilesName } });
+    return res.status(SUCCESS_CODE.OK).json({ msg: 'Success', data: order.displayId  });
   } catch (error) {
+    console.log("_____error", error)
     return res.status(ERROR_CODE.BAD_REQUEST).json({ msg: 'Tạo đơn hàng thất bại' });
   }
 });
 
 orderApi.get('', async (req, res) => {
-  console.log('___________go here: ', req.query);
   try {
-    const { id, page, pageSize, sort, search, searchBy } = req.query;
+    let { id, page = '1', pageSize = '100', sort = '-createdAt', search, searchBy, displayId, email, tel } = req.query;
 
     if (id) {
       const x = await Order.findByPk(id);
-      if (!req.user.idAdmin && x.createdBy !== req.user.sub)
-        return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [], total: 0 } });
       return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [x], total: 1 } });
     }
 
-    const conditions = {};
+    if(displayId) {
+      const originRecord = await Order.findOne({where: {displayId}})
+      if(!originRecord) return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [], total: 0 } });
+      email = originRecord.email;
+      tel = originRecord.tel;
+    }
 
-    if (!req.user.isAdmin) conditions.createdBy = req.user.sub;
+    let conditions = {}
+    let tempConds = []
+    if(email) tempConds .push({email})
+    if(tel) tempConds.push({tel})
+    if(tempConds.length) conditions = {[Op.or]: tempConds}
 
     // Prepare the sorting order based on the sort parameter
     let sortOrder = [];
@@ -108,7 +113,13 @@ orderApi.get('', async (req, res) => {
 
     // Combine the search conditions with the existing conditions
     const combinedConditions = { ...conditions, ...searchConditions };
-    console.log('________-combinedConditions: ', combinedConditions);
+
+    Object.keys(combinedConditions).forEach(key => {
+      if (combinedConditions[key] === undefined) {
+        delete combinedConditions[key];
+      }
+    });
+
     // Count the number of rows that match the conditions
     const count = await Order.count({
       where: combinedConditions
@@ -133,7 +144,7 @@ orderApi.get('', async (req, res) => {
 
     return res.status(SUCCESS_CODE.OK).json({ orders: { docs, total: count } });
   } catch (error) {
-    // logger.error('Failed to fetch orders:', error);
+    logger.error('Failed to fetch orders:', error);
     // console.log("_____________CATCH: ", error);
     return res.status(ERROR_CODE.INTERNAL_SERVER_ERROR).json({ msg: 'Lỗi khi lấy danh sách đơn hàng' });
   }

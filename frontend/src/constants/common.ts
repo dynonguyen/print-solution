@@ -35,10 +35,15 @@ export const TABLE_TRANSLATION: TableTranslation = {
   colFilter: 'Ẩn cột'
 };
 
-export const ORDER_STATUS = {
-  CANCELED: 'Đã hủy',
-  WAITING: 'Chờ thanh toán',
-  CONFIRMED: 'Đã xác nhận',
-  SHIPPING: 'Đang giao',
-  COMPLETED: 'Đã hoàn thành'
+export const ORDER_STATUS: Record<string, { id: string; name: string }> = {
+  WAITING_CONFIRM: { id: "WAITING_CONFIRM", name: 'Chờ xử lý' },
+  CONFIRMED: { id: "CONFIRMED", name: 'Đã xác nhận' },
+  WAITING_PAYMENT: { id: "WAITING_PAYMENT", name: 'Chờ thanh toán' },
+  PRINTING: { id: "PRINTING", name: 'Đang in' },
+  SHIPPING: { id: "SHIPPING", name: 'Đang giao' },
+  COMPLETED: { id: "COMPLETED", name: 'Đã hoàn thành' },
+  REJECT: { id: "REJECT", name: 'Lỗi' },
+  CANCELED: { id: "CANCELED", name: 'Đã hủy' },
 };
+
+
