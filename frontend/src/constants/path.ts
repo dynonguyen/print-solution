@@ -15,7 +15,8 @@ export const PATH = {
   },
 
   GUEST: {
-    ROOT: '/guest'
+    ROOT: '/guest',
+    CART: '/shoping_cart'
   },
 
   ORDER: {

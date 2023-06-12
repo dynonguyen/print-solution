@@ -1,13 +1,13 @@
-import { useState } from 'react'
 import { Flex } from '@cads-ui/core';
 import { Button, Divider, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Icon from '~/components/Icon';
+import { PATH } from '~/constants/path';
 import ProductOptions from './ProductOptions';
 import ProductParameter from './ProductParameter';
 import ProductPrice from './ProductPrice';
-import { useNavigate } from 'react-router-dom';
-import { PATH } from '~/constants/path';
 
 const ProductInfo = ({ product }: any) => {
   const [amount, setAmount] = useState(1)
@@ -18,13 +18,25 @@ const ProductInfo = ({ product }: any) => {
   const navigate = useNavigate();
 
   const handleOrderClick = () => {
-    const queryParams = new URLSearchParams({
-      product: product?._id,
-      amount: String(amount),
-      options: selectedValues.toString()
-    }).toString();
+    addProductToCart()
+    navigate(PATH.GUEST.CART)
+  };
 
-    navigate(`${PATH.ORDER.ROOT}?${queryParams}`);
+
+  const addProductToCart = () => {
+    let localCart = localStorage.getItem('cart');
+    let cart: Array<any> = [];
+    if (localCart) {
+      cart = JSON.parse(localCart);
+    }
+    const existingProductIndex = cart.findIndex((productInCart) => product._id === productInCart._id);
+    if (existingProductIndex !== -1) {
+      cart[existingProductIndex].amount = amount;
+    } else {
+      cart.push({ ...product, amount: amount });
+    }
+    const cartJson = JSON.stringify(cart);
+    localStorage.setItem('cart', cartJson);
   };
 
   return (
