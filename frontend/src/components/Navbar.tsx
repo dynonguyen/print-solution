@@ -1,6 +1,6 @@
 import { Button } from '@cads-ui/core';
 import { Search, ShoppingCart } from '@mui/icons-material';
-import { AppBar, Badge, IconButton, InputBase, Stack, Toolbar, Typography, Menu, MenuItem } from '@mui/material';
+import { AppBar, Badge, IconButton, InputBase, Menu, MenuItem, Stack, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -39,6 +39,10 @@ const Navbar = () => {
 
   const handleSearchClick = () => {
     navigate(`/product/search?name=${searchKey}`)
+  }
+
+  const handleShoppingCartClick = () => {
+    navigate(PATH.GUEST.CART)
   }
 
   return (
@@ -86,7 +90,10 @@ const Navbar = () => {
             </Button>
             :
             <>
-              <IconButton sx={{ color: '#fff', ml: 2 }}>
+              <IconButton
+                onClick={handleShoppingCartClick}
+                sx={{ color: '#fff', ml: 2 }}
+              >
                 <StyledBadge badgeContent={0} color="secondary">
                   <ShoppingCart />
                 </StyledBadge>
