@@ -1,4 +1,4 @@
-import { Box, Container, Grid } from '@cads-ui/core';
+import { Box, Container, Grid, Typography } from '@cads-ui/core';
 import { Navigate, useLocation } from 'react-router-dom';
 import { DEFAULTS } from '~/constants/default';
 import { PATH } from '~/constants/path';
@@ -26,6 +26,7 @@ const SearchResult = withCatalogApolloProvider(() => {
         return <Navigate to={PATH.NOT_FOUND} />;
     }
     if (products) {
+      if(products.length>0)
         return (
             <Container maxWidth="lg" sx={{ mt: 3 }}>
                 <Box
@@ -47,14 +48,25 @@ const SearchResult = withCatalogApolloProvider(() => {
                 </Box>
             </Container >
         );
+      else return (
+        <Container maxWidth="lg" sx={{height:"100vh", mt: 3 }}>
+          <Box
+              sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  bgcolor: 'background.paper',
+                  justifyContent:"center",
+                  alignItems: "center",
+              }}
+          >
+              <Typography variant="h2">Không tìm thấy sản phẩm!</Typography>
+          </Box>
+        </Container >
+      );
     }
     else return (
-        loading ?
-            <></> :
-            <div>
-                Không tìm thấy sản phẩm tương ứng
-            </div>
-    );
+      <></>
+    )
 });
 
 export default SearchResult
