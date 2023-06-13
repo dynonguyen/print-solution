@@ -7,7 +7,7 @@ import useQueryPagination from '~/hooks/useQueryPagination';
 import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
 import ProductItemGuest from './GuestProductItem';
 
-interface GuestProductListProps {}
+interface GuestProductListProps { }
 
 const GuestProductList = withCatalogApolloProvider<GuestProductListProps>((props) => {
   const { search, setParams } = useQueryPagination();

@@ -1,5 +1,13 @@
-import { NonEmptyArray } from 'type-graphql';
+import { NonEmptyArray, Query, Resolver } from 'type-graphql';
 
-const resolvers: NonEmptyArray<Function> = [];
+@Resolver()
+class MyResolver {
+  @Query()
+  hello(): string {
+    return 'Hello, world!';
+  }
+}
+
+const resolvers: NonEmptyArray<Function> = [MyResolver];
 
 export default resolvers;

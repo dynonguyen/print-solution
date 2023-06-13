@@ -28,7 +28,7 @@ const customerRoute: RouteObject[] = [
         children: [
           { path: PATH.PRODUCT.DETAILS, element: <ProductDetail /> },
           { path: PATH.PRODUCT.SEARCH, element: <ProductSearchPage /> }
-      ]
+        ]
       }
     ]
   }

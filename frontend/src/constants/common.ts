@@ -34,3 +34,16 @@ export const TABLE_TRANSLATION: TableTranslation = {
   search: 'Tìm kiếm',
   colFilter: 'Ẩn cột'
 };
+
+export const ORDER_STATUS: Record<string, { id: string; name: string }> = {
+  WAITING_CONFIRM: { id: "WAITING_CONFIRM", name: 'Chờ xử lý' },
+  CONFIRMED: { id: "CONFIRMED", name: 'Đã xác nhận' },
+  WAITING_PAYMENT: { id: "WAITING_PAYMENT", name: 'Chờ thanh toán' },
+  PRINTING: { id: "PRINTING", name: 'Đang in' },
+  SHIPPING: { id: "SHIPPING", name: 'Đang giao' },
+  COMPLETED: { id: "COMPLETED", name: 'Đã hoàn thành' },
+  REJECT: { id: "REJECT", name: 'Lỗi' },
+  CANCELED: { id: "CANCELED", name: 'Đã hủy' },
+};
+
+

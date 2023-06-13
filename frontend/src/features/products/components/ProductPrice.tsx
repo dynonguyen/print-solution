@@ -19,7 +19,7 @@ const Amount = ({ unit, onChangeAmount }: any) => {
       <Input
         id="amount"
         type="number"
-        sx={{ maxWidth: '200px' }}
+        sx={{ maxWidth: '200px', mt: 4 }}
         endAdornment={<InputAdornment position="end">{unit}</InputAdornment>}
         defaultValue={1}
         required
@@ -34,18 +34,20 @@ const Amount = ({ unit, onChangeAmount }: any) => {
   );
 };
 
-const ProductPrice = ({ price, unit }: any) => {
+const ProductPrice = ({ price, unit, setAmount }: any) => {
   const [totalPrice, setTotalPrice] = useState(price);
 
   const onChangeAmount = (event: React.FormEvent<HTMLInputElement>) => {
-    if (Number(event.currentTarget.value) > MAX.AMOUNT) {
+    const curAmount = Number(event.currentTarget.value)
+    if (curAmount > MAX.AMOUNT) {
       event.currentTarget.value = MAX.AMOUNT.toString();
       toast.warning(`Bạn chỉ có thể in tối đa ${MAX.AMOUNT} ${unit} cho một đơn sản phẩm này`);
-    } else if (Number(event.currentTarget.value) < 0) {
+    } else if (curAmount < 0) {
       event.currentTarget.value = MIN.AMOUNT.toString();
       toast.warning(`Bạn chỉ có thể in tối thiểu ${MIN.AMOUNT} ${unit} cho một đơn sản phẩm này`);
     }
-    setTotalPrice(calculatePrice(price, Number(event.currentTarget.value)));
+    setAmount(curAmount)
+    setTotalPrice(calculatePrice(price, curAmount));
   };
   return (
     <>

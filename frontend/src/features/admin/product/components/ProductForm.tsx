@@ -99,7 +99,6 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isE
     );
 
     if (uploadErr) {
-      console.log(uploadErr);
       toast.error('Upload ảnh thất bại');
       return '';
     }
@@ -172,7 +171,6 @@ const ProductForm: React.FC<ProductFormProps> = withCatalogApolloProvider(({ isE
       }
     } else {
       if (photoFile.current) {
-        console.log(editedProduct.photo);
         docsAxios.delete(ENDPOINTS.DOCS_API.DELETE_PHOTO, { params: { photoUrl: editedProduct.photo } });
       }
       apolloClient.cache.reset();

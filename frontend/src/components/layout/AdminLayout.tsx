@@ -27,7 +27,19 @@ const sidebarItems: SidebarItems[] = [
           { label: 'Thêm mới', link: PATH.ADMIN.PRODUCT.ADD, icon: <Icon icon="material-symbols:add-box-rounded" /> }
         ]
       },
-      { label: 'Quản lý đơn hàng', link: PATH.ADMIN.ORDER, icon: <Icon icon="icon-park-solid:transaction-order" /> },
+      {
+        label: 'Quản lý đơn hàng',
+        link: PATH.ADMIN.ORDER.ROOT,
+        icon: <Icon icon="icon-park-solid:transaction-order" />,
+        subMenu: [
+          {
+            label: 'Danh sách',
+            link: PATH.ADMIN.ORDER.LIST,
+            icon: <Icon icon="material-symbols:list-alt-rounded" />
+          },
+          // { label: 'Thêm mới', link: PATH.ADMIN.PRODUCT.ADD, icon: <Icon icon="material-symbols:add-box-rounded" /> }
+        ]
+      },
       { label: 'Hỗ trợ khách hàng', link: PATH.ADMIN.CHAT, icon: <Icon icon="material-symbols:support-agent" /> },
       { label: 'Doanh thu', link: PATH.ADMIN.REVENUE, icon: <Icon icon="ph:currency-circle-dollar-fill" /> },
       { label: 'Tài khoản', link: PATH.ADMIN.PROFILE, icon: <Icon icon="ic:baseline-account-circle" /> },
