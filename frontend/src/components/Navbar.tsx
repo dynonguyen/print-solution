@@ -33,12 +33,11 @@ const Navbar = () => {
 
   const handleSearchProducts = (e: any) => {
     e.preventDefault()
-    setSearchKey(e.target.value.trim())
-    e.target.value("")
+    setSearchKey(e.target.value)
   }
 
-  const handleSearchClick = () => {
-    navigate(`/product/search?name=${searchKey}`)
+  const handleSearchClick=()=>{
+    navigate(encodeURI(`/product/search?name=${searchKey}`))
   }
 
   const handleShoppingCartClick = () => {
