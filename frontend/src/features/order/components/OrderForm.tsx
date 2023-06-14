@@ -14,13 +14,16 @@ import orderAxios from '~/libs/axios/order';
 import { CUSTOM_PRODUCT } from '~/types/Product';
 import { fileReader } from '~/utils/file-reader';
 import ProductList from './ProductList';
+import { useSelector } from 'react-redux';
+import { RootState } from '~/libs/redux/store';
 
 // -----------------------------
-interface OrderFormProps {}
+interface OrderFormProps { }
 
 // -----------------------------
 const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) => {
   const location = useLocation();
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
 
   const { data: dataCategory } = useGuestCategoryListQuery({ variables: { page: 1, pageSize: 1000, sort: 'name' } });
   const { search, setParams } = useQueryPagination();

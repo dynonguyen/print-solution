@@ -2,21 +2,25 @@ import { Flex } from '@cads-ui/core';
 import { Button, Divider, Stack, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Icon from '~/components/Icon';
 import { PATH } from '~/constants/path';
-import { increment } from '~/libs/redux/cardSlice';
+import { addCartItem } from '~/libs/redux/cartSlice';
 import ProductOptions from './ProductOptions';
 import ProductParameter from './ProductParameter';
 import ProductPrice from './ProductPrice';
 import { toast } from 'react-toastify';
+import { RootState } from '~/libs/redux/store';
 
 interface ListValues {
   [key: string]: string;
 }
 
 const ProductInfo = ({ product }: any) => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
   const [amount, setAmount] = useState(1);
   const [selectedValues, setOptions] = useState({});
   const [inputValue, setInputValue] = useState({});
@@ -33,42 +37,7 @@ const ProductInfo = ({ product }: any) => {
     setRadioValue
   };
 
-  const objToString = (obj: ListValues) => {
-    let result = '';
-    for (const item in obj) {
-      result += `${item}: ${obj[item].toString()}. `;
-    }
-    return result;
-  };
-
-  const handleOrderClick = () => {
-    const queryParams = new URLSearchParams({
-      product: product?.uuid,
-      amount: String(amount),
-      options: `${Object.keys(radioValue).length > 0 ? objToString(radioValue) : ''}${Object.keys(selectedValues).length > 0 ? objToString(selectedValues) : ''
-        }${Object.keys(inputValue).length > 0 ? objToString(inputValue) : ''}`
-    }).toString();
-    navigate(`${PATH.ORDER.ROOT}?${queryParams}`);
-  };
-
-  const dispatch = useDispatch();
-
-  const addProductToCart = () => {
-    let localCart = localStorage.getItem('cart');
-    let cart: Array<any> = [];
-    if (localCart) {
-      cart = JSON.parse(localCart);
-    }
-    const existingProductIndex = cart.findIndex((productInCart) => product._id === productInCart._id);
-    if (existingProductIndex !== -1) {
-      cart[existingProductIndex].amount += amount;
-    } else {
-      cart.push({ ...product, amount: amount });
-      dispatch(increment());
-    }
-    const cartJson = JSON.stringify(cart);
-    localStorage.setItem('cart', cartJson);
-  };
+  const isUpdate: Boolean = !!cartItems.find(item => item._id === product._id)
 
   return (
     <Flex direction="column" alignItems="stretch">
@@ -85,21 +54,25 @@ const ProductInfo = ({ product }: any) => {
           variant="contained"
           size="medium"
           startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
-          color="info"
+          color={isUpdate ? 'warning' : 'info'}
           onClick={() => {
-            addProductToCart();
-            toast('Đã thêm vào giỏ hàng')
+            dispatch(addCartItem({ ...product, amount: +amount, selectedValues, radioValue }))
+            // addProductToCart();
+            toast(isUpdate ? 'Đã cập nhật giỏ hàng' : 'Đã thêm vào giỏ hàng', { type: 'success' })
           }}
         >
-          Thêm vào giỏ hàng
+          {isUpdate ? 'Cập nhật giỏ hàng' : 'Thêm vào giỏ hàng'}
         </Button>
 
         <Button
-          href={PATH.GUEST.CART}
           variant="contained"
           size="medium"
           sx={{ py: 1 }}
           color="success"
+          onClick={() => {
+            dispatch(addCartItem({ ...product, amount: +amount, selectedValues, radioValue }))
+            navigate(PATH.GUEST.CART)
+          }}
         >
           Đặt in ngay
         </Button>

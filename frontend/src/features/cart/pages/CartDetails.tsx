@@ -3,7 +3,9 @@ import {
   Box,
   Button,
   IconButton,
+  Modal,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -12,56 +14,59 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { decrement } from '~/libs/redux/cardSlice';
+import { CartItem, addFileDesign, removeCartItem, removeFileDesign } from '~/libs/redux/cartSlice';
 import { withMinio } from '~/utils/withStatic';
 import StyledBreadcrumb from '../components/CardBreadcrumbs';
 import { toast } from 'react-toastify';
 import { PATH } from '~/constants/path';
+import { RootState } from '~/libs/redux/store';
+import UploadFile from '~/components/UploadFile';
 
-interface CartItem {
-  _id: number;
-  uuid: number;
-  name: string;
-  price: number;
-  amount: number;
-  photo: string;
-}
+const style = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
 
 const CartDetails: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+  const [open, setOpen] = React.useState<CartItem | null>();
+
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const cartData = localStorage.getItem('cart');
-    if (cartData) {
-      setCartItems(JSON.parse(cartData));
-    }
-  }, []);
-
-  const removeItem = (index: number) => {
-    const updatedCartItems = [...cartItems];
-    updatedCartItems.splice(index, 1);
-    setCartItems(updatedCartItems);
-    localStorage.setItem('cart', JSON.stringify(updatedCartItems));
-    dispatch(decrement());
-  };
 
   const handleEdit = (index: number) => {
     navigate(`/product/${cartItems[index].uuid}`);
   };
 
   const handleRequestQuote = () => {
-    if (cartItems.length <= 0) return toast("Vui lòng chọn ít nhất 1 sản phẩm!")
+    if (cartItems.length <= 0) return toast("Vui lòng chọn ít nhất 1 sản phẩm!", { type: 'error' })
     navigate(PATH.ORDER.ROOT);
   };
 
+  const MAX_FILE = 5;
+  const MAX_SIZE = 500;
+
+  useEffect(() => {
+    return () => {
+      dispatch(removeFileDesign())
+    }
+  }, [])
+
+
   return (
-    <Box minHeight="80vh" display="flex" flexDirection="column">
+    <Box minHeight="calc(100vh - 196px)" display="flex" flexDirection="column">
       <StyledBreadcrumb />
 
       <Box flex={1} component={Paper} mt={2}>
@@ -72,6 +77,7 @@ const CartDetails: React.FC = () => {
                 <TableCell>Ảnh</TableCell>
                 <TableCell>Tên sản phẩm</TableCell>
                 <TableCell>Số lượng</TableCell>
+                <TableCell>Chọn file thiết kế</TableCell>
                 <TableCell>Thao tác</TableCell>
               </TableRow>
             </TableHead>
@@ -79,18 +85,24 @@ const CartDetails: React.FC = () => {
               {cartItems.map((item, index) => (
                 <TableRow key={item._id}>
                   <TableCell>
-                    <img src={withMinio(item.photo)} alt={item.name} style={{ width: '50px', height: 'auto' }} />
+                    <img src={withMinio(item.photo)} alt={item.name} style={{ width: '90px', height: 'auto' }} />
                   </TableCell>
                   <TableCell>
-                    <Typography variant="subtitle1">{item.name}</Typography>
+                    <Typography variant="h6">{item.name}</Typography>
                     <Typography variant="body2">Giá: {item.price}</Typography>
                   </TableCell>
-                  <TableCell>{item.amount}</TableCell>
+                  <TableCell sx={{ fontSize: 20, fontWeight: 600 }}>{item.amount}</TableCell>
+                  <TableCell>
+                    <UploadFile sx={{
+                      px: 2,
+                      py: 2,
+                    }} maxFiles={MAX_FILE} maxSizePerFile={MAX_SIZE} onFileChange={(files) => dispatch(addFileDesign({ files, productId: item._id }))} />
+                  </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleEdit(index)}>
                       <Edit />
                     </IconButton>
-                    <IconButton onClick={() => removeItem(index)}>
+                    <IconButton onClick={() => setOpen(item)}>
                       <Delete />
                     </IconButton>
                   </TableCell>
@@ -100,16 +112,46 @@ const CartDetails: React.FC = () => {
           </Table>
         </TableContainer>
       </Box>
+      <Stack direction={'row'} spacing={2} width={'100%'}>
+        <Button
+          fullWidth
+          variant="contained"
+          color="secondary"
+          href={"/"}
+          style={{ marginTop: '30px', marginBottom: '30px' }}
+        >
+          Chọn thêm sản phẩm
+        </Button>
+        <Button
+          fullWidth
+          variant="contained"
+          color="warning"
+          onClick={handleRequestQuote}
+          style={{ marginTop: '30px', marginBottom: '30px' }}
+        >
+          Yêu cầu báo giá
+        </Button>
 
-      <Button
-        // disabled={cartItems.length <= 0}
-        variant="contained"
-        color="primary"
-        onClick={handleRequestQuote}
-        style={{ marginTop: '30px', marginBottom: '30px' }}
+      </Stack>
+      <Modal
+        open={!!open}
+        onClose={() => setOpen(null)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
-        Chọn files thiết kế và đặt in
-      </Button>
+        <Box sx={style}>
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            Text in a modal
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 4 }}>
+            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+          </Typography>
+          <Stack direction='row-reverse' spacing={4} marginTop={2}>
+            <Button variant='contained' color='error' onClick={() => { dispatch(removeCartItem(open?._id)); setOpen(null) }}>Remove</Button>
+            <Button variant='contained' color='inherit' onClick={() => setOpen(null)}>Cancel</Button>
+          </Stack>
+        </Box>
+      </Modal>
     </Box>
   );
 };

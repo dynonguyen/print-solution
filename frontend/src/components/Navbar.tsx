@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/path';
 import useAuth from '~/hooks/useAuth';
-import { incrementByAmount } from '~/libs/redux/cardSlice';
+import { RootState } from '~/libs/redux/store';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -46,16 +46,7 @@ const Navbar = () => {
     navigate(PATH.GUEST.CART);
   };
 
-  const count = useSelector((state: any) => state?.card?.value);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const cartData = localStorage.getItem('cart');
-    if (cartData) {
-      const historyCardCount = JSON.parse(cartData);
-      dispatch(incrementByAmount(historyCardCount.length));
-    }
-  }, [localStorage]);
+  const count = useSelector((state: RootState) => state?.cart?.count);
 
   return (
     <AppBar position="static" sx={{ bgcolor: '#424242' }} elevation={0}>

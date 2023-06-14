@@ -1,12 +1,16 @@
-import { configureStore } from '@reduxjs/toolkit';
-import { getEnv } from '~/utils/getEnv';
-import cardReducer from './cardSlice';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import cartReducer from './cartSlice';
+
+const rootReducer = combineReducers({
+  cart: cartReducer,
+  // other reducers...
+});
+
+export type RootState = ReturnType<typeof rootReducer>;
 
 const store = configureStore({
-  reducer: {
-    card: cardReducer
-  },
-  devTools: Boolean(getEnv('DEV'))
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default store;

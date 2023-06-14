@@ -24,6 +24,7 @@ function validateFile(file: File, acceptFiles: string, maxSize: number) {
 
 // -----------------------------
 interface UploadFileProps {
+  sx?: Object;
   uploadTitle?: string;
   acceptFiles?: 'all' | string; // ex: '.docx,doc,.xlsx'
   maxSizePerFile?: number; // by MB
@@ -38,7 +39,7 @@ export interface UploadFileRef {
 
 // -----------------------------
 const UploadFile = React.forwardRef<UploadFileRef, UploadFileProps>((props, ref) => {
-  const { uploadTitle, acceptFiles = ACCEPT_ALL, maxSizePerFile = 2, maxFiles = 1, onFileChange, ListProps } = props;
+  const { uploadTitle, acceptFiles = ACCEPT_ALL, maxSizePerFile = 2, maxFiles = 1, onFileChange, ListProps, sx } = props;
   const [files, setFiles] = React.useState<File[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -135,7 +136,8 @@ const UploadFile = React.forwardRef<UploadFileRef, UploadFileProps>((props, ref)
             cursor: 'pointer',
             transition: 'all 0.2s',
             '& *': { color: 'secondary.light', transition: 'all 0.2s' },
-            _hover: { borderColor: 'primary.dark', '& *': { color: 'primary.dark' } }
+            _hover: { borderColor: 'primary.dark', '& *': { color: 'primary.dark' } },
+            ...sx
           }}
         >
           <Icon icon="material-symbols:cloud-upload" sx={{ fs: 48 }} />
