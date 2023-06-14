@@ -6,89 +6,115 @@ const { db, postgresConnect, Op } = require('~/configs/database');
 const { ORDER_STATUS } = require('~/utils/constant');
 const Order = require('~/models/Order');
 const UploadFile = require('~/models/UploadFile');
+const OrderProduct = require('~/models/OrderProduct');
+
+db.sync()
+  .then(() => {
+    // Start the server or execute other operations
+    // after the synchronization is complete
+  })
+  .catch((error) => {
+    console.error('Database synchronization error:', error);
+  });
+
 // -----------------------------
 orderApi.post('/create', async (req, res) => {
   try {
-    const {
-      listFiles = [],
-      listFilesName = [],
-      tel = '',
-      email = '',
-      name = '',
-      address = '',
-      details = '',
-      options = '',
-      selectedCategory: category,
-      selectedProduct: product,
-      createdBy = ''
-    } = req.body;
-    console.log('____ params: ', req.body);
-    const listFileNameErr = [];
+    const { products, tel = '', email = '', name = '', address = '', options = '' } = req.body;
+
     const order = await Order.create({
       status: ORDER_STATUS.CONFIRMED.id,
       tel,
       email,
       name,
-      address,
-      details,
-      category,
-      product,
-      options,
-      createdBy: req?.user?.sub ? req.user.sub : createdBy
+      address
     });
 
-    // Create UploadFile records and associate them with the Order
-    const uploadFilePromises = listFiles.map(async (file, idx) => {
-      const rs = await countPageEachFile(file, listFilesName[idx]);
-      if (typeof rs === 'string') {
-        listFileNameErr.push(rs);
-        return null;
-      }
+    let totalAllCost = 0;
 
-      // Create UploadFile record associated with the Order
-      const uploadFile = await UploadFile.create({
-        name: listFilesName[idx],
-        base64: file,
-        totalPage: rs
+    products.forEach(async (product) => {
+      const { _id, options, listFiles = [], listFilesName = [], amount, details, price } = product;
+      console.log('____-amount, details, price: ', amount, details, price);
+      const listFileNameErr = [];
+      console.log('_________price * amount', price * amount);
+
+      totalAllCost += price * amount;
+      const orderProduct = await OrderProduct.create({
+        _id,
+        options,
+        amount,
+        details,
+        totalCost: price * amount,
+        OrderId: order.id
       });
 
-      // Associate the UploadFile with the Order
-      await order.addFile(uploadFile);
+      // Create UploadFile records and associate them with the Order
+      const uploadFilePromises = listFiles.map(async (file, idx) => {
+        const rs = await countPageEachFile(file, listFilesName[idx]);
+        if (typeof rs === 'string') {
+          listFileNameErr.push(rs);
+          return null;
+        }
 
-      return uploadFile;
+        // Create UploadFile record associated with the Order
+        const uploadFile = await UploadFile.create({
+          name: listFilesName[idx],
+          base64: file,
+          totalPage: rs
+        });
+
+        // Associate the UploadFile with the Order
+        await orderProduct.addFile(uploadFile);
+
+        return uploadFile;
+      });
+
+      await Promise.all(uploadFilePromises);
     });
 
-    await Promise.all(uploadFilePromises);
-    return res.status(SUCCESS_CODE.OK).json({ msg: 'Success', data: order.displayId  });
+    order.totalCost = totalAllCost;
+    await order.save();
+
+    return res.status(SUCCESS_CODE.OK).json({ msg: 'Success', data: order.displayId });
   } catch (error) {
-    console.log("_____error", error)
+    console.log('_____error', error);
     return res.status(ERROR_CODE.BAD_REQUEST).json({ msg: 'Tạo đơn hàng thất bại' });
   }
 });
 
-orderApi.get('', async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     let { id, page = '1', pageSize = '100', sort = '-createdAt', search, searchBy, displayId, email, tel } = req.query;
 
     if (id) {
-      const x = await Order.findByPk(id);
+      const x = await Order.findByPk(id, {
+        include: [
+          {
+            model: OrderProduct,
+            as: 'products',
+            include: {
+              model: UploadFile,
+              as: 'files'
+            }
+          }
+        ]
+      });
       return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [x], total: 1 } });
     }
 
-    if(displayId) {
-      const originRecord = await Order.findOne({where: {displayId}})
-      if(!originRecord) return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [], total: 0 } });
+    if (displayId) {
+      const originRecord = await Order.findOne({ where: { displayId } });
+
+      if (!originRecord) return res.status(SUCCESS_CODE.OK).json({ orders: { docs: [], total: 0 } });
       email = originRecord.email;
       tel = originRecord.tel;
     }
+    let conditions = {};
+    let tempConds = [];
+    if (email) tempConds.push({ email });
+    if (tel) tempConds.push({ tel });
+    if (tempConds.length) conditions = { [Op.or]: tempConds };
 
-    let conditions = {}
-    let tempConds = []
-    if(email) tempConds .push({email})
-    if(tel) tempConds.push({tel})
-    if(tempConds.length) conditions = {[Op.or]: tempConds}
-
-    // Prepare the sorting order based on the sort parameter
     let sortOrder = [];
 
     if (sort) {
@@ -102,6 +128,7 @@ orderApi.get('', async (req, res) => {
 
     // Prepare the search conditions
     let searchConditions = {};
+
     if (search && searchBy) {
       const searchFields = searchBy.split(',');
       searchConditions = {
@@ -122,33 +149,36 @@ orderApi.get('', async (req, res) => {
       }
     });
 
-    // Count the number of rows that match the conditions
+    const offset = (parseInt(page) - 1) * parseInt(pageSize);
+
     const count = await Order.count({
       where: combinedConditions
     });
 
-    // Calculate the offset based on the page and pageSize
-    const offset = (parseInt(page) - 1) * parseInt(pageSize);
-
-    // Find the orders based on the conditions, pagination, sorting, and search
-    const docs = await Order.findAll({
+    const orders = await Order.findAll({
       where: combinedConditions,
       include: [
         {
-          model: UploadFile,
-          as: 'files'
+          model: OrderProduct,
+          as: 'products',
+          include: {
+            model: UploadFile,
+            as: 'files'
+          }
         }
       ],
-      limit: parseInt(pageSize), // Number of records per page
-      offset, // Offset based on page number
-      order: sortOrder // Specify the sorting order
+      order: sortOrder,
+      limit: parseInt(pageSize),
+      offset
     });
 
-    return res.status(SUCCESS_CODE.OK).json({ orders: { docs, total: count } });
+    return res.status(SUCCESS_CODE.OK).json({ orders: { docs: orders, total: count } });
   } catch (error) {
     logger.error('Failed to fetch orders:', error);
-    // console.log("_____________CATCH: ", error);
     return res.status(ERROR_CODE.INTERNAL_SERVER_ERROR).json({ msg: 'Lỗi khi lấy danh sách đơn hàng' });
   }
-});
+};
+
+orderApi.get('', getOrders);
+
 module.exports = orderApi;

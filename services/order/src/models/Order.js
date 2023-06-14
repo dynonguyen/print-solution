@@ -1,6 +1,6 @@
 // Order.js
 const { DataTypes } = require('sequelize');
-const UploadFile = require('./UploadFile');
+const OrderProduct = require('./OrderProduct');
 const { db } = require('~/configs/database');
 
 function generateDisplayId() {
@@ -32,19 +32,10 @@ const Order = db.define('Orders', {
     allowNull: false,
     defaultValue: 'WAITING_CONFIRM'
   },
-  amount: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 1
-  },
   totalCost: {
     type: DataTypes.INTEGER,
     allowNull: true,
     defaultValue: 0
-  },
-  options: {
-    type: DataTypes.STRING,
-    allowNull: true,
   },
   tel: {
     type: DataTypes.STRING,
@@ -62,22 +53,6 @@ const Order = db.define('Orders', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  details: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  product: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  createdBy: {
-    type: DataTypes.STRING,
-    allowNull: true
-  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,
@@ -90,7 +65,7 @@ const Order = db.define('Orders', {
   }
 });
 
-Order.hasMany(UploadFile, { as: 'files' });
-UploadFile.belongsTo(Order);
+OrderProduct.belongsTo(Order, { foreignKey: 'OrderId' });
+Order.hasMany(OrderProduct, { as: 'products', foreignKey: 'OrderId' });
 
 module.exports = Order;

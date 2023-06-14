@@ -16,3 +16,4 @@ exports.docsAxios = createAxiosInstance(`${getEnv('GATEWAY_PATH')}/api/docs`);
 exports.shippingAxios = createAxiosInstance(`${getEnv('GATEWAY_PATH')}/api/shipping`);
 exports.paymentAxios = createAxiosInstance(`${getEnv('GATEWAY_PATH')}/api/payment`);
 exports.accountAxios = createAxiosInstance(`${getEnv('GATEWAY_PATH')}/api/account`);
+
