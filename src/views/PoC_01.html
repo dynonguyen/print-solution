@@ -41,6 +41,7 @@
         Upload
       </button>
     </form>
+    <div id="div-result" class="w-full"></div>
   </body>
   <script>
     const form = document.getElementById("upload-form");
@@ -54,9 +55,32 @@
         body: formData,
       });
 
-      const data = await response.text();
+      const data = JSON.parse(await response.text());
+      const listContainer = document.createElement("div");
+      listContainer.classList.add("mt-5");
 
-      console.log(data);
+      const listTitle = document.createElement("h2");
+      listTitle.classList.add("text-2xl", "font-bold", "mb-2");
+      listTitle.textContent = "List of uploaded files";
+
+      listContainer.appendChild(listTitle);
+
+      const ul = document.createElement("ul");
+      ul.classList.add("list-disc", "ml-5");
+
+      console.log("_____data: ", data);
+      data.forEach((item) => {
+        const li = document.createElement("li");
+        li.textContent = `File: ${item.fileName}, Total Pages: ${item.totalPage}`;
+        ul.appendChild(li);
+      });
+
+      listContainer.appendChild(ul);
+
+      const apiContent = document.getElementById("div-result");
+      apiContent.appendChild(listContainer)
     });
+
+    
   </script>
 </html>

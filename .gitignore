@@ -2,3 +2,6 @@ node_modules
 package-lock.json
 uploads/*
 docker-volumes
+.env
+.DS_Store
+graphql
