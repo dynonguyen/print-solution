@@ -1,29 +1,22 @@
-import { Box, Button, Container, Grid, Paper, SelectChangeEvent, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import UploadFile from '~/components/UploadFile';
-import CategoryList from './CategoryList';
-import ProductList from './ProductList';
-import Uploader from './Uploader';
-import UploadFiles from './UploadFiles';
-import { Alert, FieldLabel, Spinner } from '@cads-ui/core';
-import { ENDPOINTS } from '~/constants/endpoints';
-import orderAxios from '~/libs/axios/order';
-import { fileReader } from '~/utils/file-reader';
+import { Alert, FieldLabel } from '@cads-ui/core';
+import { Box, Button, Container, Grid, SelectChangeEvent, TextField, Typography } from '@mui/material';
 import to from 'await-to-js';
-import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
-import {
-  useCategoryForSelectQuery,
-  useGuestCategoryListQuery,
-  useGuestProductListQuery
-} from '~/graphql/catalog/generated/graphql';
-import useQueryPagination from '~/hooks/useQueryPagination';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useNavigate, useLocation } from 'react-router-dom';
+import UploadFile from '~/components/UploadFile';
+import { ENDPOINTS } from '~/constants/endpoints';
 import { PATH } from '~/constants/path';
+import { useGuestCategoryListQuery, useGuestProductListQuery } from '~/graphql/catalog/generated/graphql';
+import useQueryPagination from '~/hooks/useQueryPagination';
+import { withCatalogApolloProvider } from '~/libs/apollo/catalog';
+import orderAxios from '~/libs/axios/order';
 import { CUSTOM_PRODUCT } from '~/types/Product';
+import { fileReader } from '~/utils/file-reader';
+import ProductList from './ProductList';
 
 // -----------------------------
-interface OrderFormProps { }
+interface OrderFormProps {}
 
 // -----------------------------
 const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) => {
@@ -70,10 +63,10 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
     const product = searchParams.get('product');
     const amount = searchParams.get('amount');
     const options = searchParams.get('options');
-    console.log("____options");
+    console.log('____options');
 
     setSelectedProduct(product ?? '');
-    setFormValues({ ...formValues, amount: amount ? parseInt(amount) : 1 })
+    setFormValues({ ...formValues, amount: amount ? parseInt(amount) : 1 });
     setSelectedOptions(options ?? '');
   }, [location.search]);
 
@@ -134,7 +127,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
           ...formValues
         })
       );
-      console.log("_____rs: ", uploadResult?.data);
+      console.log('_____rs: ', uploadResult?.data);
 
       if (uploadErr) {
         return toast.error('Đặt lệnh thất bại');
@@ -150,7 +143,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
 
   // Validate Input:
   const validate = (key: string, value: string | number) => {
-    let isValid = true
+    let isValid = true;
     switch (key) {
       case 'email':
         isValid = /^\S+@\S+\.\S+$/.test(value + '');
@@ -159,7 +152,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
       default:
         break;
     }
-    setIsErrors(prev => ({ ...prev, [key]: !isValid }));
+    setIsErrors((prev) => ({ ...prev, [key]: !isValid }));
   };
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
@@ -172,7 +165,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
 
   const handleFocus: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (event) => {
     const key = event.target?.id as keyof typeof formValues;
-    setIsErrors(prev => ({ ...prev, [key]: false }));
+    setIsErrors((prev) => ({ ...prev, [key]: false }));
   };
 
   return (
@@ -202,14 +195,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
             <Typography variant="h6" mt={3} mb={2}>
               Lựa chọn
             </Typography>
-            <TextField
-              hiddenLabel
-              aria-readonly
-              required
-              id="amount"
-              fullWidth
-              value={selectedOptions}
-            />
+            <TextField hiddenLabel aria-readonly required id="amount" fullWidth value={selectedOptions} />
           </Grid>
         </Grid>
       </Box>
@@ -279,7 +265,6 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
             onBlur={handleBlur}
             onFocus={handleFocus}
             helperText={isErrors.email && 'Please enter a valid email address.'}
-
           />
         </Grid>
       </Grid>
@@ -307,68 +292,119 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
           <Button disabled={loadingCreateOrder} style={{ width: '100%' }} variant="contained" type="submit">
             {/* import LoopOutlinedIcon from '@mui/icons-material/LoopOutlined'; */}
             {loadingCreateOrder ? (
-              <svg xmlns='http://www.w3.org/2000/svg'
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
                 style={{
                   background: 'rgba(0, 0, 0, 0) none repeat scroll 0% 0%',
                   display: 'block',
                   shapeRendering: 'auto'
                 }}
-                viewBox='0 0 100 100'
+                viewBox="0 0 100 100"
                 width={24}
                 height={24}
-                preserveAspectRatio='xMidYMid'
+                preserveAspectRatio="xMidYMid"
                 className="ml-1"
               >
-                <g transform='rotate(0 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.875s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(0 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.875s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(45 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.75s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(45 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.75s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(90 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.625s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(90 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.625s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(135 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.5s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(135 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.5s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(180 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.375s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(180 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.375s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(225 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.25s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(225 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.25s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(270 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='-0.125s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(270 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="-0.125s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
-                <g transform='rotate(315 50 50)'>
-                  <rect x='44' y='9' rx='6' ry='7.2' width='12' height='28' fill={'#F6F6F6'}>
-                    <animate attributeName='opacity' values='1;0' keyTimes='0;1' dur='1s' begin='0s'
-                      repeatCount='indefinite'></animate>
+                <g transform="rotate(315 50 50)">
+                  <rect x="44" y="9" rx="6" ry="7.2" width="12" height="28" fill={'#F6F6F6'}>
+                    <animate
+                      attributeName="opacity"
+                      values="1;0"
+                      keyTimes="0;1"
+                      dur="1s"
+                      begin="0s"
+                      repeatCount="indefinite"
+                    ></animate>
                   </rect>
                 </g>
               </svg>
-            ) : 'Đặt in'}
+            ) : (
+              'Đặt in'
+            )}
           </Button>
         </Grid>
       </Grid>

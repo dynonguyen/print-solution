@@ -1,7 +1,7 @@
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
 import React from 'react';
-import ProductItem from './ProductItem';
 import { IProduct } from '~/types/Product';
+import ProductItem from './ProductItem';
 
 // -----------------------------
 interface ProductListProps {
@@ -24,14 +24,14 @@ const ProductList: React.FC<ProductListProps> = (props) => {
         onChange={onChange}
       >
         {data?.map((item) => {
-          const { _id, name, photo } = item;
+          const { uuid, name, photo } = item;
 
           return (
             <FormControlLabel
-              key={_id}
-              value={_id}
+              key={uuid}
+              value={uuid}
               control={<Radio />}
-              label={<ProductItem label={name} description={""} image={photo} />}
+              label={<ProductItem label={name} description={''} image={photo} />}
               sx={{ marginBottom: '3rem' }}
             />
           );

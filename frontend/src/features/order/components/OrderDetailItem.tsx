@@ -1,5 +1,5 @@
-import { Divider, Flex, Typography } from '@cads-ui/core';
-import { Box } from '@mui/material';
+import { Flex } from '@cads-ui/core';
+import { Box, Divider, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { useState } from 'react';
 import { toVND } from '~/utils/helper';
@@ -8,7 +8,7 @@ import ItemDetail from './ItemDetail';
 
 const OrderDetailItem = (props: any) => {
   const [open, setOpen] = useState(false);
-  const { item } = props;
+  const { item, order } = props;
   let optionsString = '';
 
   const handleClickOpen = () => {
@@ -18,9 +18,6 @@ const OrderDetailItem = (props: any) => {
     setOpen(false);
   };
 
-  item.options.map((option: any) => {
-    optionsString += `${option.label}: ${option.values.toString()}. `;
-  });
   return (
     <>
       <Flex
@@ -41,20 +38,22 @@ const OrderDetailItem = (props: any) => {
             alignItems: 'center',
             mr: 2
           }}
-          alt={item.product.name}
-          src={withMinio(item.product.photo)}
+          alt={item.name}
+          src={withMinio(item.photo)}
         />
         <Flex direction="column" justifyContent="center" sx={{ flexGrow: 1 }}>
-          <Typography variant="h6">{item.product.name}</Typography>
-          <Typography variant="subtitle1">{optionsString}</Typography>
-          <Typography variant="body2">Số lượng: {item.amount}</Typography>
+          <Typography variant="h6">{item.name}</Typography>
+          <Typography variant="subtitle1" maxWidth="sm" gutterBottom>
+            {order.options}
+          </Typography>
+          <Typography variant="body2">Số lượng: {order.amount}</Typography>
         </Flex>
         <Typography variant="body1" color={red[500]}>
           {toVND(item.price)}
         </Typography>
       </Flex>
       <Divider />
-      <ItemDetail item={item} handleClose={handleClose} open={open} />
+      <ItemDetail item={item} order={order} handleClose={handleClose} open={open} />
     </>
   );
 };
