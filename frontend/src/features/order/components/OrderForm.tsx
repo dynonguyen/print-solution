@@ -117,16 +117,34 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
         listFilesName.push(file.name);
       }
 
+      const { amount, details, ...rest } = formValues;
+
       const [uploadErr, uploadResult] = await to(
         orderAxios.post(ENDPOINTS.ORDER_API.CREATE, {
-          listFiles: formData,
-          listFilesName: listFilesName,
-          selectedCategory,
-          selectedProduct,
-          options: selectedOptions,
-          ...formValues
+          products: [
+            {
+              _id: selectedProduct,
+              options: selectedOptions,
+              listFiles: formData,
+              listFilesName: listFilesName,
+              amount,
+              details,
+              price: 1000
+            },
+            {
+              _id: selectedProduct,
+              options: selectedOptions,
+              listFiles: formData,
+              listFilesName: listFilesName,
+              amount,
+              details,
+              price: 2000
+            }
+          ],
+          ...rest
         })
       );
+
       console.log('_____rs: ', uploadResult?.data);
 
       if (uploadErr) {
@@ -195,7 +213,7 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
             <Typography variant="h6" mt={3} mb={2}>
               Lựa chọn
             </Typography>
-            <TextField hiddenLabel aria-readonly required id="amount" fullWidth value={selectedOptions} />
+            <TextField hiddenLabel aria-readonly id="amount" fullWidth value={selectedOptions} />
           </Grid>
         </Grid>
       </Box>

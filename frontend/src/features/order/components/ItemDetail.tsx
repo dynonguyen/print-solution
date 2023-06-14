@@ -55,13 +55,13 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
 }
 
 export default function ItemDetail(props: any) {
-  const { item, order, handleClose, open } = props;
+  const { item, product, handleClose, open } = props;
 
   return (
     <div>
       <BootstrapDialog maxWidth="md" open={open} onClose={handleClose}>
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
-          {item.name}
+          {product.name}
         </BootstrapDialogTitle>
         <DialogContent dividers>
           <Flex justifyContent="space-between">
@@ -78,24 +78,24 @@ export default function ItemDetail(props: any) {
                     alignItems: 'center',
                     mr: 2
                   }}
-                  alt={item.name}
-                  src={withMinio(item.photo)}
+                  alt={product.name}
+                  src={withMinio(product.photo)}
                 />
               </Typography>
 
-              <Typography gutterBottom>{order.options}</Typography>
+              <Typography gutterBottom>{item.options}</Typography>
             </Flex>
             <Flex direction="column" spacing={3}>
-              <Typography variant="body2">Số lượng: {order.amount}</Typography>
+              <Typography variant="body2">Số lượng: {item.amount}</Typography>
               <Typography variant="body1" color={red[500]}>
-                {toVND(order.totalCost)}
+                {toVND(item.totalCost)}
               </Typography>
             </Flex>
           </Flex>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>
-            <Link to={`/product/${item.uuid}`}>Xem trang sản phẩm</Link>
+            <Link to={`/product/${product.uuid}`}>Xem trang sản phẩm</Link>
           </Button>
         </DialogActions>
       </BootstrapDialog>
