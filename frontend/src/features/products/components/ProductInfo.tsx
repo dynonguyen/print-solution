@@ -1,5 +1,5 @@
 import { Flex } from '@cads-ui/core';
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -10,6 +10,7 @@ import { increment } from '~/libs/redux/cardSlice';
 import ProductOptions from './ProductOptions';
 import ProductParameter from './ProductParameter';
 import ProductPrice from './ProductPrice';
+import { toast } from 'react-toastify';
 
 interface ListValues {
   [key: string]: string;
@@ -44,9 +45,8 @@ const ProductInfo = ({ product }: any) => {
     const queryParams = new URLSearchParams({
       product: product?.uuid,
       amount: String(amount),
-      options: `${Object.keys(radioValue).length > 0 ? objToString(radioValue) : ''}${
-        Object.keys(selectedValues).length > 0 ? objToString(selectedValues) : ''
-      }${Object.keys(inputValue).length > 0 ? objToString(inputValue) : ''}`
+      options: `${Object.keys(radioValue).length > 0 ? objToString(radioValue) : ''}${Object.keys(selectedValues).length > 0 ? objToString(selectedValues) : ''
+        }${Object.keys(inputValue).length > 0 ? objToString(inputValue) : ''}`
     }).toString();
     navigate(`${PATH.ORDER.ROOT}?${queryParams}`);
   };
@@ -61,13 +61,13 @@ const ProductInfo = ({ product }: any) => {
     }
     const existingProductIndex = cart.findIndex((productInCart) => product._id === productInCart._id);
     if (existingProductIndex !== -1) {
-      cart[existingProductIndex].amount = amount;
+      cart[existingProductIndex].amount += amount;
     } else {
       cart.push({ ...product, amount: amount });
+      dispatch(increment());
     }
     const cartJson = JSON.stringify(cart);
     localStorage.setItem('cart', cartJson);
-    dispatch(increment());
   };
 
   return (
@@ -79,30 +79,31 @@ const ProductInfo = ({ product }: any) => {
       {product?.infos.length > 0 ? <ProductParameter sx={{ mt: 4 }} infos={product?.infos} /> : ''}
       {product?.options.length > 0 ? <ProductOptions sx={{ mt: 4 }} options={product?.options} {...valueHandle} /> : ''}
       <ProductPrice sx={{ mt: 4 }} price={product?.price} unit={product?.unit} setAmount={setAmount} />
-      <Button
-        sx={{ flexGrow: 1 }}
-        variant="contained"
-        size="medium"
-        startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
-        color="info"
-        onClick={() => {
-          addProductToCart();
-          navigate(PATH.GUEST.CART);
-        }}
-      >
-        Thêm vào giỏ hàng
-      </Button>
+      <Stack direction={'row'} marginTop={4} spacing={2}>
+        <Button
+          sx={{ flexGrow: 1, py: 1 }}
+          variant="contained"
+          size="medium"
+          startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
+          color="info"
+          onClick={() => {
+            addProductToCart();
+            toast('Đã thêm vào giỏ hàng')
+          }}
+        >
+          Thêm vào giỏ hàng
+        </Button>
 
-      <Button
-        variant="contained"
-        size="large"
-        startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
-        sx={{ py: 2, mt: 4 }}
-        color="success"
-        onClick={handleOrderClick}
-      >
-        Đặt in ngay
-      </Button>
+        <Button
+          href={PATH.GUEST.CART}
+          variant="contained"
+          size="medium"
+          sx={{ py: 1 }}
+          color="success"
+        >
+          Đặt in ngay
+        </Button>
+      </Stack>
     </Flex>
   );
 };

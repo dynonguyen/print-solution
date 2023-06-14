@@ -88,7 +88,7 @@ const Navbar = () => {
           </IconButton>
         </Stack>
         <Stack spacing={2} direction="row">
-          <IconButton onClick={handleShoppingCartClick} sx={{ color: '#fff', ml: 2 }}>
+          <IconButton onClick={handleShoppingCartClick} sx={{ color: '#fff', ml: 2, mr: 2 }}>
             <StyledBadge badgeContent={count} color="secondary">
               <ShoppingCart />
             </StyledBadge>
@@ -141,7 +141,7 @@ const Navbar = () => {
         </Stack>
         {/* Below is the icon of user after login */}
       </Toolbar>
-    </AppBar>
+    </AppBar >
   );
 };
 

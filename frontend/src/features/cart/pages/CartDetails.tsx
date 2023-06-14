@@ -18,6 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import { decrement } from '~/libs/redux/cardSlice';
 import { withMinio } from '~/utils/withStatic';
 import StyledBreadcrumb from '../components/CardBreadcrumbs';
+import { toast } from 'react-toastify';
+import { PATH } from '~/constants/path';
 
 interface CartItem {
   _id: number;
@@ -54,8 +56,8 @@ const CartDetails: React.FC = () => {
   };
 
   const handleRequestQuote = () => {
-    // Xử lý sự kiện yêu cầu báo giá
-    // Xóa localstorage etc
+    if (cartItems.length <= 0) return toast("Vui lòng chọn ít nhất 1 sản phẩm!")
+    navigate(PATH.ORDER.ROOT);
   };
 
   return (
@@ -100,6 +102,7 @@ const CartDetails: React.FC = () => {
       </Box>
 
       <Button
+        // disabled={cartItems.length <= 0}
         variant="contained"
         color="primary"
         onClick={handleRequestQuote}
