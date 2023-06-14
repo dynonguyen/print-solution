@@ -1,10 +1,23 @@
 import { Delete, Edit } from '@mui/icons-material';
-import { Box, Button, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { decrement } from '~/libs/redux/cardSlice';
 import { withMinio } from '~/utils/withStatic';
 import StyledBreadcrumb from '../components/CardBreadcrumbs';
-
 
 interface CartItem {
   _id: number;
@@ -19,6 +32,8 @@ const CartDetails: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const cartData = localStorage.getItem('cart');
     if (cartData) {
@@ -31,6 +46,7 @@ const CartDetails: React.FC = () => {
     updatedCartItems.splice(index, 1);
     setCartItems(updatedCartItems);
     localStorage.setItem('cart', JSON.stringify(updatedCartItems));
+    dispatch(decrement());
   };
 
   const handleEdit = (index: number) => {
@@ -39,7 +55,7 @@ const CartDetails: React.FC = () => {
 
   const handleRequestQuote = () => {
     // Xử lý sự kiện yêu cầu báo giá
-    //Xóa localstorage etc
+    // Xóa localstorage etc
   };
 
   return (
@@ -83,8 +99,13 @@ const CartDetails: React.FC = () => {
         </TableContainer>
       </Box>
 
-      <Button variant="contained" color="primary" onClick={handleRequestQuote} style={{ marginTop: '30px', marginBottom: '30px' }}>
-        Yêu cầu báo giá
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleRequestQuote}
+        style={{ marginTop: '30px', marginBottom: '30px' }}
+      >
+        Chọn files thiết kế và đặt in
       </Button>
     </Box>
   );

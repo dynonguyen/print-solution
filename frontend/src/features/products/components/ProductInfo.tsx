@@ -1,27 +1,29 @@
 import { Flex } from '@cads-ui/core';
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, Divider, Stack, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Icon from '~/components/Icon';
 import { PATH } from '~/constants/path';
+import { increment } from '~/libs/redux/cardSlice';
 import ProductOptions from './ProductOptions';
 import ProductParameter from './ProductParameter';
 import ProductPrice from './ProductPrice';
 
 const ProductInfo = ({ product }: any) => {
-  const [amount, setAmount] = useState(1)
-  const [selectedValues, setOptions] = useState<String | String[]>("")
-  console.log("____selectedValues: ", selectedValues);
-
+  const [amount, setAmount] = useState(1);
+  const [selectedValues, setOptions] = useState<String | String[]>('');
+  console.log('____selectedValues: ', selectedValues);
 
   const navigate = useNavigate();
 
   const handleOrderClick = () => {
-    addProductToCart()
-    navigate(PATH.GUEST.CART)
+    addProductToCart();
+    navigate(PATH.GUEST.CART);
   };
 
+  const dispatch = useDispatch();
 
   const addProductToCart = () => {
     let localCart = localStorage.getItem('cart');
@@ -37,6 +39,7 @@ const ProductInfo = ({ product }: any) => {
     }
     const cartJson = JSON.stringify(cart);
     localStorage.setItem('cart', cartJson);
+    dispatch(increment());
   };
 
   return (
@@ -46,18 +49,42 @@ const ProductInfo = ({ product }: any) => {
       </Typography>
       <Divider />
       {product?.infos.length > 0 ? <ProductParameter sx={{ mt: 4 }} infos={product?.infos} /> : ''}
-      {product?.options.length > 0 ? <ProductOptions sx={{ mt: 4 }} options={product?.options} selectedValue={selectedValues} setOptions={setOptions} /> : ''}
+      {product?.options.length > 0 ? (
+        <ProductOptions
+          sx={{ mt: 4 }}
+          options={product?.options}
+          selectedValue={selectedValues}
+          setOptions={setOptions}
+        />
+      ) : (
+        ''
+      )}
       <ProductPrice sx={{ mt: 4 }} price={product?.price} unit={product?.unit} setAmount={setAmount} />
-      <Button
-        variant="contained"
-        size="large"
-        startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
-        sx={{ py: 2, mt: 4 }}
-        color="success"
-        onClick={handleOrderClick}
-      >
-        Đặt in ngay
-      </Button>
+      <Stack direction="row" spacing={2} marginTop={2}>
+        <Button
+          sx={{ flexGrow: 1 }}
+          variant="contained"
+          size="medium"
+          startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
+          color="info"
+          onClick={addProductToCart}
+        >
+          Thêm vào giỏ hàng
+        </Button>
+        <Button
+          variant="contained"
+          size="medium"
+          startIcon={<Icon icon="material-symbols:shopping-cart-outline-rounded" />}
+          sx={{ flexGrow: 1 }}
+          color="success"
+          onClick={() => {
+            addProductToCart();
+            navigate(PATH.GUEST.CART);
+          }}
+        >
+          Đặt in ngay
+        </Button>
+      </Stack>
     </Flex>
   );
 };

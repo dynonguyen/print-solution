@@ -39,3 +39,5 @@ frontend/src/graphql/**/graphql.tsx
 !docker-volumes/note.txt
 services/docs/src/upload/*
 !services/docs/src/upload/note.txt
+
+uploads/*
