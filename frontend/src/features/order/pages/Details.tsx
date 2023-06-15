@@ -46,7 +46,6 @@ const OrderDetails: React.FC<OrderDetailsProps> = withCatalogApolloProvider((pro
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
     const id = searchParams.get('id');
-    console.log('____id: ', id);
 
     fetchOrders({ id });
   }, [location.search]);

@@ -66,7 +66,6 @@ const OrderForm: React.FC<OrderFormProps> = withCatalogApolloProvider((props) =>
     const product = searchParams.get('product');
     const amount = searchParams.get('amount');
     const options = searchParams.get('options');
-    console.log('____options');
 
     setSelectedProduct(product ?? '');
     setFormValues({ ...formValues, amount: amount ? parseInt(amount) : 1 });

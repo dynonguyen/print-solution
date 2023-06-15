@@ -1,8 +1,19 @@
 import { Box, Button, Divider, FieldLabel, Flex, Input, Typography } from '@cads-ui/core';
 import { yupResolver } from '@hookform/resolvers/yup';
+import to from 'await-to-js';
+import { isEmpty } from 'lodash';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
+import { ENDPOINTS } from '~/constants/endpoints';
+import { PATH } from '~/constants/path';
 import { MAX, REGEX } from '~/constants/validation';
+import orderAxios from '~/libs/axios/order';
+import { RootState } from '~/libs/redux/store';
+import { fileReader } from '~/utils/file-reader';
 
 const schema = yup.object({
   name: yup
@@ -11,7 +22,7 @@ const schema = yup.object({
     .required('Tên không được bỏ trống')
     .max(MAX.CUSTOMER_NAME, `Tối đa ${MAX.CUSTOMER_NAME} ký tự`),
 
-  phone: yup
+  tel: yup
     .string()
     .trim()
     .required('Số điện thoại không được bỏ trống')
@@ -22,11 +33,15 @@ const schema = yup.object({
 
 type ICustomerContact = {
   name: string;
-  phone: string;
+  tel: string;
   email: string;
 };
 
 function CusContactForm() {
+  const cartItems = useSelector((state: RootState) => state.cart.cartItems);
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -35,7 +50,55 @@ function CusContactForm() {
     resolver: yupResolver(schema)
   });
 
-  const onSubmit: SubmitHandler<ICustomerContact> = (data) => console.log(data);
+  const [loadingCreateOrder, setLoadingCreateOrder] = useState(false)
+
+  const onSubmit: SubmitHandler<ICustomerContact> = async (data) => {
+    const { name, tel, email, } = data
+    setLoadingCreateOrder(true);
+    try {
+      const listProducts = [];
+
+      for (const cartItem of cartItems) {
+        const formData = [];
+        const listFilesName = [];
+
+        for (const file of cartItem.files) {
+          if (!file || isEmpty(file)) continue;
+
+          const fileDataUrl = await fileReader(file);
+          formData.push(fileDataUrl);
+          listFilesName.push(file.name);
+        }
+
+        listProducts.push({
+          ...cartItem,
+          listFiles: formData,
+          listFilesName: listFilesName,
+        });
+      }
+
+
+      const [uploadErr, uploadResult] = await to(
+        orderAxios.post(ENDPOINTS.ORDER_API.CREATE, {
+          name, tel, email,
+          products: listProducts,
+        })
+      );
+
+      console.log('_____rs: ', uploadResult?.data);
+
+      if (uploadErr) {
+        return toast.error('Yêu cầu thất bại');
+      } else {
+        navigate(PATH.ORDER.SUCCESS + `?display_id=${uploadResult.data.data}`);
+      }
+    } catch (error) {
+      console.log('____ERROR: ', error);
+    } finally {
+      setLoadingCreateOrder(false);
+    }
+
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -49,8 +112,8 @@ function CusContactForm() {
         <Input fullWidth {...register('name')} />
       </FieldLabel>
 
-      <FieldLabel sx={{ m: 6 }} label="Số điện thoại" error={Boolean(errors.phone)} message={errors.phone?.message}>
-        <Input fullWidth {...register('phone')} />
+      <FieldLabel sx={{ m: 6 }} label="Số điện thoại" error={Boolean(errors.tel)} message={errors.tel?.message}>
+        <Input fullWidth {...register('tel')} />
       </FieldLabel>
 
       <FieldLabel sx={{ m: 6 }} label="Email" error={Boolean(errors.email)} message={errors.email?.message}>

@@ -14,7 +14,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { CartItem, addFileDesign, removeCartItem, removeFileDesign } from '~/libs/redux/cartSlice';
@@ -41,6 +41,7 @@ const style = {
 const CartDetails: React.FC = () => {
   const cartItems = useSelector((state: RootState) => state.cart.cartItems);
   const [open, setOpen] = React.useState<CartItem | null>();
+  const [requestingQuote, setRequestingQuote] = useState(false)
 
   const navigate = useNavigate();
 
@@ -51,18 +52,20 @@ const CartDetails: React.FC = () => {
   };
 
   const handleRequestQuote = () => {
+    setRequestingQuote(true)
     if (cartItems.length <= 0) return toast("Vui lòng chọn ít nhất 1 sản phẩm!", { type: 'error' })
-    navigate(PATH.ORDER.ROOT);
+    navigate(PATH.ORDER.CUS_CONTACT);
   };
 
   const MAX_FILE = 5;
   const MAX_SIZE = 500;
 
   useEffect(() => {
-    return () => {
-      dispatch(removeFileDesign())
+    if (!requestingQuote) { // Add a condition to check if requesting quote is false
+      dispatch(removeFileDesign());
     }
-  }, [])
+  }, [dispatch, requestingQuote])
+
 
 
   return (

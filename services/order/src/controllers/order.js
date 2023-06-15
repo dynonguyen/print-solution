@@ -20,7 +20,7 @@ db.sync()
 // -----------------------------
 orderApi.post('/create', async (req, res) => {
   try {
-    const { products, tel = '', email = '', name = '', address = '', options = '' } = req.body;
+    const { products, tel = '', email = '', name = '', address = '' } = req.body;
 
     const order = await Order.create({
       status: ORDER_STATUS.CONFIRMED.id,
@@ -33,7 +33,8 @@ orderApi.post('/create', async (req, res) => {
     let totalAllCost = 0;
 
     products.forEach(async (product) => {
-      const { _id, options, listFiles = [], listFilesName = [], amount, details, price } = product;
+      console.log('_____product: ', product);
+      const { _id, options, radioValue, listFiles = [], listFilesName = [], amount, details, price } = product;
       console.log('____-amount, details, price: ', amount, details, price);
       const listFileNameErr = [];
       console.log('_________price * amount', price * amount);
@@ -41,7 +42,7 @@ orderApi.post('/create', async (req, res) => {
       totalAllCost += price * amount;
       const orderProduct = await OrderProduct.create({
         _id,
-        options,
+        options: JSON.stringify(radioValue),
         amount,
         details,
         totalCost: price * amount,
@@ -143,7 +144,7 @@ const getOrders = async (req, res) => {
     // Combine the search conditions with the existing conditions
     const combinedConditions = { ...conditions, ...searchConditions };
 
-    Object.keys(combinedConditions).forEach(key => {
+    Object.keys(combinedConditions).forEach((key) => {
       if (combinedConditions[key] === undefined) {
         delete combinedConditions[key];
       }
